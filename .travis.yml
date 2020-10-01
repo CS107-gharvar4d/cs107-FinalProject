@@ -1,4 +1,13 @@
 language:
   python
+
+# Install the codecov pip dependency
+install:
+  - pip install codecov
+
+script:
+  - coverage run tests.py
+
+# Push to codecov
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov
