@@ -10,4 +10,6 @@ script:
 
 # Push to codecov
 after_success:
+  - export CODECOV_TOKEN="token"
+  - bash <(curl -s https://codecov.io/bash) -t token
   - codecov
