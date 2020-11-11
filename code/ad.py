@@ -107,23 +107,23 @@ x = AutoDiffToy(a)
 alpha = 2.0
 beta = 3.0
 
-f = alpha * x + beta
-print(f.val, f.der)
-f = x * alpha + beta
-print(f.val, f.der)
-f = beta + alpha * x
-print(f.val, f.der)
-f = beta + x * alpha
-print(f.val, f.der)
+#f = alpha * x + beta
+#print(f.val, f.der)
+#f = x * alpha + beta
+#print(f.val, f.der)
+#f = beta + alpha * x
+#print(f.val, f.der)
+#f = beta + x * alpha
+#print(f.val, f.der)
 f = beta - x * alpha
 print(f.val, f.der)
-f = sin_ad(x)
-print(f.val, f.der)
-f = 2**x
-print(f.val, f.der)
-f = x**2
-print(f.val, f.der)
-f = x**x
-print(f.val, f.der)
-f = -2**x
-print(f.val, f.der)
+#f = sin_ad(x)
+#print(f.val, f.der)
+#f = 2**x
+#print(f.val, f.der)
+#f = x**2
+#print(f.val, f.der)
+#f = x**x
+#print(f.val, f.der)
+#f = -2**x
+#print(f.val, f.der)
