@@ -6,8 +6,8 @@ Below is our latest status update toward Milestone 2, with tasks and contributio
 * Contributions: Participated in the discussion. Set up a prototype of the test suite.
  
 **Kristen**:
-* Tasks:
-* Contributions:
+* Tasks: Helping to improve code by administering code reviews in Github. Add additional test cases to bolster test suite, and help supplement David's initial prototype by adding partial derivative functionality based on framework in implementation section of Milestone 1.
+* Contributions: Participated and maintained notes in team discussion, made modifications to Milestone 1 document (including cleanup and refinement of Software Organization and Implementation Sections) per TF feedback.
     
 **Rodrigo**:
 * Tasks:
