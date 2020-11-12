@@ -10,8 +10,8 @@ Below is our latest status update toward Milestone 2, with tasks and contributio
 * Contributions: Participated and maintained notes in team discussion, made modifications to Milestone 1 document (including cleanup and refinement of Software Organization and Implementation Sections) per TF feedback.
     
 **Rodrigo**:
-* Tasks:
-* Contributions:
+* Tasks: Participated in discussion on how to improve implementation code and made promptly reviews in github. 
+* Contributions: Structured Software Organization. Available for creating new test cases in pytest or unittest in order to increase code coverage.  
     
 **David**:
 * Tasks: Design and complete a raw version of codes. Test the codes with preliminary command.
