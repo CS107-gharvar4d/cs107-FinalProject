@@ -1,6 +1,7 @@
 import numpy as np
 import copy
-from ad import *
+import sys 
+sys.setrecursionlimit(10**6) 
 
 class AutoDiffVector():
     
@@ -95,6 +96,32 @@ class AutoDiffVector():
             new.der=new.val*np.log(other)*self.der
         return new
 
+def sin_ad(x):
+    y=copy.copy(x)
+    y.val=np.sin(x.val)
+    y.der=np.cos(x.val)*x.der
+    return y
+
+def cos_ad(x):
+    y=copy.copy(x)
+    y.val=np.cos(x.val)
+    y.der=-np.sin(x.val)*x.der
+    return y
+
+def tan_ad(x):
+    y=copy.copy(x)
+    y.val=np.tan(x.val)
+    y.der=np.power(np.sec(x.val),2.)*x.der
+    return y
+
+def exp_ad(x):
+    y=copy.copy(x)
+    y.val=np.exp(x.val)
+    y.der=np.exp(x.val)*x.der
+    return y
+
+def mul_ad(x):
+    return x[0] * mul_ad(x[1:]) if len(x)>1 else x[0]
 
 def gen_vars(vvars):
     vars=[]
@@ -106,7 +133,10 @@ def gen_vars(vvars):
     return vars
 
 [x,y,z,t]=gen_vars([3.,np.pi,5.,3.4])
-
 f = AutoDiffVector.vconvert([(x + y**z)/t, sin_ad(x+cos_ad(100*y**3)-z**t)])
-
 print(f.val,f.der)
+
+v_list=gen_vars(np.linspace(1,1,10000))
+f = mul_ad(v_list)
+print(f.val,f.der)
+
