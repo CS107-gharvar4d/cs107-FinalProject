@@ -1,11 +1,16 @@
 import numpy as np
 import copy
+from ad import *
 
-class AutoDiffToy():
+class AutoDiffVector():
     
-    def __init__(self,a):
+    def __init__(self,a,der):
         self.val=a
-        self.der=1
+        self.der=der
+
+    @classmethod
+    def vconvert(cls,v):
+        return AutoDiffVector(np.array([ii.val for ii in v]),np.array([ii.der for ii in v]))
 
     def __add__(self,other):
         new=copy.copy(self)
@@ -31,6 +36,26 @@ class AutoDiffToy():
 
     def __rmul__(self,other):
         return self.__mul__(other)
+
+    def __truediv__(self,other):
+        new=copy.copy(self)
+        try:
+            new.val=self.val/other.val
+            new.der=self.der/other.val-self.val/np.power(other.val,2.)*other.der
+        except AttirbuteError:
+            new.val=self.val/other
+            new.der=self.der/other
+        return new
+
+    def __truerdiv__(self,other):
+        new=copy.copy(self)
+        try:
+            new.val=other.val/self.val
+            new.der=other.der/self.val-other.val/np.power(self.val,2.)*self.der
+        except AttributeError:
+            new.val=other/self.val
+            new.der=other/np.power(self.val,2.)*self.der
+        return new
 
     def __neg__(self):
         new=copy.copy(self)
@@ -70,60 +95,18 @@ class AutoDiffToy():
             new.der=new.val*np.log(other)*self.der
         return new
 
-# David, 11/08/2020, trying to find a duner method for sin...
-#    def __sin__(self):
-#        new=copy.copy(self)
-#        new.val=np.sin(self.val)
-#        new.der=np.cos(self.val)*self.der
-#        return new
 
-def sin_ad(x):
-    y=copy.copy(x)
-    y.val=np.sin(x.val)
-    y.der=np.cos(x.val)*x.der
-    return y
+def gen_vars(vvars):
+    vars=[]
+    nvars=len(vvars)
+    for ii in range(len(vvars)):
+        der=np.zeros(nvars)
+        der[ii]=1
+        vars.append(AutoDiffVector(vvars[ii],der))
+    return vars
 
-def cos_ad(x):
-    y=copy.copy(x)
-    y.val=np.cos(x.val)
-    y.der=-np.sin(x.val)*x.der
-    return y
+[x,y,z,t]=gen_vars([3.,np.pi,5.,3.4])
 
-def tan_ad(x):
-    y=copy.copy(x)
-    y.val=np.tan(x.val)
-    y.der=np.power(np.sec(x.val),2.)*x.der
-    return y
+f = AutoDiffVector.vconvert([(x + y**z)/t, sin_ad(x+cos_ad(100*y**3)-z**t)])
 
-def exp_ad(x):
-    y=copy.copy(x)
-    y.val=np.exp(x.val)
-    y.der=np.exp(x.val)*x.der
-    return y
-
-a = 2.0 # Value to evaluate at
-x = AutoDiffToy(a)
-
-alpha = 2.0
-beta = 3.0
-
-f = alpha * x + beta
-print(f.val, f.der)
-f = x * alpha + beta
-print(f.val, f.der)
-f = beta + alpha * x
-print(f.val, f.der)
-f = beta + x * alpha
-print(f.val, f.der)
-f = beta - x * alpha
-print(f.val, f.der)
-f = sin_ad(x)
-print(f.val, f.der)
-f = 2**x
-print(f.val, f.der)
-f = x**2
-print(f.val, f.der)
-f = x**x
-print(f.val, f.der)
-f = -2**x
-print(f.val, f.der)
+print(f.val,f.der)
