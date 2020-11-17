@@ -5,7 +5,7 @@ import jacobian
 
 def test_xsquare():
     a = 2.0 # Value to evaluate at
-    der = 3.1
+    der = 1.
     x = jacobian.AutoDiffVector(a,der)
 
     alpha = 2.0
