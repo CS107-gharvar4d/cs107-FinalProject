@@ -1,17 +1,51 @@
 import numpy as np
 import copy
 
+
+
 class AutoDiffToy():
     
     def __init__(self,a):
         self.val=a
-        self.der=1
+        self.derivs = { self: 1}
+
+
+    def get_deriv(wrt=None):
+        if wrt:
+            return self.derivs[wrt]
+        return self.derivs
+
+    def merge_derivs(self, d1, d2, fn=lambda deriv_1, deriv_2: deriv_1 + deriv_2, default_value=0):
+        res = {}
+
+        for var, d1_deriv in d1.items():
+            if var in d2:
+                res[var] = fn(d1_deriv,d2[var])
+            else:
+                res[var] = fn(d1_deriv,default_value)
+
+        for var, d2_deriv in d2.items():
+            if var not in res:
+                res[var] = fn(default_value,d2_deriv)
+        return res
+
+
+
+    def map_derivs(self, fn=lambda deriv: deriv):
+        res = self.derivs.copy()
+        for key, val in res.items():
+            res[key] = fn(val)
+        return res
+
+
+    def __repr__(self):
+        return f'AutoDiffToy({self.val})'
 
     def __add__(self,other):
         new=copy.copy(self)
         try:
             new.val+=other.val
-            new.der+=other.der
+            new.derivs = self.merge_derivs(new.derivs, other.derivs)
         except AttributeError:
             new.val+=other
         return new
@@ -23,10 +57,10 @@ class AutoDiffToy():
         new=copy.copy(self)
         try:
             new.val*=other.val
-            new.der=self.der*other.val+self.val*other.der
+            new.derivs = self.merge_derivs(new.derivs, other.derivs, lambda new_der, other_der: new_der*other.val + self.val * other_der)
         except AttributeError:
             new.val*=other
-            new.der*=other
+            new.derivs = new.map_derivs(lambda deriv: deriv*other)
         return new
 
     def __rmul__(self,other):
@@ -35,14 +69,15 @@ class AutoDiffToy():
     def __neg__(self):
         new=copy.copy(self)
         new.val=-new.val
-        new.der=-new.der
+        new.derivs = new.map_derivs(lambda deriv: -deriv)
         return new
 
     def __sub__(self,other):
         new=copy.copy(self)
         try:
             new.val-=other.val
-            new.der-=other.der
+            new.derivs = self.merge_derivs(new.derivs, other.derivs, lambda new_der,other_der: new_der - other_der)
+
         except AttributeError:
             new.val-=other
         return new
@@ -54,20 +89,22 @@ class AutoDiffToy():
         new=copy.copy(self)
         try:
             new.val=np.power(self.val,other.val)
-            new.der=other.val*np.power(self.val,other.val-1)*self.der+new.val*np.log(self.val)*other.der
+            l = lambda new_der,other_der: other.val*np.power(self.val,other.val-1)*new_der+new.val*np.log(self.val)*other_der
+            new.derivs = self.merge_derivs(new.derivs, other.derivs, l)
         except AttributeError:
             new.val=np.power(self.val,other)
-            new.der=other*np.power(self.val,other-1)*self.der
+            new.derivs= new.map_derivs(lambda deriv: other*np.power(self.val,other-1)*deriv)
         return new
 
     def __rpow__(self,other):
         new=copy.copy(self)
         try:
             new.val=np.power(other.val,self.val)
-            new.der=self.val*np.power(other.val,self.val-1)*other.der+new.val*np.log(other.val)*self.der
+            l = lambda new_der,other_der: self.val*np.power(other.val,self.val-1)*other_der+new.val*np.log(other.val)*new_der
+            new.derivs = self.merge_derivs(new.derivs, other.derivs, l)
         except AttributeError:
             new.val=np.power(other,self.val)
-            new.der=new.val*np.log(other)*self.der
+            new.derivs= new.map_derivs(lambda deriv: new.val*np.log(other)*deriv)
         return new
 
 # David, 11/08/2020, trying to find a duner method for sin...
@@ -80,50 +117,24 @@ class AutoDiffToy():
 def sin_ad(x):
     y=copy.copy(x)
     y.val=np.sin(x.val)
-    y.der=np.cos(x.val)*x.der
+    y.derivs = x.map_derivs(lambda x_der: np.cos(x.val)*x_der)
+
     return y
 
 def cos_ad(x):
     y=copy.copy(x)
     y.val=np.cos(x.val)
-    y.der=-np.sin(x.val)*x.der
+    y.derivs =  x.map_derivs(lambda x_der: -np.sin(x.val)*x_der)
     return y
 
 def tan_ad(x):
     y=copy.copy(x)
     y.val=np.tan(x.val)
-    y.der=np.power(np.sec(x.val),2.)*x.der
+    y.derivs =  x.map_derivs(lambda x_der: np.power(np.sec(x.val),2.)*x_der)
     return y
 
 def exp_ad(x):
     y=copy.copy(x)
     y.val=np.exp(x.val)
-    y.der=np.exp(x.val)*x.der
+    y.derivs =  x.map_derivs(lambda x_der: np.exp(x.val)*x_der)
     return y
-
-a = 2.0 # Value to evaluate at
-x = AutoDiffToy(a)
-
-alpha = 2.0
-beta = 3.0
-
-#f = alpha * x + beta
-#print(f.val, f.der)
-#f = x * alpha + beta
-#print(f.val, f.der)
-#f = beta + alpha * x
-#print(f.val, f.der)
-#f = beta + x * alpha
-#print(f.val, f.der)
-f = beta - x * alpha
-print(f.val, f.der)
-#f = sin_ad(x)
-#print(f.val, f.der)
-#f = 2**x
-#print(f.val, f.der)
-#f = x**2
-#print(f.val, f.der)
-#f = x**x
-#print(f.val, f.der)
-#f = -2**x
-#print(f.val, f.der)
