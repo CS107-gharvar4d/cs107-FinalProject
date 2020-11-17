@@ -2,7 +2,8 @@ import pytest
 import sys
 sys.path.append('./code')
 import ad as ad 
-
+from functools import reduce
+import numpy as np
 
 
 def test_xsquare():
@@ -55,6 +56,32 @@ def test_chain_vars():
     assert g.val == 72
     assert g.derivs[x] == 5 # aka 3+2
     assert g.derivs[y] == 3 * 3 ** 2
+
+
+@pytest.mark.skip(reason="Useful for benchmarking large scale functions, not needed every time")
+def test_many_vars():
+    ad_vars = [ad.AutoDiffToy(i) for i in range(10000)]
+
+    f = reduce(lambda x, y: x*y, ad_vars)
+
+    print(f.val)
+
+def test_vector_input():
+    x = ad.AutoDiffToy(np.array([1,2,3,5]))
+
+    f = x * 3
+
+    print(f.val)
+    assert f.derivs[x] == 3
+
+def test_vector_input():
+    x = ad.AutoDiffToy(np.array([1,2,3,5]))
+    y = ad.AutoDiffToy(np.array([1,1,1,1]))
+
+    f = x * y
+
+    print(f.val)
+    assert all([a==b for a in f.derivs[x] for b in y.val])
 
 
 
