@@ -1,6 +1,6 @@
 import pytest
 import sys
-sys.path.append('../ADG4/')
+sys.path.append('./code/ADG4')
 import ad as ad 
 import numpy as np
 import random as random
