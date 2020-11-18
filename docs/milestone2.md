@@ -259,6 +259,32 @@ class ADVariable:
 	def __repr__(self):
 		return f'ADVariable(val={self.val})'
 ```
+## Future Features
+
+As an add-on feature that we've thought to include in our project is to apply AD to a a real world problem, coupled by a potential UI to facilitate this. There has been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specically applied to calculating greeks in Option contracts or valuating Interest Rate Swaps where the interest rate yield curve can be complex. 
+
+In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical example. 
+
+We expect that the implementation of this new feature will require minimum changes in the current code base. The new inputs and outputs of the financial instrument should accomodate the ones already tested and will assume that the hypothetical interest rate yield curve of the derivative will mirror f() function of securities underlying values and its derivative.      
+
+Code directory structured can be separated into a subfolder
+
+```
+ADG4/
+	advar.py
+	admath.py
+quant_finance/
+	options.py
+	interest_rate_swaps.py
+tests/
+	test_advar.py
+	test_admath.py
+	test_extension.py
+docs/
+	howto.md
+setup.py
+README.md
+```
 
 ## Feedback
 
