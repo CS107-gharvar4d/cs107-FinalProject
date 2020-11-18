@@ -260,63 +260,6 @@ class ADVariable:
 		return f'ADVariable(val={self.val})'
 ```
 
-# Software Organization
-
-This section addresses how we plan to organize our software package.
-
-What will the directory structure look like?
-* Directory will be structured based on functionality. Modules will be deployed according to program features such as mathematic calculations, user interface, computational graph and unit tests.
-* A primary influence on the directory structure is that if we want it to be pip installable, we'll need a general format that looks like this:
-
-```
-ADG4/
-ad_extension/ # name TBD
-tests/
-docs/
-setup.py
-README.md
-```
-
-
-* We will have a unittest test file per implementation file.
-
-```
-ADG4/
-	advar.py
-	admath.py
-ad_extension/
-	extension.py
-tests/
-	test_advar.py
-	test_admath.py
-	test_extension.py
-docs/
-	howto.md
-setup.py
-README.md
-```
-
-What modules do you plan on including? What is their basic functionality?
-* For now, we plan of having two models: `ADG4` for implementing our core AD functionality and `ad_extension` which will use our core library for an end-user program.
-* We are also considering the use of third-party libraries or modules at this time. This will help us support specific features of the project, but nothing specific has been defined yet. But we most probably consider numpy or scipy for data structures and basic operators. We'd like to use numpy . Numpy is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices. It has built in support for matrix/vector math which will be useful for our final implementation and is accessible by running the following:
-```
-import numpy as np
-```
-
-Where will your test suite live? Will you use TravisCI? CodeCov?
-* Yes we plan to use both TravisCI and CodeCov. 
-* The project will leverage the unittest module to test, and will live in a separate directory structure as seen above. The test suite will be run automatically via TravisCI everytime we push a change into our branch. Each time code is pushed, they both will run all the tests in the `tests/` dir. Possibly with `python -m unittest tests/`
-How will you distribute your package (e.g. PyPI)?
-* We intend to distribute our package via PyPI. For the moment will do do so via git clone or forking the project, as well as, ake it friendly to use on different environments such as conda, virtualenv, etc.
-* We are interested in designing the package to be in the pip package format so that it could be installed via PyPI or via `git clone` then `pip install`.
-* Our main usage within our team will be with the command `pip install --editable [project repo location]`. This creates a local pip package that we can continue to live edit and interact with.
-
-How will you package your software? Will you use a framework? If so, which one and why? If not, why not?
-* We will use SetupTools (setup.py) to package our software. That way it can handle downloading dependencies and setup processes.
-
-Other considerations?
-* As noted in the project instructions we will also include a broader impact statement for our library. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population.	
-
 ## Feedback
 
 ### Milestone 1
