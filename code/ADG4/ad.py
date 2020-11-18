@@ -4,11 +4,11 @@ import copy
 class AutoDiffToy():
     
     def __init__(self,a):
-        self.val=a
+        self.val=copy.deepcopy(a) ##Boer Nov.17 added a "copy.copy" to address a case where a is initiated by a (1,) ndarray
         self.der=1
 
     def __add__(self,other):
-        new=copy.copy(self)
+        new=copy.deepcopy(self) ##Boer change it to deepcopy to address a case where the original x is changed
         try:
             new.val+=other.val
             new.der+=other.der
@@ -20,7 +20,7 @@ class AutoDiffToy():
         return self.__add__(other)
 
     def __mul__(self,other):
-        new=copy.copy(self)
+        new=copy.deepcopy(self)
         try:
             new.val*=other.val
             new.der=self.der*other.val+self.val*other.der
@@ -33,13 +33,13 @@ class AutoDiffToy():
         return self.__mul__(other)
 
     def __neg__(self):
-        new=copy.copy(self)
+        new=copy.deepcopy(self) #Boer change it to deepcopy to avoid self to be changed Nov.17
         new.val=-new.val
         new.der=-new.der
         return new
 
     def __sub__(self,other):
-        new=copy.copy(self)
+        new=copy.deepcopy(self) #Boer change it to deepcopy to avoid self to be changed Nov.17
         try:
             new.val-=other.val
             new.der-=other.der
@@ -51,7 +51,7 @@ class AutoDiffToy():
         return -self.__sub__(other)
 
     def __pow__(self,other):
-        new=copy.copy(self)
+        new=copy.deepcopy(self) #Boer change it to deepcopy to avoid self to be changed Nov.17
         try:
             new.val=np.power(self.val,other.val)
             new.der=other.val*np.power(self.val,other.val-1)*self.der+new.val*np.log(self.val)*other.der
@@ -61,7 +61,7 @@ class AutoDiffToy():
         return new
 
     def __rpow__(self,other):
-        new=copy.copy(self)
+        new=copy.deepcopy(self) #Boer change it to deepcopy to avoid self to be changed Nov.17
         try:
             new.val=np.power(other.val,self.val)
             new.der=self.val*np.power(other.val,self.val-1)*other.der+new.val*np.log(other.val)*self.der
@@ -70,33 +70,33 @@ class AutoDiffToy():
             new.der=new.val*np.log(other)*self.der
         return new
 
-# David, 11/08/2020, trying to find a duner method for sin...
+# David, 11/08/2020, trying to find a dunder method for sin...
 #    def __sin__(self):
-#        new=copy.copy(self)
+#        new=copy.deepcopy(self) #Boer change it to deepcopy to avoid self to be changed Nov.17
 #        new.val=np.sin(self.val)
 #        new.der=np.cos(self.val)*self.der
 #        return new
 
 def sin_ad(x):
-    y=copy.copy(x)
+    y=copy.deepcopy(x) #Boer change it to deepcopy to avoid self to be changed Nov.17
     y.val=np.sin(x.val)
     y.der=np.cos(x.val)*x.der
     return y
 
 def cos_ad(x):
-    y=copy.copy(x)
+    y=copy.deepcopy(x) #Boer change it to deepcopy to avoid self to be changed Nov.17
     y.val=np.cos(x.val)
     y.der=-np.sin(x.val)*x.der
     return y
 
 def tan_ad(x):
-    y=copy.copy(x)
+    y=copy.deepcopy(x) #Boer change it to deepcopy to avoid self to be changed Nov.17
     y.val=np.tan(x.val)
-    y.der=np.power(np.sec(x.val),2.)*x.der
+    y.der=np.power(1/np.cos(x.val),2.)*x.der ##Boer Nov 17 2020 Looks like np do not have sec,so change it to 1/cos(x.val)
     return y
 
 def exp_ad(x):
-    y=copy.copy(x)
+    y=copy.deepcopy(x) #Boer change it to deepcopy to avoid self to be changed Nov.17
     y.val=np.exp(x.val)
     y.der=np.exp(x.val)*x.der
     return y
