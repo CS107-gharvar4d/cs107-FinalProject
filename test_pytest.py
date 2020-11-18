@@ -1,11 +1,12 @@
 import pytest
 import sys
 sys.path.append('./code')
-import ad as ad 
+import jacobian 
 
 def test_xsquare():
     a = 2.0 # Value to evaluate at
-    x = ad.AutoDiffToy(a)
+    der = 1.
+    x = jacobian.AutoDiffVector(a,der)
 
     alpha = 2.0
     beta = 3.0
@@ -26,7 +27,7 @@ def test_xsquare():
     f = beta - x * alpha
     #print(f.val, f.der)
     assert f.val==-1.0 and f.der==-2.0
-    f = ad.sin_ad(x)
+    f = jacobian.sin_ad(x)
     #print(f.val, f.der)
     assert f.val==0.9092974268256817 and f.der==-0.4161468365471424 
 
