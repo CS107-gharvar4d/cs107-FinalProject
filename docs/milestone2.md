@@ -62,25 +62,33 @@ conda activate adg4_env
 5. Install our package with `pip install --editable ./code`
 6. Now you can do `import ADG4.ad as ad` or just run our tests with the command `pytest` in the repo directory
 
+
 ### A demo
 
-- An example of the user interface for how to use the package is below:
+- A simple example of the user interface for how to use the package is below. Running our packages involves:
+- Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
+- Jacobian: Lastly, the function returns to the Jacobian matrix. 
 
 ```
+
 import ADG4.ad as ad
 
 a = 2.0 # Value to evaluate at
-x = ad.AutoDiffVector(a) #create a AutoDiff variable
+x = ad.AutoDiffVector(a) #create a AutoDiff variable with value 2
 alpha=2.0
 beta=3.0
 
-###Examples for neg, add,sub, mul,div,pow
+###Examples for Simple Operations: Create Functions from AD Variables
 f=alpha*x+beta # behind the scenes this calls the __add__ function and the __mul__ function respectively
+
+# Now you can access the values and derivatives from the AD objects
 print(f.val,f.der) # print the value and derivative
+
 f=alpha/x-beta # behind the scenes this calls the __truediv__ function and the __sub__ function respectively
 print(f.val,f.der) # print the value and derivative
-f=x**x
-print(f.val,f.der) #calculate pow
+
+f=x**x #calculate pow
+print(f.val,f.der) 
 
 ##Examples for trig functions:
 f = ad.sin_ad(x)
@@ -94,8 +102,6 @@ print(f.val, f.der)
 f = ad.exp_ad(x)
 print(f.val, f.der)
 ```
-
-
 
 # Software Organization
 
