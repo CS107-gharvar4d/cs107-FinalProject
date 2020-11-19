@@ -77,6 +77,16 @@ def test_pow():
     assert f3.val==a**a and np.abs(f3.der-(np.log(a)+1)*a**a)<1e-5
     f4= x.__rpow__(x)
     assert f4.val==a**a and np.abs(f4.der-(np.log(a)+1)*a**a)<1e-5
+
+
+def test_unary_negation():
+    a = 80
+    x = ad.AutoDiffVector(a)
+    f = -x
+    assert f.val == -80
+    assert f.der == -1
+
+
 ###########
 ##Boer Nov17
 def test_twoAD():
