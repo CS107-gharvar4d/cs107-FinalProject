@@ -43,19 +43,19 @@ class AutoDiffVector():
         try:
             new.val=self.val/other.val
             new.der=self.der/other.val-self.val/np.power(other.val,2.)*other.der
-        except AttirbuteError:
+        except AttributeError:
             new.val=self.val/other
             new.der=self.der/other
         return new
 
-    def __truerdiv__(self,other):
+    def __rtruediv__(self,other):
         new=copy.deepcopy(self)
         try:
             new.val=other.val/self.val
             new.der=other.der/self.val-other.val/np.power(self.val,2.)*self.der
         except AttributeError:
             new.val=other/self.val
-            new.der=other/np.power(self.val,2.)*self.der
+            new.der=-other/np.power(self.val,2.)*self.der
         return new
 
     def __neg__(self):
@@ -102,9 +102,9 @@ class AutoDiffVector():
             if len(idx)>1:
                print('Not an independent variable')
                raise TypeError
-            if len(f.der.shape)==1:
-               f.der=f.der.reshape(1,-1)
-            return f.der[:,idx[0]]
+            if len(self.der.shape)==1:
+               self.der=self.der.reshape(1,-1)
+            return self.der[:,idx[0]]
         except AttributeError:
             print('Not an independent variable')
             raise TypeError
@@ -145,14 +145,4 @@ def gen_vars(vvars):
         vars.append(AutoDiffVector(vvars[ii],der))
     return vars
 
-[x,y,z,t]=gen_vars([3.,np.pi,5.,3.4])
-f = AutoDiffVector.vconvert([(x + y**z)/t, sin_ad(x+cos_ad(100*y**3)-z**t)])
-print(f.val,f.der,f.partial(t))
 
-[x,y,z,t]=gen_vars([3.,np.pi,5.,3.4])
-f = (x + y**z)/t
-print(f.val,f.der,f.partial(t))
-
-v_list=gen_vars(np.linspace(1,1,10000))
-f = mul_ad(v_list)
-print(f.val,f.der)
