@@ -49,38 +49,47 @@ Dual numbers: a two dimentional space where a outer product is defined between a
 # How to use
 
 Here are the steps to use our package. First, below are the steps to download and install `ADG4`:
-1. Create a virtual environment, either with conda `conda create -n adg4_env python=3.8` or any prefered method
+1. Create and activte a virtual environment, either with conda 
+```
+conda create -n adg4_env python=3.8
+conda activate your_env_name 
+```
+ or any prefered method
 2. Download our repository, `git clone git@github.com:CS107-gharvar4d/cs107-FinalProject.git`
 3. Navigate into the repo folder with: `cd cs107-FinalProject`
 4. Install requirements with `pip install -r requirements.txt`
 5. Install our package with `pip install --editable ./code`
 6. Now you can do `import ADG4.ad as ad` or just run our tests with the command `pytest` in the repo directory
 
-### Example
+### A demo
 
 - An example of the user interface for how to use the package is below:
 
 ```
-from ADG4.advar import ADVariable
-from ADG4.admath import cos
+import ADG4.ad as ad
 
-x = ADVariable(1)
-y = ADVariable(2)
-z = x + (2 * y) # behind the scenes this calls the Add ADFunction and the mul ADFunction respectively
+a = 2.0 # Value to evaluate at
+x = AutoDiffToy(a) #create a AutoDiff variable
+alpha=2.0
+beta=3.0
 
-z.get_deriv(wrt=x) # returns 1
-z.get_deriv(wrt=y) # returns 2
+###Examples for neg, add,sub, mul,div,pow
+f=alpha*x+beta # behind the scenes this calls the Add function and the mul function respectively
+print(f.val,f.der) # print the value and derivative
 
-z.derivs # contains {x: 1, y : 2}, eg dx and dy
-z.val # contains 5
+##Examples for trig functions:
+f = ad.sin_ad(x)
+print(f.val, f.der)
+f = ad.cos_ad(x)
+print(f.val, f.der)
+f = ad.tan_ad(x)
+print(f.val, f.der)
 
-cos(z)
+##Examples for exp function
+f = ad.exp_ad(x)
+print(f.val, f.der)
 ```
 
-- Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
-- Jacobian: Lastly, the function returns to the Jacobian matrix. 
-
-Adds-on: solution to a three-body interaction dataset. The dataset provides the trajectories of the three bodies. Function returns to the mass ratios.
 
 
 # Software Organization
