@@ -153,9 +153,7 @@ Test Suite:
 
 Package Distribution:
 * Our package is pip installable using the editable option pointing to a local file system.
-* Specific step by step instructions for how to download and install our package are provided above in the How to 
-
-Use section.
+* Specific step by step instructions for how to download and install our package are provided above in the How to Use section.
 * As a brief summary, `ADG4` can be downloaded and installed by creating and activating a virtual environment, downloading our repository (`git clone git@github.com:CS107-gharvar4d/cs107-FinalProject.git`), and navigating into the repo folder with `cd cs107-FinalProject`. 
 * Then, install the requirements with `pip install -r requirements.txt`, and install the `ADG4` package with `pip install --editable ./code` (code is the name of the directory where it lives).
 * Now you can use the command `import ADG4.ad as ad` and you are ready to use our package!
@@ -283,21 +281,21 @@ In the computation of derivatives, two aspects have to be taken into account; pr
 
 We expect that the implementation of this new feature will require minimum changes in the current code base. The new inputs and outputs of the financial instrument should accomodate the ones already tested and will assume that the hypothetical interest rate yield curve of the derivative will mirror f() function of securities underlying values and its derivative.      
 
-Code directory structured can be separated into a subfolder
+Code directory structure for the add-on component can be separated into a subfolder
 
 ```
 ADG4/
-	advar.py
-	admath.py
+	ad.py
 quant_finance/
 	options.py
 	interest_rate_swaps.py
 tests/
-	test_advar.py
-	test_admath.py
-	test_extension.py
+	test_ad.py
+	test_options.py
+	test_interest_rate_swaps.py
 docs/
-	howto.md
+	milestone1.ipynb
+	milestone2.md
 setup.py
 README.md
 ```
