@@ -58,23 +58,24 @@ Here are the steps to use our package. First, below are the steps to download an
 
 ### Example
 
-- An example of the user interface for how to use the package is below:
+- A simple example of the user interface for how to use the package is below:
 
 ```
-from ADG4.advar import ADVariable
-from ADG4.admath import cos
+import ADG4.ad as ad
 
-x = ADVariable(1)
-y = ADVariable(2)
-z = x + (2 * y) # behind the scenes this calls the Add ADFunction and the mul ADFunction respectively
+# Create an AD Variable with value 2
+x = ad.AutoDiffVector(2)
 
-z.get_deriv(wrt=x) # returns 1
-z.get_deriv(wrt=y) # returns 2
+# Create functions from AD variable x
+f = 2*x
+z = f+x
 
-z.derivs # contains {x: 1, y : 2}, eg dx and dy
-z.val # contains 5
+# Now you can access the values and derivatives from the AD objects
+f.val # returns 4
+f.der # returns 2
 
-cos(z)
+z.val # returns 6
+z.der # returns 3
 ```
 
 - Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
