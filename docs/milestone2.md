@@ -52,7 +52,7 @@ Here are the steps to use our package. First, below are the steps to download an
 1. Create and activte a virtual environment, either with conda 
 ```
 conda create -n adg4_env python=3.8
-conda activate your_env_name 
+conda activate adg4_env 
 ```
  or any prefered method
  
@@ -70,13 +70,17 @@ conda activate your_env_name
 import ADG4.ad as ad
 
 a = 2.0 # Value to evaluate at
-x = AutoDiffToy(a) #create a AutoDiff variable
+x = ad.AutoDiffVector(a) #create a AutoDiff variable
 alpha=2.0
 beta=3.0
 
 ###Examples for neg, add,sub, mul,div,pow
-f=alpha*x+beta # behind the scenes this calls the Add function and the mul function respectively
+f=alpha*x+beta # behind the scenes this calls the __add__ function and the __mul__ function respectively
 print(f.val,f.der) # print the value and derivative
+f=alpha/x-beta # behind the scenes this calls the __truediv__ function and the __sub__ function respectively
+print(f.val,f.der) # print the value and derivative
+f=x**x
+print(f.val,f.der) #calculate pow
 
 ##Examples for trig functions:
 f = ad.sin_ad(x)
@@ -297,16 +301,3 @@ setup.py
 README.md
 ```
 
-## Feedback
-
-### Milestone 1
-Overall, the feedback we received on Milestone 1 was positive. Based on the comments from our TF Simon, our Introduction and Background sections were good. In terms of constructive feedback:
-* He recommended taking some of the codeblocks we define later and including them as examples in the 'How to Use' section.
-* In the Software Organization section, he recommended that we break apart each answer to the questions asked explicitly, and show the potential directory structure.
-* There is also opportunity to clean up the Implementation section a bit.
-
-#### Response
-To address this feedback, we took the following steps:
-* Moved code blocks into How to Use section to clarify demos.
-* Revised Software Organization section to more clearly address each question and include directory structure.
-* Cleaned up the Implementation section.
