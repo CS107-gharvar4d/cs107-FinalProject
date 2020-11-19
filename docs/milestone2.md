@@ -63,7 +63,7 @@ conda activate adg4_env
 6. Now you can do `import ADG4.ad as ad` or just run our tests with the command `pytest` in the repo directory
 
 
-### A demo
+### A Demo
 
 - A simple example of the user interface for how to use the package is below. Running our packages involves:
 - Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
@@ -123,7 +123,6 @@ README.md
 requirements.txt
 ```
 
-
 * We will have a unittest test file per implementation file. At this point, our module is contained within the `ad.py` file.
 
 ```
@@ -146,18 +145,24 @@ What modules do you plan on including? What is their basic functionality?
 ```
 import numpy as np
 ```
+
 Test Suite:
 * We are using both TravisCI and CodeCov as part of our test suite.
 * The project will leverage the unittest module to test, and will live in a separate directory structure as seen above. The test suite will be run automatically via TravisCI everytime we push a change into our branch. Each time code is pushed, they both will run all the tests in the `tests/` dir. Possibly with `python -m unittest tests/`.
 * The project repo has a badge reporting on the coverage of our code from Codecov, so we can easily tell how many tests are passing.
+
 Package Distribution:
 * Our package is pip installable using the editable option pointing to a local file system.
-* Specific step by step instructions for how to download and install our package are provided above in the How to Use section.
+* Specific step by step instructions for how to download and install our package are provided above in the How to 
+
+Use section.
 * As a brief summary, `ADG4` can be downloaded and installed by creating and activating a virtual environment, downloading our repository (`git clone git@github.com:CS107-gharvar4d/cs107-FinalProject.git`), and navigating into the repo folder with `cd cs107-FinalProject`. 
 * Then, install the requirements with `pip install -r requirements.txt`, and install the `ADG4` package with `pip install --editable ./code` (code is the name of the directory where it lives).
 * Now you can use the command `import ADG4.ad as ad` and you are ready to use our package!
+
 Sofware Packaging:
 * We use SetupTools (setup.py) to package our software. That way it can handle downloading dependencies and setup processes.
+
 Other Considerations:
 * As noted in the project instructions we will also include a broader impact statement for our library. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population.
 
