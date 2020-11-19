@@ -48,12 +48,13 @@ Dual numbers: a two dimentional space where a outer product is defined between a
 
 # How to use
 
-We envision a three-step user-software interaction:
-- Download and install: the package will be distributed through PyPI. A user should download it and install it along with all other needed packages automatically.
-Some code like the following can be used to import the libraries:
-
-   `import ADG4`
-
+Here are the steps to use our package. First, below are the steps to download and install `ADG4`:
+1. Create a virtual environment, either with conda `conda create -n adg4_env python=3.8` or any prefered method
+2. Download our repository, `git clone git@github.com:CS107-gharvar4d/cs107-FinalProject.git`
+3. Navigate into the repo folder with: `cd cs107-FinalProject`
+4. Install requirements with `pip install -r requirements.txt`
+5. Install our package with `pip install --editable ./code`
+6. Now you can do `import ADG4.ad as ad` or just run our tests with the command `pytest` in the repo directory
 
 ### Example
 
