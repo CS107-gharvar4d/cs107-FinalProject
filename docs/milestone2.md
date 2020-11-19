@@ -162,123 +162,112 @@ Other considerations?
 
 # Implementation
 
-The core data structure is an ADVariable which maintains two core pieces of data:
-the current value, and the the current trace for *all* previously involved variables.
+The core data structure is an AutoDiffVector which maintains two core pieces of data:
+the current value, and the the derivatives with regard to *all* the independent variables.
 Eg the partial derivatives with respect to each input variable.
 
 
 ## Core Classes 
-### ADVariable
+### AutoDiffVector
 ```
-ADVariable
+AutoDiffVector
   fields:
     - val: the currently computed value
-    - derivs: a dictionary that maps inputs -> partial derivatives
+    - der: the jacobian with respect to all the input (aka. independent) variables.
   methods:
-    - get_deriv(wrt=None)
-    - __mul__, __add__, .. call the associated ADFunctions to return new ADVariables
+    - partial(vari)
+    - __mul__, __add__, .. call the associated ADFunctions to return new AutoDiffVector
 ```
 
 ### Managing derivatives
-At any point, the method `get_deriv(wrt=v)` can be called on an ADVariable to get the derivative with respont to any input
+At any point, the method `partial(vari=v)` can be called on an AutoDiffVector get the derivative with respont to any input variables.
 
 
 ## ADFunctions
-ADFunctions accept one or more ADVariables and output a new ADVariable with an updated `val` and `derivs`.
+ADFunctions accept one or more AutoDiffVectors and output a new AutoDiffVector with an updated `val` and `der`.
 ```
 ADFunction
-  input: One or more ADVariables
-  output: A new ADVariable with appropriate val, deriv
+  input: One or more AutoDiffVectors
+  output: A new AutoDiffVector with appropriate val, der
 ```
 
 ### ADFunction Implementations
-Since ADFunctions do not contain internal state, for now it seems to make the most sense to have them as direct functions.
+Since ADFunctions do not contain internal state, and cannot be loaded as dunder methods (e.g., sin, cos), for now it seems to make the most sense to have them as direct functions.
 Elementary functions like sin, cos, etc will each have a corresponding `ADFunction` implementation that stores gradients
 and maintains logic depending on whether the input is a vector, matrix etc. For functions such as multiplication and addition,
-which have implicit functionality in Python, we will overwrite the underlying dunder method so that when called upon an `ADVariable`,
+which have implicit functionality in Python, we will overwrite the underlying dunder method so that when called upon an `AutoDiffVector`,
 these functions will evaluate and update the derivatives as described above.
 
 No external dependencies are required at this time.
 
 
-### Vectors, Matrices
-A Vector is a `list(ADVariables)` and a matrix is a `list(list(ADVariables))`.
-If each `ADFunction` handles the four input types:
+### Scalar and Vector
+A Vector is a `list(AutoDiffVectors)` 
+If each `ADFunction` handles the three input types:
 - Scalar
-- ADVariable
-- list(ADVariable)
-- list(list(ADVariable))
+- AutoDiffVector
+- Vector
 
 We anticipate that our program will be able to support these instances.
 
-####  Vectors, Matrices example:
+####  Scalars, Vectors example:
 
 ```
-v = [ ADVariable(1) for i in range(4)] # a vector of length 4
-z = v + 2
-```
+v = AutoDiffVector(range(1)) # a vector of length 4
+z = ad.sin_ad(v)
 
-```
-Add(v1, v2)
- - if v1 is scalar -> ...
- ...
- - if v1 is vector -> ..
+v = AutoDiffVector(range(4)) # a vector of length 4
+z = ad.sin_ad(v)
 ```
 
 ### Example Code Structure
-All functions will return a new ADVariable with an updated value and list of derivatives with respect to variables.
+All functions will return a new AutoDiffVector with an updated value and an array of derivatives with respect to variables.
 
-For example, below is an example of how we might implement a function for addition, which would perform the elementary operation of adding two ADVariables and calculating the updated derivatives.
+For example, below is an example of how we might implement a function for addition, which would perform the elementary operation of adding two AutoDiffVectors and calculating the updated derivatives.
 
 ```
-def add(first, second):
-	val = first.val + second.val
-	derivs = {}
-
-    # Update trace for the first item
-	for element, element_deriv in first.derivs.items():
-		derivs[element] = element_deriv
-
-    # Update trace for the second item
-	for element, element_deriv in second.derivs.items():
-		derivs[element] = element_deriv
-
-	n = ADVariable(val=val, derivs=derivs)
-	return n
+    def __add__(self,other):
+        new=copy.deepcopy(self)
+        try:
+            new.val+=other.val
+            new.der+=other.der
+        except AttributeError:
+            new.val+=other
+        return new
 ```
 
 Below is another example of how we might implement a function for multiplying two scalars, again performing the elementary operation and calculating the derivatives.
 ```
-def mul_scalar(first, scalar):
-	val = first.val * scalar
-	derivs = {}
-	for element, element_deriv in first.derivs.items():
-		derivs[element] = element_deriv * scalar
-
-	n = ADVariable(val=val, derivs=derivs)
-	return n
+    def __mul__(self,other):
+        new=copy.deepcopy(self)
+        try:
+            new.val*=other.val
+            new.der=self.der*other.val+self.val*other.der
+        except AttributeError:
+            new.val*=other
+            new.der*=other
+        return new
 ```
 
-ADVariables will track their trace within the `derivs` variable, as can be seen in the sample implementation below. An example of this implementation can be seen below. On an ADVariable, the method `get_deriv` allows the user to extract the derivative of that ADVariable, either as the full Jacobian or with respect to an argument variable.
-We also can overwrite dunder methods such as `__add__` to use our written functions so that our package can operate on ADVariables using `+` and other built-in syntax.
+AutoDiffVector will track their trace within the `der` variable, just like it did with a single input case, except that `der` now is a vector. An example of this implementation can be seen below. On an AutoDiffVector, the method `partial` allows the user to extract a specific derivative of that AutoDiffVector.
 ```
-class ADVariable:
+    def __init__(self,a,der=1):
+        self.val=a
+        self.der=der
 
-	def __init__(self, val, derivs={}):
-		self.val = val
-		self.derivs = derivs
-		self.derivs[self] = 1
+    def partial(self,vari):
+        try:
+            idx=np.nonzero(vari.der)[0]
+            if len(idx)>1:
+               print('Not an independent variable')
+               raise TypeError
+            if len(self.der.shape)==1:
+               self.der=self.der.reshape(1,-1)
+            return self.der[:,idx[0]]
+        except AttributeError:
+            print('Not an independent variable')
+            raise TypeError
 
-	def get_deriv(self, wrt=None):
-		if not wrt:
-			return self.derivs
-		return self.derivs[wrt]
-
-	def __add__(self, other):
-		return add(self, other)
-
-	def __repr__(self):
-		return f'ADVariable(val={self.val})'
 ```
 ## Future Features
 
