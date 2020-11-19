@@ -55,6 +55,7 @@ conda create -n adg4_env python=3.8
 conda activate your_env_name 
 ```
  or any prefered method
+ 
 2. Download our repository, `git clone git@github.com:CS107-gharvar4d/cs107-FinalProject.git`
 3. Navigate into the repo folder with: `cd cs107-FinalProject`
 4. Install requirements with `pip install -r requirements.txt`
