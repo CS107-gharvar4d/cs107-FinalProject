@@ -70,7 +70,7 @@ conda activate adg4_env
 import ADG4.ad as ad
 
 a = 2.0 # Value to evaluate at
-x = AutoDiffVector(a) #create a AutoDiff variable
+x = ad.AutoDiffVector(a) #create a AutoDiff variable
 alpha=2.0
 beta=3.0
 
