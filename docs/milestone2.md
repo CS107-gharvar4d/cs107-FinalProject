@@ -80,9 +80,6 @@ cos(z)
 - Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
 - Jacobian: Lastly, the function returns to the Jacobian matrix. 
 
-Adds-on: solution to a three-body interaction dataset. The dataset provides the trajectories of the three bodies. Function returns to the mass ratios.
-
-
 # Software Organization
 
 This section addresses how we plan to organize our software package.
