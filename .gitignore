@@ -3,3 +3,7 @@
 __pycache__
 *.swo
 *.egg-info/
+*.swp
+*.py.swp
+*.pyc
+*.coverage
