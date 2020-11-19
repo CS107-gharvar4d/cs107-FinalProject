@@ -1,0 +1,8 @@
+#
+# This file can be run to install all 
+# package requirements and dependencies for ADG4
+#
+pytest==6.1.2
+numpy==1.19.4
+#copy
+#sys==28.1
