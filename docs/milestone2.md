@@ -49,7 +49,7 @@ Dual numbers: a two dimentional space where a outer product is defined between a
 # How to use
 
 Here are the steps to use our package. First, below are the steps to download and install `ADG4`:
-1. Create and activte a virtual environment, either with conda 
+1. Create and activate a virtual environment, either with conda 
 ```
 conda create -n adg4_env python=3.8
 conda activate adg4_env 
@@ -63,7 +63,7 @@ conda activate adg4_env
 6. Now you can do `import ADG4.ad as ad` or just run our tests with the command `pytest` in the repo directory
 
 
-### A demo
+### A Demo
 
 - A simple example of the user interface for how to use the package is below. Running our packages involves:
 - Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
@@ -108,56 +108,60 @@ print(f.val, f.der)
 This section addresses how we plan to organize our software package.
 
 What will the directory structure look like?
-* Directory will be structured based on functionality. Modules will be deployed according to program features such as mathematic calculations, user interface, computational graph and unit tests.
-* A primary influence on the directory structure is that if we want it to be pip installable, we'll need a general format that looks like this:
+* The directory will be structured based on functionality. Modules will be deployed according to program features such as mathematic calculations, user interface, computational graph and test suite.
+* In order to ensure that our module can be pip installable, our directory follows a structure like this (not explicitly included in this list are our configuration files, e.g. .coverage, .gitignore, requirements.txt, and .travis.yml: 
 
 ```
-ADG4/
+code/
+	ADG4/
+	tests/
+	setup.py
 ad_extension/ # name TBD
-tests/
 docs/
-setup.py
+.travis.ylm
 README.md
+requirements.txt
 ```
 
-
-* We will have a unittest test file per implementation file.
+* We will have a unittest test file per implementation file. At this point, our module is contained within the `ad.py` file.
 
 ```
 ADG4/
-	advar.py
-	admath.py
+	ad.py
 ad_extension/
 	extension.py
 tests/
-	test_advar.py
-	test_admath.py
-	test_extension.py
+	test_ad.py
 docs/
-	howto.md
+	milestone1.ipynb
+	milestone2.md
 setup.py
 README.md
 ```
 
 What modules do you plan on including? What is their basic functionality?
 * For now, we plan of having two models: `ADG4` for implementing our core AD functionality and `ad_extension` which will use our core library for an end-user program.
-* We are also considering the use of third-party libraries or modules at this time. This will help us support specific features of the project, but nothing specific has been defined yet. But we most probably consider numpy or scipy for data structures and basic operators. We'd like to use numpy . Numpy is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices. It has built in support for matrix/vector math which will be useful for our final implementation and is accessible by running the following:
+* Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices. It has built in support for matrix/vector math which will be useful for our final implementation and is accessible by running the following:
 ```
 import numpy as np
 ```
 
-Where will your test suite live? Will you use TravisCI? CodeCov?
-* Yes we plan to use both TravisCI and CodeCov. 
-* The project will leverage the unittest module to test, and will live in a separate directory structure as seen above. The test suite will be run automatically via TravisCI everytime we push a change into our branch. Each time code is pushed, they both will run all the tests in the `tests/` dir. Possibly with `python -m unittest tests/`
-How will you distribute your package (e.g. PyPI)?
-* We intend to distribute our package via PyPI. For the moment will do do so via git clone or forking the project, as well as, ake it friendly to use on different environments such as conda, virtualenv, etc.
-* We are interested in designing the package to be in the pip package format so that it could be installed via PyPI or via `git clone` then `pip install`.
-* Our main usage within our team will be with the command `pip install --editable [project repo location]`. This creates a local pip package that we can continue to live edit and interact with.
+Test Suite:
+* We are using both TravisCI and CodeCov as part of our test suite.
+* The project will leverage the unittest module to test, and will live in a separate directory structure as seen above. The test suite will be run automatically via TravisCI everytime we push a change into our branch. Each time code is pushed, they both will run all the tests in the `tests/` dir. Possibly with `python -m unittest tests/`.
+* The project repo has a badge reporting on the coverage of our code from Codecov, so we can easily tell how many tests are passing.
 
-How will you package your software? Will you use a framework? If so, which one and why? If not, why not?
-* We will use SetupTools (setup.py) to package our software. That way it can handle downloading dependencies and setup processes.
+Package Distribution:
+* Our package is pip installable using the editable option pointing to a local file system.
+* Specific step by step instructions for how to download and install our package are provided above in the How to Use section.
+* As a brief summary, `ADG4` can be downloaded and installed by creating and activating a virtual environment, downloading our repository (`git clone git@github.com:CS107-gharvar4d/cs107-FinalProject.git`), and navigating into the repo folder with `cd cs107-FinalProject`. 
+* Then, install the requirements with `pip install -r requirements.txt`, and install the `ADG4` package with `pip install --editable ./code` (code is the name of the directory where it lives).
+* Now you can use the command `import ADG4.ad as ad` and you are ready to use our package!
 
-Other considerations?
+Sofware Packaging:
+* We use SetupTools (setup.py) to package our software. That way it can handle downloading dependencies and setup processes.
+
+Other Considerations:
 * As noted in the project instructions we will also include a broader impact statement for our library. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population.
 
 # Implementation
@@ -277,21 +281,21 @@ In the computation of derivatives, two aspects have to be taken into account; pr
 
 We expect that the implementation of this new feature will require minimum changes in the current code base. The new inputs and outputs of the financial instrument should accomodate the ones already tested and will assume that the hypothetical interest rate yield curve of the derivative will mirror f() function of securities underlying values and its derivative.      
 
-Code directory structured can be separated into a subfolder
+Code directory structure for the add-on component can be separated into a subfolder
 
 ```
 ADG4/
-	advar.py
-	admath.py
+	ad.py
 quant_finance/
 	options.py
 	interest_rate_swaps.py
 tests/
-	test_advar.py
-	test_admath.py
-	test_extension.py
+	test_ad.py
+	test_options.py
+	test_interest_rate_swaps.py
 docs/
-	howto.md
+	milestone1.ipynb
+	milestone2.md
 setup.py
 README.md
 ```
