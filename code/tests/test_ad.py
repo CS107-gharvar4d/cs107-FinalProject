@@ -14,11 +14,11 @@ def test_basic():
     
     alpha = 2.0
     beta = 3.0
-    print(x.val,x.der)
+#    print(x.val,x.der)
     f =  alpha*x+beta
-    print(x.val,x.der)
-    print(f.val)
-    print("??",a)
+#    print(x.val,x.der)
+#    print(f.val)
+#    print("??",a)
     
     assert f.val==alpha*a+beta and f.der==alpha
     print(f.val,f.der)
@@ -58,7 +58,7 @@ def test_trig():
 ###Boer Nov17
 def test_exp():
     a = random.random()
-    print(a)
+#    print(a)
     x=ad.AutoDiffVector(a)
     f=ad.exp_ad(x)
     assert f.val==np.exp(a) and f.der==np.exp(a)
@@ -69,7 +69,7 @@ def test_pow():
     a = np.random.rand(1)
     x = ad.AutoDiffVector(a)
     f1= 2**x
-    print(f1.val,f1.der)
+ #   print(f1.val,f1.der)
     assert f1.val==2**a and np.abs(f1.der-2**a*np.log(2))<1e-5    
     f2= x**2
     assert f2.val==a**2 and f2.der==2*a
@@ -97,17 +97,18 @@ def test_twoAD():
     #print(f2.val,f2.der)
     f3=f1-x
     f4=f1*x
-    print(f3.val,f3.der)
-    print(f4.val,f4.der)
+  #  print(f3.val,f3.der)
+  #  print(f4.val,f4.der)
     assert f1.val==4.0 and f1.der==2.0
     assert f2.val==6.0 and f2.der==3
     assert f3.val==2 and f3.der==1
     assert f4.val==8 and f4.der==8
     f5=f1/f2
-    print(f5.val,f5.der)
+  #  print(f5.val,f5.der)
     assert f5.val==2/3 and f5.der==0
 
 def test_vector():
+   #A raw version Boer Nov 19
     [x,y,z,t]=ad.gen_vars([3.,np.pi,5.,3.4])
     f  = ad.AutoDiffVector.vconvert([(x + y**z)/t, ad.sin_ad(x+ad.cos_ad(100*y**3)-z**t)])
     print(f.val,f.der,f.partial(t))

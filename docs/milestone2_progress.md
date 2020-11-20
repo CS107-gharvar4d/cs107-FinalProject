@@ -15,4 +15,4 @@ Below is our latest status update toward Milestone 2, with tasks and contributio
     
 **David**:
 * Tasks: Design and complete a raw version of codes. Test the codes with preliminary command.
- * Contributions: As above.
+* Contributions: As above.

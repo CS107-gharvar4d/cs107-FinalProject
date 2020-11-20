@@ -43,7 +43,7 @@ Here are a few important concepts pertaining AD which are mentioned above:
 
 The Chain Rule: the derivative of a convoluted function is the product of each simple function evaluated at the value of its child function.
 Jacobian: the gradient of each element of a function's output with respect to each and every input. In other words, it's the gradient of the function at the space spanned by the inputs.
-Dual numbers: a two dimentional space where a outer product is defined between any vectors $$x\ =\ (a,\ b)x = (a, b)$$ and $$y\ =\ (c,\ d)y = (c, d)$$ as $$x\times y\ =\ (a\cdot c,\ a\cdot d\ +\ c\cdot b)x×y = (a⋅c, a⋅d + c⋅b).$$ Dual number is useful when we want to include a second-order calculation, i.e., not only calculate the value of a function, but also its changes with regard to small changes from the inputs.
+Dual numbers: a two dimentional space where a outer product is defined between any vectors x = (a, b) and y = (c, d) as x×y = (a⋅c, a⋅d + c⋅b). Dual number is useful when we want to include a second-order calculation, i.e., not only calculate the value of a function, but also its changes with regard to small changes from the inputs.
 
 
 # How to use
@@ -109,7 +109,7 @@ This section addresses how we plan to organize our software package.
 
 What will the directory structure look like?
 * The directory will be structured based on functionality. Modules will be deployed according to program features such as mathematic calculations, user interface, computational graph and test suite.
-* In order to ensure that our module can be pip installable, our directory follows a structure like this (not explicitly included in this list are our configuration files, e.g. .coverage, .gitignore, requirements.txt, and .travis.yml: 
+* In order to ensure that our module can be pip installable, our directory follows a structure like this (not explicitly included in this list are our configuration files, e.g. .coverage, .gitignore: 
 
 ```
 code/
@@ -118,7 +118,7 @@ code/
 	setup.py
 ad_extension/ # name TBD
 docs/
-.travis.ylm
+.travis.yml
 README.md
 requirements.txt
 ```
@@ -140,15 +140,12 @@ README.md
 ```
 
 What modules do you plan on including? What is their basic functionality?
-* For now, we plan of having two models: `ADG4` for implementing our core AD functionality and `ad_extension` which will use our core library for an end-user program.
-* Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices. It has built in support for matrix/vector math which will be useful for our final implementation and is accessible by running the following:
-```
-import numpy as np
-```
+* For now, we plan of having two modules: `ADG4` for implementing our core AD functionality and `ad_extension` which will use our core library for an end-user program.
+* Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices. It has built in support for matrix/vector math which will be useful for our final implementation. We have include these libraries in `requirements.txt` so users can install them easily with `pip install -r requirements.txt` on their machine orvirtual environment.
 
 Test Suite:
 * We are using both TravisCI and CodeCov as part of our test suite.
-* The project will leverage the unittest module to test, and will live in a separate directory structure as seen above. The test suite will be run automatically via TravisCI everytime we push a change into our branch. Each time code is pushed, they both will run all the tests in the `tests/` dir. Possibly with `python -m unittest tests/`.
+* The project will leverage the `pytest` module to test, and will live in a separate directory structure as seen above. The test suite will be run automatically via TravisCI everytime we push a change into our branch. We set the test suite up in the `.travis.yml` file. Each time code is pushed, they both will run all the tests in the `tests/` dir.
 * The project repo has a badge reporting on the coverage of our code from Codecov, so we can easily tell how many tests are passing.
 
 Package Distribution:
@@ -164,7 +161,7 @@ Sofware Packaging:
 Other Considerations:
 * As noted in the project instructions we will also include a broader impact statement for our library. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population.
 
-# Implementation
+# Implementation Details
 
 The core data structure is an AutoDiffVector which maintains two core pieces of data:
 the current value, and the the derivatives with regard to *all* the independent variables.
@@ -212,7 +209,7 @@ If each `ADFunction` handles the three input types:
 - AutoDiffVector
 - Vector
 
-We anticipate that our program will be able to support these instances.
+We anticipate that our program will be able to support these instances. 
 
 ####  Scalars, Vectors example:
 
@@ -273,6 +270,10 @@ AutoDiffVector will track their trace within the `der` variable, just like it di
             raise TypeError
 
 ```
+
+### Next step
+As mentioned in the in the `Scalar and Vector` section, we anticipate that our program will be able to support both scaler and vector implementations. At thi stage, we have tested the scaler implementation relatively carefully, but more tests should be done to the vector implementation.
+
 ## Future Features
 
 As an add-on feature that we've thought to include in our project is to apply AD to a a real world problem, coupled by a potential UI to facilitate this. There has been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specically applied to calculating greeks in Option contracts or valuating Interest Rate Swaps where the interest rate yield curve can be complex. 
