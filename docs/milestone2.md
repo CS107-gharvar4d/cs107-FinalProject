@@ -276,6 +276,8 @@ As mentioned in the in the `Scalar and Vector` section, we anticipate that our p
 
 ## Future Features
 
+1. Pricing Exotic Derivatives
+
 As an add-on feature that we've thought to include in our project is to apply AD to a a real world problem, coupled by a potential UI to facilitate this. There has been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specically applied to calculating greeks in Option contracts or valuating Interest Rate Swaps where the interest rate yield curve can be complex. 
 
 In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical example. 
@@ -297,6 +299,28 @@ tests/
 docs/
 	milestone1.ipynb
 	milestone2.md
+setup.py
+README.md
+```
+
+2. Parameter Fitting on a Time-dependent System
+
+Another option of the extra feature is to implement a parameter fitting algorithm for a time dependent system. Give a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. Note that a distance needs to be defined in this space. With stochastic gradient descent with gradients provided by AD, we can infer the correct set of parameters to reproduce the observational data.
+
+Same as the previous example, the extra feature would be implemented in an seperate subfolder as follows,
+
+```
+ADG4/
+        ad.py
+Fitting/
+        integral.py
+        descent.py
+tests/
+        test_ad.py
+        test_integral.py
+        test_descent.py
+docs/
+        howto.md
 setup.py
 README.md
 ```
