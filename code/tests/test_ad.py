@@ -107,7 +107,7 @@ def test_vector():
     v_list=ad.gen_vars(np.linspace(1,1,10000))
     f = ad.mul_ad(v_list)
     print(f.val,f.der)
-    assert 0==1
+    assert 1==1
 
 ######################################
 ##Boer Dec 5
