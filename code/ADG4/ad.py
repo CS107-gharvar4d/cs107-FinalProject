@@ -108,6 +108,15 @@ class AutoDiffVector():
         except AttributeError:
             print('Not an independent variable')
             raise TypeError
+    
+    ##Boer Dec 5
+    ################
+    def __eq__(self,other):
+        return np.abs(self.val-other.val)<1e-6 and np.abs(self.der-other.der)<1e-6
+    def __ne__(self,other):
+        return np.abs(self.val- other.val)>1e-6 or np.abs(self.der-other.der)>1e-6
+    ################
+
 
 def sin_ad(x):
     y=copy.deepcopy(x)
@@ -126,6 +135,78 @@ def tan_ad(x):
     y.val=np.tan(x.val)
     y.der=np.power(1./np.cos(x.val),2.)*x.der
     return y
+
+#Boer Dec4
+#######################
+def arcsin_ad(x):
+    y=copy.deepcopy(x)
+    y.val=np.arcsin(x.val)
+    y.der=1/(1-x.val**2)**0.5*x.der
+    return y
+
+def arccos_ad(x):
+    y=copy.deepcopy(x)
+    y.val=np.arccos(x.val)
+    y.der=-1/(1-x.val**2)**0.5*x.der
+    return y
+
+def arctan_ad(x):
+    y=copy.deepcopy(x)
+    y.val=np.arctan(x.val)
+    y.der=1/(1+x.val**2)*x.der
+    return y
+
+def expa_ad(a,x):
+    y=copy.deepcopy(x)
+    y.val=a**x.val
+    y.der=a**x.val*np.log(a)*x.der
+    return y
+
+def loga_ad(a,x):
+    y=copy.deepcopy(x)
+    y.val=np.log(x.val)/np.log(a)
+    y.der=1/(x.val*np.log(a))*x.der
+    return y
+
+def log_ad(x):
+    y=copy.deepcopy(x)
+    y.val=np.log(x.val)
+    y.der=1/(x.val)*x.der
+    return y
+
+def sinh_ad(x):
+    y=copy.deepcopy(x)
+    y.val=np.sinh(x.val)
+    y.der=np.cosh(x.val)*x.der
+    return y
+
+def cosh_ad(x):
+    y=copy.deepcopy(x)
+    y.val=np.cosh(x.val)
+    y.der=np.sinh(x.val)*x.der
+    return y
+
+def tanh_ad(x):
+    y=copy.deepcopy(x)
+    y.val=np.tanh(x.val)
+    y.der=(np.cosh(x.val)**2-np.sinh(x.val)**2)/(np.cosh(x.val)**2)*x.der
+    return y
+
+def logistic_ad(x):
+    y=copy.deepcopy(x)
+    y.val=1/(1+np.exp(-x.val))
+    y.der=np.exp(x.val)/(1+np.exp(x.val))**2*x.der
+    return y
+
+def sqrt_ad(x):
+    return x**0.5
+
+
+
+
+###Boer Dec 5
+################################
+
 
 def exp_ad(x):
     y=copy.deepcopy(x)
