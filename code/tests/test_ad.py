@@ -59,7 +59,6 @@ def test_pow():
     a = np.random.rand(1)
     x = ad.AutoDiffVector(a)
     f1= 2**x
- #   print(f1.val,f1.der)
     assert f1.val==2**a and np.abs(f1.der-2**a*np.log(2))<1e-5    
     f2= x**2
     assert f2.val==a**2 and f2.der==2*a
@@ -94,6 +93,7 @@ def test_twoAD():
     assert f5.val==2/3 and f5.der==0
     f5=f1.__rtruediv__(f2)
     assert f5.val==3/2 and f5.der==0
+
 def test_vector():
    #A raw version Boer Nov 19
     [x,y,z,t]=ad.gen_vars([3.,np.pi,5.,3.4])
@@ -107,7 +107,7 @@ def test_vector():
     v_list=ad.gen_vars(np.linspace(1,1,10000))
     f = ad.mul_ad(v_list)
     print(f.val,f.der)
-    assert 1==1
+    assert 0==1
 
 ######################################
 ##Boer Dec 5
