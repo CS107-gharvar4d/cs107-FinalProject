@@ -4,37 +4,27 @@ import ADG4.ad as ad
 import numpy as np
 import random as random
 
+##Boer Dec5, calculating derivative of f at x0  using finite difference
+def fprime_fd(f,x0,dx=1e-12):
+    return (f(x0+dx)-f(x0))/dx
+
 def test_basic():
-    #a = 3.0 # Value to evaluate at
     a = np.random.rand(1)
-    #a.type()
-    #print(a)
-    #a=5.0
     x = ad.AutoDiffVector(a)
     
     alpha = 2.0
     beta = 3.0
-#    print(x.val,x.der)
+
     f =  alpha*x+beta
-#    print(x.val,x.der)
-#    print(f.val)
-#    print("??",a)
     
     assert f.val==alpha*a+beta and f.der==alpha
-    print(f.val,f.der)
-    print(x.val,x.der)
     f = x * alpha + beta
-    print(f.val,f.der)
     assert f.val==alpha*a+beta and f.der==alpha
-    #print(f.val, f.der)
     f = beta + alpha * x
     assert f.val==alpha*a+beta and f.der==alpha
-    #print(f.val, f.der) 
     f = beta + x * alpha
-    assert f.val==alpha*a+beta and f.der==alpha
-    #print(f.val, f.der) 
+    assert f.val==alpha*a+beta and f.der==alpha 
     f = beta - x * alpha
-    #print(f.val, f.der)
     assert f.val==beta-a*alpha and f.der==-alpha
     f = x/alpha
     assert f.val==a/alpha and f.der==1/alpha
@@ -90,23 +80,20 @@ def test_unary_negation():
 ###########
 ##Boer Nov17
 def test_twoAD():
-    a = 2.0 # Value to evaluate at
+    a = 2.0 
     x = ad.AutoDiffVector(a)
     f1= 2*x
     f2=f1+x
-    #print(f2.val,f2.der)
     f3=f1-x
     f4=f1*x
-  #  print(f3.val,f3.der)
-  #  print(f4.val,f4.der)
     assert f1.val==4.0 and f1.der==2.0
     assert f2.val==6.0 and f2.der==3
     assert f3.val==2 and f3.der==1
     assert f4.val==8 and f4.der==8
     f5=f1/f2
-  #  print(f5.val,f5.der)
     assert f5.val==2/3 and f5.der==0
-
+    f5=f1.__rtruediv__(f2)
+    assert f5.val==3/2 and f5.der==0
 def test_vector():
    #A raw version Boer Nov 19
     [x,y,z,t]=ad.gen_vars([3.,np.pi,5.,3.4])
@@ -121,3 +108,79 @@ def test_vector():
     f = ad.mul_ad(v_list)
     print(f.val,f.der)
     assert 1==1
+
+######################################
+##Boer Dec 5
+def test_expa():
+    a = random.random()
+    x=ad.AutoDiffVector(a)
+    f=ad.expa_ad(2,x)
+    assert f.val==2**a and f.der==2**a*np.log(2)
+
+def test_loga():
+    a = random.random()
+    x=ad.AutoDiffVector(a)
+    f=ad.loga_ad(2,x)
+    assert f.val==np.log(a)/np.log(2) and f.der==1/(a*np.log(2))
+
+def test_log():
+    a = random.random()
+    x=ad.AutoDiffVector(a)
+    f=ad.log_ad(x)
+    assert f.val==np.log(a) and f.der==1/(a)
+
+def test_inverse_trig():
+    a = random.random()
+    x=ad.AutoDiffVector(a)
+    f=ad.arcsin_ad(x)
+    assert f.val==np.arcsin(a)
+    assert  np.abs(f.der-fprime_fd(np.arcsin,a))<1e-2
+    f=ad.arccos_ad(x)
+    assert f.val==np.arccos(a)
+    assert  np.abs(f.der-fprime_fd(np.arccos,a))<1e-2
+    f=ad.arctan_ad(x)
+    assert f.val==np.arctan(a)
+    assert  np.abs(f.der-fprime_fd(np.arctan,a))<1e-2
+
+def test_sqrt():
+    a = random.random()
+    x=ad.AutoDiffVector(a)
+    f=ad.sqrt_ad(x)
+    assert f.val==a**0.5
+    assert f.der==0.5*a**(-0.5)
+     
+def test_hyperbolic():
+    a = random.random()
+    x=ad.AutoDiffVector(a)
+    f=ad.sinh_ad(x)
+    assert f.val==np.sinh(a)
+    assert f.der==np.cosh(a)
+    f=ad.cosh_ad(x)
+    assert f.val==np.cosh(a)
+    assert f.der==np.sinh(a)
+    f=ad.tanh_ad(x)
+    assert f.val==np.tanh(a)
+    assert np.abs(f.der-(1-np.tanh(a)**2))<1e-3
+
+def test_logistic():
+    a = random.random()
+    x=ad.AutoDiffVector(a)
+    f=ad.logistic_ad(x)
+    assert f.val==1/(1+np.exp(-a))
+    assert np.abs(f.der-fprime_fd(lambda x:1/(1+np.exp(-x)),a))<1e-2
+
+def test_compare():
+    a = random.random()
+    x=ad.AutoDiffVector(a)
+    f1=ad.sinh_ad(x)
+    f2=ad.cosh_ad(x)
+    f3=ad.tanh_ad(x)
+    assert f1!=f2
+    f4=f1/f2
+    print(f4.val,f4.der)
+    print(f3.val,f3.der)
+    assert f1/f2==f3
+
+####Boer Dec 5
+####################################
+
