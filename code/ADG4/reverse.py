@@ -6,25 +6,22 @@ from collections import defaultdict
 
 class AutoDiffReverse():
     
-    def __init__(self,a):
+    def __init__(self,a, name=None):
         self.val=a
-        self.derivs = { self: 0}
         self.children = []
         self.acc = 1
         self.has_backpropped = False
-
-
-    def get_deriv(self,wrt=None):
-        if wrt:
-            return self.derivs[wrt]
-        return self.derivs
-
+        self.name = name
+        self._partial = {}
 
     def __repr__(self):
-        return f'AutoDiffToy({self.val})'
+        if not self.name:
+            return f'AutoDiffReverse({self.val})'
+        return f'AutoDiffReverse({self.val}, name="{self.name}")'
 
     def __add__(self,other):
         new=copy.deepcopy(self)
+        new.name=None
         
         try:
             new.val+=other.val
@@ -39,6 +36,8 @@ class AutoDiffReverse():
 
     def __mul__(self,other):
         new=copy.deepcopy(self)
+        new.name=None
+        
         try:
             new.val*=other.val
             new.children=[[self,other.val],[other,self.val]]
@@ -68,7 +67,7 @@ class AutoDiffReverse():
                 # (derivative root -> node) * (derivative node -> child_node)
                 stack.append((child_node, edge_value * child_edge_value))
                 
-        self._partial = partial
+        self._partial = dict(partial)
         
 
     def partial(self,vv):
@@ -85,13 +84,14 @@ class AutoDiffReverse():
 
 
 
-x=AutoDiffReverse(3)
-y=AutoDiffReverse(4)
-z=AutoDiffReverse(9)
+x=AutoDiffReverse(3, name='x')
+y=AutoDiffReverse(4, name='y')
+z=AutoDiffReverse(9, name='z')
 m=x+y
 n=m*z+x
 print(n.val,n.partial(x),n.partial(y),n.partial(z))
 
+print(n._partial)
 assert n.partial(x) == 10
 assert n.partial(y) == 1 * z.val
 assert n.partial(z) == m.val
