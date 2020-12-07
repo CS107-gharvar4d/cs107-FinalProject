@@ -49,19 +49,19 @@ class AutoDiffReverse():
         return self.__mul__(other)
     
     def backprop(self):
-        var_list=[]
-        self._backprop(var_list)
+        self.acc=1
         self._partial={}
-        for vv in var_list:
-            self._partial[vv]=vv.derivs[vv]
+        self._backprop(self._partial)
 
-    def _backprop(self,var_list):
+    def _backprop(self,partial):
         for (c,i) in self.children:
             c.acc = i * self.acc
-            c._backprop(var_list)
+            c._backprop(partial)
         if not self.children:
-            self.derivs[self]=self.acc+self.derivs[self]
-            var_list.append(self)
+            if self in partial.keys():
+                partial[self]+=self.acc
+            else:
+                partial[self]=self.acc
 
     def partial(self,vv):
         self.backprop()
@@ -79,4 +79,5 @@ y=AutoDiffReverse(4)
 z=AutoDiffReverse(9)
 m=x+y
 n=m*z+x
+print(n.val,n.partial(x))
 print(n.val,n.partial(x))
