@@ -10,6 +10,7 @@ class AutoDiffReverse():
         self.derivs = { self: 0}
         self.children = []
         self.acc = 1
+        self.has_backpropped = False
 
 
     def get_deriv(self,wrt=None):
@@ -64,7 +65,10 @@ class AutoDiffReverse():
             var_list.append(self)
 
     def partial(self,vv):
-        self.backprop()
+        if not self.has_backpropped:
+            self.backprop()
+            self.has_backpropped = True
+        
         if vv in self._partial.keys():
             return self._partial[vv]
         else:
@@ -79,4 +83,10 @@ y=AutoDiffReverse(4)
 z=AutoDiffReverse(9)
 m=x+y
 n=m*z+x
-print(n.val,n.partial(x))
+print(n.val,n.partial(x),n.partial(y),n.partial(z))
+
+assert n.partial(x) == 10
+assert n.partial(y) == 1 * z.val
+assert n.partial(z) == m.val
+
+
