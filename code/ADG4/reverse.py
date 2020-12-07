@@ -1,5 +1,6 @@
 import numpy as np
 import copy
+from collections import defaultdict
 
 
 
@@ -50,19 +51,25 @@ class AutoDiffReverse():
         return self.__mul__(other)
     
     def backprop(self):
-        var_list=[]
-        self._backprop(var_list)
-        self._partial={}
-        for vv in var_list:
-            self._partial[vv]=vv.derivs[vv]
-
-    def _backprop(self,var_list):
-        for (c,i) in self.children:
-            c.acc = i * self.acc
-            c._backprop(var_list)
-        if not self.children:
-            self.derivs[self]=self.acc+self.derivs[self]
-            var_list.append(self)
+        # A back prop implementation that keeps all derivative accumulations
+        # within this root node that calls .backprop()
+        partial = defaultdict(int)
+        
+        stack = [ (child_node, edge_value) for (child_node, edge_value) in self.children]
+        while stack:
+            # edge value is the derivative between the root node
+            # and this current node
+            node, edge_value = stack.pop()
+            # Update the partial derivative to add this current derivative value
+            partial[node] += edge_value
+            # Add each child to our stack
+            for child_node, child_edge_value in node.children:
+                # For each child, its derivative with respect to the root is
+                # (derivative root -> node) * (derivative node -> child_node)
+                stack.append((child_node, edge_value * child_edge_value))
+                
+        self._partial = partial
+        
 
     def partial(self,vv):
         if not self.has_backpropped:
@@ -90,3 +97,5 @@ assert n.partial(y) == 1 * z.val
 assert n.partial(z) == m.val
 
 
+assert m.partial(x) == 1
+assert m.partial(y) == 1
