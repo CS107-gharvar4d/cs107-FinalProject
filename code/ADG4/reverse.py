@@ -1,4 +1,5 @@
 import numpy as np
+from collections import defaultdict
 import copy
 
 
@@ -50,7 +51,7 @@ class AutoDiffReverse():
     
     def backprop(self):
         self.acc=1
-        self._partial={}
+        self._partial=defaultdict(int)
         self._backprop(self._partial)
 
     def _backprop(self,partial):
@@ -58,10 +59,7 @@ class AutoDiffReverse():
             c.acc = i * self.acc
             c._backprop(partial)
         if not self.children:
-            if self in partial.keys():
-                partial[self]+=self.acc
-            else:
-                partial[self]=self.acc
+            partial[self]+=self.acc
 
     def partial(self,vv):
         self.backprop()
