@@ -45,9 +45,8 @@ class AutoDiffVector():
         :param a:
         :param der:
         """
-
-    self.val = a
-    self.der = der
+        self.val = a
+        self.der = der
 
     @classmethod
     def vconvert(cls, v):
