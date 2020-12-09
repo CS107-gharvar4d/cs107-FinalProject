@@ -139,7 +139,7 @@ class AutoDiffVector():
         """
         Returns partial derivative given variable
         :param vari:
-        :return: 
+        :return:
         """
         try:
             idx = np.nonzero(vari.der)[0]
@@ -160,106 +160,120 @@ class AutoDiffVector():
     def __ne__(self, other):
         return np.abs(self.val - other.val) > 1e-6 or np.abs(self.der - other.der) > 1e-6
 
-    def sin_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.sin(x.val)
-        y.der = np.cos(x.val) * x.der
-        return y
 
-    def cos_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.cos(x.val)
-        y.der = -np.sin(x.val) * x.der
-        return y
+def sin_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.sin(x.val)
+    y.der = np.cos(x.val) * x.der
+    return y
 
 
-    def tan_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.tan(x.val)
-        y.der = np.power(1. / np.cos(x.val), 2.) * x.der
-        return y
+def cos_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.cos(x.val)
+    y.der = -np.sin(x.val) * x.der
+    return y
+
+
+def tan_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.tan(x.val)
+    y.der = np.power(1. / np.cos(x.val), 2.) * x.der
+    return y
+
 
 # Boer Dec4
+def arcsin_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.arcsin(x.val)
+    y.der = 1 / (1 - x.val ** 2) ** 0.5 * x.der
+    return y
 
-    def arcsin_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.arcsin(x.val)
-        y.der = 1 / (1 - x.val ** 2) ** 0.5 * x.der
-        return y
 
-    def arccos_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.arccos(x.val)
-        y.der = -1 / (1 - x.val ** 2) ** 0.5 * x.der
-        return y
+def arccos_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.arccos(x.val)
+    y.der = -1 / (1 - x.val ** 2) ** 0.5 * x.der
+    return y
 
-    def arctan_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.arctan(x.val)
-        y.der = 1 / (1 + x.val ** 2) * x.der
-        return y
 
-    def expa_ad(a, x):
-        y = copy.deepcopy(x)
-        y.val = a ** x.val
-        y.der = a ** x.val * np.log(a) * x.der
-        return y
+def arctan_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.arctan(x.val)
+    y.der = 1 / (1 + x.val ** 2) * x.der
+    return y
 
-    def loga_ad(a, x):
-        y = copy.deepcopy(x)
-        y.val = np.log(x.val) / np.log(a)
-        y.der = 1 / (x.val * np.log(a)) * x.der
-        return y
 
-    def log_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.log(x.val)
-        y.der = 1 / (x.val) * x.der
-        return y
+def expa_ad(a, x):
+    y = copy.deepcopy(x)
+    y.val = a ** x.val
+    y.der = a ** x.val * np.log(a) * x.der
+    return y
 
-    def sinh_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.sinh(x.val)
-        y.der = np.cosh(x.val) * x.der
-        return y
 
-    def cosh_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.cosh(x.val)
-        y.der = np.sinh(x.val) * x.der
-        return y
+def loga_ad(a, x):
+    y = copy.deepcopy(x)
+    y.val = np.log(x.val) / np.log(a)
+    y.der = 1 / (x.val * np.log(a)) * x.der
+    return y
 
-    def tanh_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.tanh(x.val)
-        y.der = (np.cosh(x.val) ** 2 - np.sinh(x.val) ** 2) / (np.cosh(x.val) ** 2) * x.der
-        return y
 
-    def logistic_ad(x):
-        y = copy.deepcopy(x)
-        y.val = 1 / (1 + np.exp(-x.val))
-        y.der = np.exp(x.val) / (1 + np.exp(x.val)) ** 2 * x.der
-        return y
+def log_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.log(x.val)
+    y.der = 1 / (x.val) * x.der
+    return y
 
-    def sqrt_ad(x):
-        return x ** 0.5
+
+def sinh_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.sinh(x.val)
+    y.der = np.cosh(x.val) * x.der
+    return y
+
+
+def cosh_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.cosh(x.val)
+    y.der = np.sinh(x.val) * x.der
+    return y
+
+
+def tanh_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.tanh(x.val)
+    y.der = (np.cosh(x.val) ** 2 - np.sinh(x.val) ** 2) / (np.cosh(x.val) ** 2) * x.der
+    return y
+
+
+def logistic_ad(x):
+    y = copy.deepcopy(x)
+    y.val = 1 / (1 + np.exp(-x.val))
+    y.der = np.exp(x.val) / (1 + np.exp(x.val)) ** 2 * x.der
+    return y
+
+
+def sqrt_ad(x):
+    return x ** 0.5
+
 
 # Boer Dec 5
+def exp_ad(x):
+    y = copy.deepcopy(x)
+    y.val = np.exp(x.val)
+    y.der = np.exp(x.val) * x.der
+    return y
 
-    def exp_ad(x):
-        y = copy.deepcopy(x)
-        y.val = np.exp(x.val)
-        y.der = np.exp(x.val) * x.der
-        return y
 
-    def mul_ad(x):
-        return x[0] * mul_ad(x[1:]) if len(x) > 1 else x[0]
+def mul_ad(x):
+    return x[0] * mul_ad(x[1:]) if len(x) > 1 else x[0]
 
-    def gen_vars(vvars):
-        vars = []
-        nvars = len(vvars)
-        for ii in range(len(vvars)):
-            der = np.zeros(nvars)
-            der[ii] = 1
-            vars.append(AutoDiffVector(vvars[ii], der))
-        return vars
+
+def gen_vars(vvars):
+    vars = []
+    nvars = len(vvars)
+    for ii in range(len(vvars)):
+        der = np.zeros(nvars)
+        der[ii] = 1
+        vars.append(AutoDiffVector(vvars[ii], der))
+    return vars
