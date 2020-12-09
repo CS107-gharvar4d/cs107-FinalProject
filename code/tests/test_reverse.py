@@ -47,7 +47,7 @@ def test_neg():
 
 def basic_sub():
     """
-    Test substracion operations upon reverse mode.
+    Test substraction operations upon reverse mode.
     :return:
     """
     x = rev.AutoDiffReverse(3, name='x')
@@ -61,17 +61,23 @@ def basic_sub():
     assert n.val == 8
     assert n.partial(x) == 1
     assert n.partial(y) == -1
-    #n.partial(m)
+    assert n.partial(z) == -1
 
     m = x - 1
+    n = m - 1
     assert m.val == 2
     assert m.partial(x) == 1
+    assert n.val == 1
+    assert n.partial(x) == 1
     m = 1 - x
     assert m.val == -2
     assert m.partial(x) == -1
     m = z - 1
+    n = m -1
     assert m.val == -10
-    #assert  m.partial(y)
+    assert n.val == -11
+    assert m.partial(z) == 1
+    assert n.partial(z) == 1
 
 def test_inv():
     """
@@ -127,3 +133,7 @@ def test_power():
     z = rev.AutoDiffReverse(-2, name='z')
     m = z ** -2
     assert m.val == 0.25
+
+def negative():
+    x = rev.AutoDiffReverse(3, name='x')
+    assert x.__neg__().val == -3
