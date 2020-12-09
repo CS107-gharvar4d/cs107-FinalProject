@@ -21,7 +21,6 @@ class AutoDiffReverse():
 
     def __add__(self,other):
         new=AutoDiffReverse(self.val)
-        new.name=None
         
         try:
             new.val+=other.val
@@ -36,7 +35,6 @@ class AutoDiffReverse():
 
     def __mul__(self,other):
         new=AutoDiffReverse(self.val)
-        new.name=None
         
         try:
             new.val*=other.val
@@ -83,7 +81,6 @@ class AutoDiffReverse():
         else:
             raise KeyError('Function not dependent on input')
 
-    ##Boer Dec 7     
     def __neg__(self):
       new=AutoDiffReverse(-self.val)
       new.name=None
@@ -139,8 +136,6 @@ m=x+y
 n=m*z+x
 
 p=x*x*x
-
-
 
 print(n.val,n.partial(x),n.partial(y),n.partial(z))
 
@@ -198,3 +193,4 @@ assert m.partial(y)==3**4*np.log(3)
 m=2**x
 assert m.val==8
 assert m.partial(x)==2**3*np.log(2)
+
