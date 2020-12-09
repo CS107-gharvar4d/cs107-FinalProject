@@ -125,5 +125,5 @@ def test_power():
     assert m.val == 8
     assert m.partial(x) == 2 ** 3 * np.log(2)
     z = rev.AutoDiffReverse(-2, name='z')
-    m = z ** 2
+    m = z ** -2
     assert m.val == 0.25
