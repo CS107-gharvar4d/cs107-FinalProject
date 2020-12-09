@@ -72,3 +72,12 @@ def basic_sub():
     m = z - 1
     assert m.val == -10
     #assert  m.partial(y)
+    
+def test_inv():
+    """
+    Test inverse of a value i.e. 1/val and checks assertion
+    :return:
+    """
+    x = rev.AutoDiffReverse(3, name='x')
+    r = x.__inv__()
+    assert r.partial(x) == -1 / x.val ** 2    
