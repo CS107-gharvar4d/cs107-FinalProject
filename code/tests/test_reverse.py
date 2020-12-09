@@ -10,7 +10,7 @@ Tests module that using AutoDiffReverse and test using backpropagation algo.
 
 import pytest
 import sys
-import ADG4.ad as ad
+import ADG4.reverse as rev
 import numpy as np
 
 def test_add_mult():
@@ -18,9 +18,9 @@ def test_add_mult():
     Check basic assertions when adding  or multiplying new values and outputs correct derivative
     :return:
     """
-    x = ad.AutoDiffReverse(3, name='x')
-    y = ad.AutoDiffReverse(4, name='y')
-    z = ad.AutoDiffReverse(9, name='z')
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    z = rev.AutoDiffReverse(9, name='z')
     m = x + y
     n = m * z + x
     p = x * x * x
@@ -37,9 +37,9 @@ def test_neg():
     Test negative numbers, not inclusive to all positives
     :return:
     """
-    x = ad.AutoDiffReverse(3, name='x')
-    y = ad.AutoDiffReverse(4, name='y')
-    z = ad.AutoDiffReverse(-9, name='z')
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    z = rev.AutoDiffReverse(-9, name='z')
     m = x + y
     n = m * z + x
     q = -n
@@ -47,12 +47,12 @@ def test_neg():
 
 def basic_sub():
     """
-    Test substracion operations upon reverse mode. 
-    :return: 
+    Test substracion operations upon reverse mode.
+    :return:
     """
-    x = ad.AutoDiffReverse(3, name='x')
-    y = ad.AutoDiffReverse(4, name='y')
-    z = ad.AutoDiffReverse(-9, name='z')
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    z = rev.AutoDiffReverse(-9, name='z')
     m = x - y
     n = x - y - z
     assert m.val == -1
