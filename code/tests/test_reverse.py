@@ -72,7 +72,7 @@ def basic_sub():
     m = z - 1
     assert m.val == -10
     #assert  m.partial(y)
-    
+
 def test_inv():
     """
     Test inverse of a value i.e. 1/val and checks assertion
@@ -80,4 +80,50 @@ def test_inv():
     """
     x = rev.AutoDiffReverse(3, name='x')
     r = x.__inv__()
-    assert r.partial(x) == -1 / x.val ** 2    
+    assert r.partial(x) == -1 / x.val ** 2
+
+def test_div():
+    """
+    Test division on each element and calc partial derivative.
+    :return:
+    """
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    m = x / y
+    assert m.val == 3 / 4
+    assert m.partial(x) == 1 / 4
+    assert m.partial(y) == 3 * -(4) ** (-2)
+
+    m = x / 2
+    assert m.val == 1.5
+    assert m.partial(x) == 1 / 2
+
+    m = 2 / x
+    assert m.val == 2 / 3
+    assert m.partial(x) == 2 * -(3) ** (-2)
+
+    m = x / x
+    assert m.val == 1
+    assert m.partial(x) == 0
+
+    m = 0 / x
+    assert m.val == 0
+    assert m.partial(x) == 0
+
+def test_power():
+    """
+    Test power function on each element and calc partial derivative.
+    :return:
+    """
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    m = x ** y
+    assert m.val == 81
+    assert m.partial(x) == 4 * 3 * 3 * 3
+    assert m.partial(y) == 3 ** 4 * np.log(3)
+    m = 2 ** x
+    assert m.val == 8
+    assert m.partial(x) == 2 ** 3 * np.log(2)
+    z = rev.AutoDiffReverse(-2, name='z')
+    m = z ** 2
+    assert m.val == 0.25
