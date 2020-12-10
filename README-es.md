@@ -4,14 +4,9 @@
 
 [![codecov](https://codecov.io/gh/CS107-gharvar4d/cs107-FinalProject/branch/master/graph/badge.svg?token=8GK9WUDOZP)](undefined)
 
-### Documentation
+Numero de Grupo: 28
 
-**[English](docs/documentation.md)** | [Español](docs/documentation-es.md) <!-- l10n:select -->
-
-
-Group number: 28
-
-Group mumbers:  
+Miembros de Grupo:  
 
 Rodrigo	Vargas	rov406@g.harvard.edu
 

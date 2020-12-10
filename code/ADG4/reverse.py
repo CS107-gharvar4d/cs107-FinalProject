@@ -126,7 +126,6 @@ class AutoDiffReverse():
       new.children=[[self,other**self.val*np.log(other)]]
       return new
 
-
 x=AutoDiffReverse(3, name='x')
 y=AutoDiffReverse(4, name='y')
 z=AutoDiffReverse(9, name='z')
@@ -193,4 +192,3 @@ assert m.partial(y)==3**4*np.log(3)
 m=2**x
 assert m.val==8
 assert m.partial(x)==2**3*np.log(2)
-
