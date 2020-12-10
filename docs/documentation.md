@@ -273,7 +273,7 @@ AutoDiffVector will track their trace within the `der` variable, just like it di
 
 ## Add-on Feature
 
-Reverse Mode Differentiation. 
+## Reverse Mode Differentiation. 
 
 We've been focusing in forward mode, where we carry derivatives along and traverse the graph at each node. But there is another method in which we build a graph and store a partial derivative at each node and contrary to forward mode, we do not calculate the full derivative nor use the Chain Rule. The same graph can be used in both methods, it is just the direction of the derivative information that changes. In the case of reverse mode, we leverage a backpropagation technique to make this happen, where we generate the forward trace and then calculate the partial derivative on each node with respect to its children.  
 
@@ -304,12 +304,14 @@ It is important to consider the potential effects on building software and make 
 Our group accepts two common workflows for collaboration:
 
 1.  Basic Shared Repository
+
 Clone our repo and update with `git pull origin master`, then create a working branch with `git checkout -b MyNewBranch` and make any changes to it before staging. 
 Commit locally and upload the changes (including your new branch) to GitHub with `git push origin MyNewBranch`
 
 Then, navigate to main on GitHub where you should now see your new branch. Click on “Pull Request” button and “Send Pull Request”
 
 2. Fork repo and pull
+
 We can assign rights to “Collaborators”. Even though collaborators do not have push access to upstream, we accept Pull Requests (PRs) from them, reviews and then merge changes into main repo if approved.
 
 
