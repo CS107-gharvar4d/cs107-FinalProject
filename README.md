@@ -6,7 +6,7 @@
 
 ### Documentation
 
-**[English](docs/documentation.md)** | [Español](README-es.md) | <!-- l10n:select -->
+**[English](docs/documentation.md)** | [Español](docs/documentation-es.md) <!-- l10n:select -->
 
 
 Group number: 28
