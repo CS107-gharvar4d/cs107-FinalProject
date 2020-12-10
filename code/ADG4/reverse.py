@@ -5,7 +5,7 @@ from collections import defaultdict
 
 
 class AutoDiffReverse():
-    
+    ## A reverse autodifferentiation class
     def __init__(self,a, name=None):
         self.val=a
         self.children = []
@@ -126,69 +126,72 @@ class AutoDiffReverse():
       new.children=[[self,other**self.val*np.log(other)]]
       return new
 
-x=AutoDiffReverse(3, name='x')
-y=AutoDiffReverse(4, name='y')
-z=AutoDiffReverse(9, name='z')
-m=x*y
-print("m",m)
-m=x+y
-n=m*z+x
 
-p=x*x*x
+def sin_rv(x):
+  new=AutoDiffReverse(np.sin(x.val))
+  new.name=None
+  new.children=[[x,np.cos(x.val)]]
+  return new
 
-print(n.val,n.partial(x),n.partial(y),n.partial(z))
+def cos_rv(x):
+  new=AutoDiffReverse(np.cos(x.val))
+  new.name=None
+  new.children=[[x,-np.sin(x.val)]]
+  return new
 
-print(n._partial)
-assert n.partial(x) == 10
-assert n.partial(y) == 1 * z.val
-assert n.partial(z) == m.val
+def tan_rv(x):
+  return sin_rv(x)/cos_rv(x)
 
+def arcsin_rv(x):
+  new=AutoDiffReverse(np.arcsin(x.val))
+  new.name=None
+  new.children=[[x,1 / (1 - x.val ** 2) ** 0.5]]
+  return new
 
-assert m.partial(x) == 1
-assert m.partial(y) == 1
+def arccos_rv(x):
+  new=AutoDiffReverse(np.arccos(x.val))
+  new.name=None
+  new.children=[[x,-1 / (1 - x.val ** 2) ** 0.5]]
+  return new
 
-assert p.partial(x)==3*3*3
+def arctan_rv(x):
+  new=AutoDiffReverse(np.arctan(x.val))
+  new.name=None
+  new.children=[[x,-1 / (1 - x.val ** 2) ** 0.5]]
+  return new
 
+def expa_rv(a,x):
+  return a**x
 
-##test_neg
-q=-n
-assert q.partial(x)==-n.partial(x)
+def exp_rv(x):
+  return expa_rv(np.exp(1),x)
 
-##test_sub
-m=x-y
-assert m.val==-1
-assert m.partial(x)==1
-assert m.partial(y)==-1
-m=x-1
-assert m.val==2
-assert m.partial(x)==1
-m=1-x
-assert m.val==-2
-assert m.partial(x)==-1
+def loga_rv(a,x):
+  new=AutoDiffReverse(np.log(x)/np.log(a))
+  new.name=None
+  new.children=[[x,1 / (x.val * np.log(a)) ]]
+  return new
 
+def log_rv(x):
+  return loga_rv(exp(1),x)
 
-##test_inv
-r=x.__inv__()
-assert  r.partial(x)==-1/x.val**2
-##test_div
-m=x/y
-assert m.val==3/4
-assert m.partial(x)==1/4
-assert m.partial(y)==3*-(4)**(-2)
-m=x/2
+def sinh_rv(x):
+  new=AutoDiffReverse(np.sinh(x.val))
+  new.name=None
+  new.children=[[x,np.cosh(x.val)]]
+  return new
 
-assert m.val==1.5
-assert m.partial(x)==1/2
-m=2/x
-assert m.val==2/3
-assert m.partial(x)==2*-(3)**(-2)
+def cosh_rv(x):
+  new=AutoDiffReverse(np.sinh(x.val))
+  new.name=None
+  new.children=[[x,np.cosh(x.val)]]
+  return new
 
-##test pow
-m=x**y
-assert m.val==81
-assert m.partial(x)==4*3*3*3
-assert m.partial(y)==3**4*np.log(3)
+def tanh_rv(x):
+  return sinh_rv(x)/cosh_rv(x)
 
-m=2**x
-assert m.val==8
-assert m.partial(x)==2**3*np.log(2)
+def logistic_rv(x):
+  return 1/(1+exp_rv(-x))
+
+def sqrt_ad(x):
+  return x**0.5
