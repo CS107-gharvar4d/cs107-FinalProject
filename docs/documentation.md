@@ -69,7 +69,7 @@ Here are a few important concepts pertaining AD which are mentioned above:
 
 The Chain Rule: the derivative of a convoluted function is the product of each simple function evaluated at the value of its child function. Namely, it can be expressed in terms of the following equation. The basic idea of forward mode
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{du}
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" title="\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" /></a>
 	
 The basic idea of forward mode
 
