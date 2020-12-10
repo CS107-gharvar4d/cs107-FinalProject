@@ -1,7 +1,8 @@
 ##### Table of Contents  
-[Introduction](#introduction)  
+[Introduction](#introduction)
+[Use](#how_to_use)
 [Demo](#demo)   
-
+[Software Organization](#org)
 
 <a name="introduction"/>
 
@@ -53,7 +54,7 @@ The Chain Rule: the derivative of a convoluted function is the product of each s
 Jacobian: the gradient of each element of a function's output with respect to each and every input. In other words, it's the gradient of the function at the space spanned by the inputs.
 Dual numbers: a two dimentional space where a outer product is defined between any vectors x = (a, b) and y = (c, d) as x×y = (a⋅c, a⋅d + c⋅b). Dual number is useful when we want to include a second-order calculation, i.e., not only calculate the value of a function, but also its changes with regard to small changes from the inputs.
 
-
+<a name="how_to_use"/>
 
 # How to use
 
@@ -112,6 +113,8 @@ print(f.val, f.der)
 f = ad.exp_ad(x)
 print(f.val, f.der)
 ```
+
+<a name="org"/>
 
 # Software Organization
 
