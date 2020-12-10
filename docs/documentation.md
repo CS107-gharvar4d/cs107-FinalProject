@@ -92,36 +92,40 @@ conda activate adg4_env
 - Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
 - Jacobian: Lastly, the function returns to the Jacobian matrix. 
 
+Example of Creating an AutoDiffVector:
 ```
-
 import ADG4.ad as ad
 
 a = 2.0 # Value to evaluate at
 x = ad.AutoDiffVector(a) #create a AutoDiff variable with value 2
 alpha=2.0
 beta=3.0
+```
 
-###Examples for Simple Operations: Create Functions from AD Variables
+Simple Operation Example: Creating Functions from AD Variables
+```
 f=alpha*x+beta # behind the scenes this calls the __add__ function and the __mul__ function respectively
 
 # Now you can access the values and derivatives from the AD objects
-print(f.val,f.der) # print the value and derivative
+print(f.val,f.der)
 
 f=alpha/x-beta # behind the scenes this calls the __truediv__ function and the __sub__ function respectively
 print(f.val,f.der) # print the value and derivative
 
 f=x**x #calculate pow
 print(f.val,f.der) 
-
-##Examples for trig functions:
+```
+Trig Function Examples:
+```
 f = ad.sin_ad(x)
 print(f.val, f.der)
 f = ad.cos_ad(x)
 print(f.val, f.der)
 f = ad.tan_ad(x)
 print(f.val, f.der)
-
-##Examples for exp function
+```
+Exponential Function Example:
+```
 f = ad.exp_ad(x)
 print(f.val, f.der)
 ```
