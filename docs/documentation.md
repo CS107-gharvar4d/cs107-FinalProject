@@ -32,7 +32,12 @@ functions allows agents to maximize their expected outcomes. These are only a fe
 differentiating complex functions is useful and necessary.
 
 Given the broad set of applications across domains, we hope ADG4 can be a useful tool
-that can facilitate quick and easy numerical evaluation of derivatives through computing.
+that can facilitate quick and easy numerical evaluation of derivatives through computing. In our toolbox, vector
+calculation is supported. The tool box is capable of returning the Jacobian of a function with arbitrary dimension,
+and is also capable of returning the partial derivative for certain variables. We integrate both forward mode and reverse mode, 
+and the users are welcomed to choose the mode best suited to their scientific problem. Generally speaking,
+we expect that forward mode is more suitable with lower dimensional input with higher dimensional output, and
+the contrary is true for reverse mode. 
 
 
 # Background
@@ -62,9 +67,10 @@ independent variables, where the seeding variables would be put in.
 
 Here are a few important concepts pertaining AD which are mentioned above:
 
-The Chain Rule: the derivative of a convoluted function is the product of each simple function evaluated at the value of its child function.
+The Chain Rule: the derivative of a convoluted function is the product of each simple function evaluated at the value of its child function. Namely, it can be 
+
 Jacobian: the gradient of each element of a function's output with respect to each and every input. In other words, it's the gradient of the function at the space spanned by the inputs.
-Dual numbers: a two dimentional space where a outer product is defined between any vectors x = (a, b) and y = (c, d) as x×y = (a⋅c, a⋅d + c⋅b). Dual number is useful when we want to include a second-order calculation, i.e., not only calculate the value of a function, but also its changes with regard to small changes from the inputs.
+Dual numbers: a two dimentional space where an outer product is defined between any vectors x = (a, b) and y = (c, d) as x×y = (a⋅c, a⋅d + c⋅b). Dual number is useful when we want to include a second-order calculation, i.e., not only calculate the value of a function, but also its changes with regard to small changes from the inputs.
 
 <a name="how_to_use"/>
 
