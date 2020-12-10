@@ -1,7 +1,7 @@
 ##  Table of Contents  
 [Introduction and Background](#introduction)
 
-[Use](#how_to_use)
+[How to Use](#how_to_use)
 
 [Demo](#demo)   
 
@@ -334,7 +334,7 @@ README-es.md
 
 # ADG4 Impact and Inclusivity. 
 
-It is important to consider the potential effects on building software and make it available to all without distinction. Our philosophy is to distribute software to anyone to any purpose and make efforts to develop it in a collaborative public matter. A good start for this is the fact that all of our source code resides in Github, an open platform where everyone can collaborate. Include documentation for non-English speakers such as Spanish, with more to come in the Future.
+It is important to consider the potential effects on building software and make it available to all without distinction. Our philosophy is to distribute software to anyone to any purpose and make efforts to develop it in a collaborative public matter. A good start for this is the fact that all of our source code resides in Github, an open platform where everyone can collaborate. Further, we believe that individuals across borders and languages should be able to collaborate on and use our project with equal access. We thus include documentation for non-English speakers such as Spanish, with more to come in the future.
 
 Our group accepts two common workflows for collaboration:
 
@@ -349,19 +349,20 @@ Then, navigate to main on GitHub where you should now see your new branch. Click
 
 We can assign rights to “Collaborators”. Even though collaborators do not have push access to upstream, we accept Pull Requests (PRs) from them, reviews and then merge changes into main repo if approved.
 
-All ADG4 colloborators should addere to NeurIPS standards, remain vigilant and assest the impact of their code for unethical behaviour or illegal use. Some software applications where this might happen are securiry or privacy. If any misuse is known the project leader should be contacted immediately. 
+All ADG4 collaborators should adhere to NeurIPS standards, remain vigilant and assest the impact of their code for unethical behaviour or illegal use. Some software applications where this might happen are security or privacy. If any misuse is known the project leader should be contacted immediately. We also want to ensure that our software is welcoming to individuals across areas of applied computing. With this in mind, we encourage collaborators to avoid using certain computing terms that can be considered offensive or exclusionary by some groups. A list of such terms and suggested alternatives can be found on the [Association for Computing Machinery](https://www.acm.org/diversity-inclusion/words-matter) website. Some examples include avoiding gendered pronouns and racially charged words such as blacklist/whitelist.
 
+Finally, we are aware of [the gender gap in open source contributions](https://medium.com/intuit-engineering/open-source-where-are-the-women-ae20623529ca) and want to personally encourage female developers to collaborate on our software if they are interested in doing so. Since [data](https://www.techrepublic.com/article/diversity-why-open-source-needs-to-work-on-it-in-2020/) has indicated that access to resources would make women more likely to contribute to open-source projects, we would be happy to provide any additional materials or instructions personally if the materials contained in this repository are insufficient.
 
 <a name="future"/>
 
 ## Future Work
 
-There is strong interest in the group to continue working on additional extensions for this project. Mostly apply AD to real world problems that can be done more efficiently. Some examples include:
+While our primary add-on feature is reverse mode, there is also strong interest in the group to continue working on additional extensions for this project. Broadly speaking, these ideas apply autodifferentiation to real world problems that can be done more efficiently. Since these ideas are not fully crystallized, more work will likely need to be done to hone the implementation. A couple of example include:
 
 1. Pricing Exotic Derivatives
 
-here has been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specically applied to calculating greeks in Option contracts or valuating Interest Rate Swaps where the interest rate yield curve can be complex. In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical example. 
+There have been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specifically applied to calculating Greeks in Option contracts or evaluating Interest Rate Swaps where the interest rate yield curve can be complex. In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical examples. 
 
-2. Parameter Fitting on a Time-dependent System
+2. Parameter Fitting on a Time-Dependent System
 
-Parameter fitting algorithm for a time dependent system. Give a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. This type of algo can be used in the real world for complex regressions, imaging and revolve spectral mixtures.  
+Another potential future extension involves fitting an algorithm for a time dependent system. Given a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. This type of algorithm can be applicable in the real world for use cases such as complex regressions, imaging and revolve spectral mixtures.  
