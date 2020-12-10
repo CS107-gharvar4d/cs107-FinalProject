@@ -4,10 +4,10 @@
 
 [![codecov](https://codecov.io/gh/CS107-gharvar4d/cs107-FinalProject/branch/master/graph/badge.svg?token=8GK9WUDOZP)](undefined)
 
-**[English](README.md)** | [Español](README-es.md) | <!-- l10n:select -->
+### Documentation
 
+**[English](docs/documentation.md)** | [Español](README-es.md) | <!-- l10n:select -->
 
-**[Documentation](docs/documentation.md)** | <!-- l10n:select -->
 
 Group number: 28
 
