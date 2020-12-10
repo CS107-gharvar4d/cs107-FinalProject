@@ -1,6 +1,6 @@
 ##### Table of Contents  
 [Introduction](#introduction)  
-[How to use](#how to use)   
+[Demo](#demo)   
 
 
 <a name="introduction"/>
@@ -53,7 +53,7 @@ The Chain Rule: the derivative of a convoluted function is the product of each s
 Jacobian: the gradient of each element of a function's output with respect to each and every input. In other words, it's the gradient of the function at the space spanned by the inputs.
 Dual numbers: a two dimentional space where a outer product is defined between any vectors x = (a, b) and y = (c, d) as x×y = (a⋅c, a⋅d + c⋅b). Dual number is useful when we want to include a second-order calculation, i.e., not only calculate the value of a function, but also its changes with regard to small changes from the inputs.
 
-<a name="how to use"/>
+
 
 # How to use
 
@@ -71,6 +71,7 @@ conda activate adg4_env
 5. Install our package with `pip install --editable ./code`
 6. Now you can do `import ADG4.ad as ad` or just run our tests with the command `pytest` in the repo directory
 
+<a name="demo"/>
 
 ### A Demo
 
