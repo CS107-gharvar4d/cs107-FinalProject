@@ -1,8 +1,12 @@
 ##### Table of Contents  
 [Introduction](#introduction)
+
 [Use](#how_to_use)
+
 [Demo](#demo)   
+
 [Software Organization](#org)
+
 
 <a name="introduction"/>
 
