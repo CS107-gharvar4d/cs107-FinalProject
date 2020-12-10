@@ -1,11 +1,17 @@
-##### Table of Contents  
-[Introduction](#introduction)
+##  Table of Contents  
+[Introduction and Background](#introduction)
 
 [Use](#how_to_use)
 
 [Demo](#demo)   
 
 [Software Organization](#org)
+
+[Implementation](#implementation)
+
+[Add-on Feature](#addon)
+
+[Impact and Inclusivity](#impact)
 
 
 <a name="introduction"/>
@@ -178,6 +184,8 @@ Sofware Packaging:
 Other Considerations:
 * As noted in the project instructions we will also include a broader impact statement for our library. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population.
 
+<a name="implementation"/>
+
 # Implementation Details
 
 The core data structure is an AutoDiffVector which maintains two core pieces of data:
@@ -288,6 +296,8 @@ AutoDiffVector will track their trace within the `der` variable, just like it di
 
 ```
 
+<a name="addon"/>
+
 # Add-on Feature
 
 ## Reverse Mode Differentiation. 
@@ -313,6 +323,8 @@ setup.py
 README.md
 README-es.md
 ```
+
+<a name="impact"/>
 
 # ADG4 Impact and Inclusivity. 
 
