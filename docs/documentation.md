@@ -271,57 +271,46 @@ AutoDiffVector will track their trace within the `der` variable, just like it di
 
 ```
 
-### Next step
-As mentioned in the in the `Scalar and Vector` section, we anticipate that our program will be able to support both scaler and vector implementations. At thi stage, we have tested the scaler implementation relatively carefully, but more tests should be done to the vector implementation.
+## Add-on Feature
 
-## Future Features
+Reverse Mode Differentiation. 
 
-1. Pricing Exotic Derivatives
+We've been focusing in forward mode, where we carry derivatives along and traverse the graph at each node. But there is another method in which we build a graph and store a partial derivative at each node and contrary to forward mode, we do not calculate the full derivative nor use the Chain Rule. The same graph can be used in both methods, it is just the direction of the derivative information that changes. In the case of reverse mode, we leverage a backpropagation technique to make this happen, where we generate the forward trace and then calculate the partial derivative on each node with respect to its children.  
 
-As an add-on feature that we've thought to include in our project is to apply AD to a a real world problem, coupled by a potential UI to facilitate this. There has been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specically applied to calculating greeks in Option contracts or valuating Interest Rate Swaps where the interest rate yield curve can be complex. 
+Reverse mode utilizes similar element formulas to the ones implemented in forward mode.
 
-In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical example. 
-
-We expect that the implementation of this new feature will require minimum changes in the current code base. The new inputs and outputs of the financial instrument should accomodate the ones already tested and will assume that the hypothetical interest rate yield curve of the derivative will mirror f() function of securities underlying values and its derivative.      
-
-Code directory structure for the add-on component can be separated into a subfolder
+Code directory structure for the add-on component can be separated into a different module and independent test cases. 
 
 ```
 ADG4/
 	ad.py
-quant_finance/
-	options.py
-	interest_rate_swaps.py
+	reverse.py
 tests/
 	test_ad.py
-	test_options.py
-	test_interest_rate_swaps.py
+	test_reverse.py
 docs/
 	milestone1.ipynb
 	milestone2.md
+	documentation.md
 setup.py
 README.md
+README-es.md
 ```
 
-2. Parameter Fitting on a Time-dependent System
+## ADG4 Impact and Inclusivity. 
 
-Another option of the extra feature is to implement a parameter fitting algorithm for a time dependent system. Give a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. Note that a distance needs to be defined in this space. With stochastic gradient descent with gradients provided by AD, we can infer the correct set of parameters to reproduce the observational data.
+It is important to consider the potential effects on building software and make it available to all. Our group philosophy is to distribute software to anyone to any purpose and make efforts to develop it in a collaborative open matter. A good start is the fact that all of our source code resides in Github, an open platform where everyone can collaborate. 
 
-Same as the previous example, the extra feature would be implemented in an seperate subfolder as follows,
+Our group accepts two common workflows for collaboration:
 
-```
-ADG4/
-        ad.py
-Fitting/
-        integral.py
-        descent.py
-tests/
-        test_ad.py
-        test_integral.py
-        test_descent.py
-docs/
-        howto.md
-setup.py
-README.md
-```
+1.  Basic Shared Repository
+Clone our repo and update with `git pull origin master`, then create a working branch with `git checkout -b MyNewBranch` and make any changes to it before staging. 
+Commit locally and upload the changes (including your new branch) to GitHub with `git push origin MyNewBranch`
+
+Then, navigate to main on GitHub where you should now see your new branch. Click on “Pull Request” button and “Send Pull Request”
+
+2. Fork repo and pull
+We can assign rights to “Collaborators”. Even though collaborators do not have push access to upstream, we accept Pull Requests (PRs) from them, reviews and then merge changes into main repo if approved.
+
+
 
