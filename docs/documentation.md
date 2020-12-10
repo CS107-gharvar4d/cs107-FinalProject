@@ -1,3 +1,10 @@
+##### Table of Contents  
+[Introduction](#introduction)  
+[How to use](#how to use)   
+<a name="introduction"/>
+<a name="how to use"/>
+
+
 # Introduction
 ADG4 is a package which computes a value while using automatic
 differentiation to compute derivatives of that value. It integrates a set of techniques
