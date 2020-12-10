@@ -67,13 +67,16 @@ independent variables, where the seeding variables would be put in.
 
 Here are a few important concepts pertaining AD which are mentioned above:
 
-The Chain Rule: the derivative of a convoluted function is the product of each simple function evaluated at the value of its child function. Namely, it can be expressed in terms of the following equation. The basic idea of forward mode
+The Chain Rule: the derivative of a convoluted function is the product of each simple function evaluated at the value of its child function. Namely, it can be expressed in terms of the following equation. 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" title="\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" /></a>
 	
-The basic idea of forward mode
+The basic idea of forward mode relys on the chain rule. The final derivative can be calculated by using chain rule recursively.
 
-Jacobian: the gradient of each element of a function's output with respect to each and every input. In other words, it's the gradient of the function at the space spanned by the inputs.
+Jacobian: the gradient of each element of a function's output with respect to each and every input. In other words, it's the gradient of the function at the space spanned by the inputs. The Jacobian for a function <a href="https://www.codecogs.com/eqnedit.php?latex=f:\mathbb{R}^m\to\mathbb{R}^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f:\mathbb{R}^m\to\mathbb{R}^n" title="f:\mathbb{R}^m\to\mathbb{R}^n" /></a> is
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=J=\begin{bmatrix}&space;\frac{\partial{f_1}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_1}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_1}}{\partial&space;x_m}\\&space;\frac{\partial{f_2}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_2}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_2}}{\partial&space;x_m}\\&space;...&...&...&...\\&space;\frac{\partial{f_n}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_n}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_n}}{\partial&space;x_m}&space;\end{bmatrix}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?J=\begin{bmatrix}&space;\frac{\partial{f_1}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_1}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_1}}{\partial&space;x_m}\\&space;\frac{\partial{f_2}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_2}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_2}}{\partial&space;x_m}\\&space;...&...&...&...\\&space;\frac{\partial{f_n}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_n}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_n}}{\partial&space;x_m}&space;\end{bmatrix}" title="J=\begin{bmatrix} \frac{\partial{f_1}}{\partial x_1} & \frac{\partial{f_1}}{\partial x_2} & ...&\frac{\partial{f_1}}{\partial x_m}\\ \frac{\partial{f_2}}{\partial x_1} & \frac{\partial{f_2}}{\partial x_2} & ...&\frac{\partial{f_2}}{\partial x_m}\\ ...&...&...&...\\ \frac{\partial{f_n}}{\partial x_1} & \frac{\partial{f_n}}{\partial x_2} & ...&\frac{\partial{f_n}}{\partial x_m} \end{bmatrix}" /></a>
+
 Dual numbers: a two dimentional space where an outer product is defined between any vectors x = (a, b) and y = (c, d) as x×y = (a⋅c, a⋅d + c⋅b). Dual number is useful when we want to include a second-order calculation, i.e., not only calculate the value of a function, but also its changes with regard to small changes from the inputs.
 
 <a name="how_to_use"/>
