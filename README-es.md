@@ -32,8 +32,9 @@ o cualquier método preferido
 5. Instale nuestro paquete con `pip install --editable. / Code`
 6. Ahora puede hacer `importar ADG4.ad como anuncio` o simplemente ejecutar nuestras pruebas con los comandos` pytest` en el directorio del repositorio
 
+# Cómo contribuir al proyecto
 
-Para cualquier duda estamos a sus ordenes:
+ADG4 es una plataforma "open source" y abierta. Cualquier contribucion sera revisada y aprobada por nosotros. No dude en ponerse en contacto para cualquier duda. 
 
 Numero de Grupo: 28
 
