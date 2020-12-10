@@ -13,6 +13,8 @@
 
 [Impact and Inclusivity](#impact)
 
+[Future Work](#future)
+
 
 <a name="introduction"/>
 
@@ -345,6 +347,8 @@ We can assign rights to “Collaborators”. Even though collaborators do not ha
 
 All ADG4 colloborators should addere to NeurIPS standards, remain vigilant and assest the impact of their code for unethical behaviour or illegal use. Some software applications where this might happen are securiry or privacy. If any misuse is known the project leader should be contacted immediately. 
 
+
+<a name="future"/>
 
 ## Future Work
 
