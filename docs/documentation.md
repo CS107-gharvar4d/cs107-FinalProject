@@ -328,11 +328,11 @@ README-es.md
 
 # ADG4 Impact and Inclusivity. 
 
-It is important to consider the potential effects on building software and make it available to all. Our group philosophy is to distribute software to anyone to any purpose and make efforts to develop it in a collaborative open matter. A good start is the fact that all of our source code resides in Github, an open platform where everyone can collaborate. 
+It is important to consider the potential effects on building software and make it available to all without distinction. Our philosophy is to distribute software to anyone to any purpose and make efforts to develop it in a collaborative public matter. A good start for this is the fact that all of our source code resides in Github, an open platform where everyone can collaborate. Include documentation for non-English speakers such as Spanish, with more to come in the Future.
 
 Our group accepts two common workflows for collaboration:
 
-1.  Basic Shared Repository
+1. Basic Shared Repository
 
 Clone our repo and update with `git pull origin master`, then create a working branch with `git checkout -b MyNewBranch` and make any changes to it before staging. 
 Commit locally and upload the changes (including your new branch) to GitHub with `git push origin MyNewBranch`
@@ -343,5 +343,17 @@ Then, navigate to main on GitHub where you should now see your new branch. Click
 
 We can assign rights to “Collaborators”. Even though collaborators do not have push access to upstream, we accept Pull Requests (PRs) from them, reviews and then merge changes into main repo if approved.
 
+All ADG4 colloborators should addere to NeurIPS standards, remain vigilant and assest the impact of their code for unethical behaviour or illegal use. Some software applications where this might happen are securiry or privacy. If any misuse is known the project leader should be contacted immediately. 
 
 
+## Future Work
+
+There is strong interest in the group to continue working on additional extensions for this project. Mostly apply AD to real world problems that can be done more efficiently. Some examples include:
+
+1. Pricing Exotic Derivatives
+
+here has been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specically applied to calculating greeks in Option contracts or valuating Interest Rate Swaps where the interest rate yield curve can be complex. In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical example. 
+
+2. Parameter Fitting on a Time-dependent System
+
+Parameter fitting algorithm for a time dependent system. Give a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. This type of algo can be used in the real world for complex regressions, imaging and revolve spectral mixtures.  
