@@ -4,7 +4,9 @@
 
 
 <a name="introduction"/>
+
 # Introduction
+
 ADG4 is a package which computes a value while using automatic
 differentiation to compute derivatives of that value. It integrates a set of techniques
 to evaluate the derivative of various mathematical expressions.
@@ -52,6 +54,7 @@ Jacobian: the gradient of each element of a function's output with respect to ea
 Dual numbers: a two dimentional space where a outer product is defined between any vectors x = (a, b) and y = (c, d) as x×y = (a⋅c, a⋅d + c⋅b). Dual number is useful when we want to include a second-order calculation, i.e., not only calculate the value of a function, but also its changes with regard to small changes from the inputs.
 
 <a name="how to use"/>
+
 # How to use
 
 Here are the steps to use our package. First, below are the steps to download and install `ADG4`:
