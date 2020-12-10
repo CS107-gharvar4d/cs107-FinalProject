@@ -271,7 +271,7 @@ AutoDiffVector will track their trace within the `der` variable, just like it di
 
 ```
 
-## Add-on Feature
+# Add-on Feature
 
 ## Reverse Mode Differentiation. 
 
@@ -297,7 +297,7 @@ README.md
 README-es.md
 ```
 
-## ADG4 Impact and Inclusivity. 
+# ADG4 Impact and Inclusivity. 
 
 It is important to consider the potential effects on building software and make it available to all. Our group philosophy is to distribute software to anyone to any purpose and make efforts to develop it in a collaborative open matter. A good start is the fact that all of our source code resides in Github, an open platform where everyone can collaborate. 
 
