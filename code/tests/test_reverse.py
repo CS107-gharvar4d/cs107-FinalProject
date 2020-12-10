@@ -131,3 +131,17 @@ def test_power():
 def negative():
     x = rev.AutoDiffReverse(3, name='x')
     assert x.__neg__().val == -3
+
+def test_vector():
+    x = rev.AutoDiffReverse(np.array([1,2,3]))
+    y = rev.AutoDiffReverse(9)
+    z = rev.AutoDiffReverse(np.array([2, 4, 6]))
+    h = x * y
+    k = x * z
+    h.backprop()
+    k.backprop()
+    assert np.array_equal(h.partial(y), np.array([1, 2, 3]))
+    assert h.partial(x) == 9
+    assert np.array_equal(k.partial(x), np.array([2, 4, 6]))
+    assert np.array_equal(k.partial(z), np.array([1, 2, 3]))
+

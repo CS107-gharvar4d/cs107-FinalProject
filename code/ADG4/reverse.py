@@ -7,7 +7,7 @@ from collections import defaultdict
 class AutoDiffReverse():
     ## A reverse autodifferentiation class
     def __init__(self,a, name=None):
-        self.val=a
+        self.val= copy.deepcopy(a) # needed for np array reference management
         self.children = []
         self.acc = 1
         self.has_backpropped = False
