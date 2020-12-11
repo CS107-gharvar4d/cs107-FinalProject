@@ -171,17 +171,29 @@ print(f.partial(x))
 ### A list of supported calculations for forward module `ad.py`
 
 Add: AutoDiffVector.__add__(self,other), AutoDiffVector.__radd__(self,other)
+
 Subtraction: AutoDiffVector.__sub__(self,other), AutoDiffVector.__rsub__(self,other)
+
 Mupltiplication: AutoDiffVector.__mul__(self,other), AutoDiffVector.__rmul__(self,other)
+
 Divide: AutoDiffVector.__rturediv__(self,other), AutoDiffVector.__rtruediv__(self,other)
+
 Power: AutoDiffVector.__pow__(self,other), AutoDiffVector.__pow__(self,other)
+
 Negative: AutoDiffVector.__neg__(self,other)
+
 Partial derivative with respect to a variable `vari`: AutoDiffVector.partial(self, vari)
+
 Trig functions: sin_ad(x), cos_ad(x), tan_ad(x)
+
 Inverse trag functions: arcsin_ad(x), arccos_ad(x), arctan_ad(x)
+
 Exponential: expa_ad(a,x), exp_ad(x)
+
 logrithmic: loga_ad(a,x), log_ad(x)
+
 Hyperbolic: sinh_ad(x), cosh_ad(x), tanh_ad(x)
+
 Logistic: logistic_ad(x)
 
 
