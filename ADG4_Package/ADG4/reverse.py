@@ -82,11 +82,11 @@ class AutoDiffReverse():
 
     def __add__(self,other):
         """
-         add function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffReverse instance
+        add function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffReverse instance
         """
         new=AutoDiffReverse(self.val)
         
@@ -100,21 +100,21 @@ class AutoDiffReverse():
 
     def __radd__(self,other):
         """
-         reverse add function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffReverse instance
+        reverse add function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffReverse instance
         """
         return self.__add__(other)
 
     def __mul__(self,other):
         """
-         multiplication function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffReverse instance
+        multiplication function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffReverse instance
         """
         new=AutoDiffReverse(self.val)
         
@@ -128,17 +128,17 @@ class AutoDiffReverse():
 
     def __rmul__(self,other):
         """
-         reverse multiplication function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffReverse instance
+        reverse multiplication function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffReverse instance
         """
         return self.__mul__(other)
     
     def backprop(self):
         """
-         back propogation function, which backprop the tree of partial derivatives formed by the chain rule
+        back propogation function, which backprop the tree of partial derivatives formed by the chain rule
         """
         # A back prop implementation that keeps all derivative accumulations
         # within this root node that calls .backprop()
@@ -181,107 +181,106 @@ class AutoDiffReverse():
             raise KeyError('Function not dependent on input')
 
     def __neg__(self):
-      """
-         unary negative function
-         ------------
-         No input
-         ------------
-         output: A new AutoDiffVector instance
-      """
-      new=AutoDiffReverse(-self.val)
-      new.name=None
-      new.children=[[self,-1]]
-      return new
+        """
+        unary negative function
+        ------------
+        No input
+        ------------
+        output: A new AutoDiffVector instance
+        """
+        new=AutoDiffReverse(-self.val)
+        new.name=None
+        new.children=[[self,-1]]
+        return new
 
     def __inv__(self):
-      """
-         unary invert function. Invert for a variable x is defined as 1/x for its value and derivative
-         ------------
-         No input
-         ------------
-         output: A new AutoDiffReverse instance
-      """
-      new=AutoDiffReverse(1/self.val)
-      new.name=None
-      new.children=[[self,-1/(self.val)**2]]
-      return new
+        """
+        unary invert function. Invert for a variable x is defined as 1/x for its value and derivative
+        ------------
+        No input
+        ------------
+        output: A new AutoDiffReverse instance
+        """
+        new=AutoDiffReverse(1/self.val)
+        new.name=None
+        new.children=[[self,-1/(self.val)**2]]
+        return new
     
     def __sub__(self,other):
         """
-         subtraction function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffReverse instance
+        subtraction function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffReverse instance
         """   
-      return self+(-other)
+        return self+(-other)
 
     def __rsub__(self,other):
-        
-         """
-         reverse subtraction function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffReverse instance
         """
-      return -self+other
+        reverse subtraction function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffReverse instance
+        """
+        return -self+other
 
     def __truediv__(self,other):
-       """
-         divide function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffReverse instance
         """
-      try:
+        divide function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffReverse instance
+        """
+        try:
         return self*other.__inv__()
-      except AttributeError:
+        except AttributeError:
         return self*(1/other)
 
     def __rtruediv__(self,other):
         """
-         reverse divide function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffReverse instance
+        reverse divide function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffReverse instance
         """
-      return other*self.__inv__()
+        return other*self.__inv__()
 
     def __pow__(self,other):
         
-      """
-         power function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffReverse instance
         """
-      new=AutoDiffReverse(self.val)
-      new.name=None
-      try:
+        power function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffReverse instance
+        """
+        new=AutoDiffReverse(self.val)
+        new.name=None
+        try:
         new.val**=other.val
         new.children=[[self,other.val*self.val**(other.val-1)],[other,self.val**other.val*np.log(self.val)]]
-      except:
+        except:
         new.val**=other
         new.children=[[self,other*self.val**(other-1)]]
-      return new
+        return new
 
     def __rpow__(self,other):
-      """
+        """
          reverse power function
          ------------
          other: either a int/float, or a AutoDiffVector instance
          ------------
          output: A new AutoDiffReverse instance
         """
-      new=AutoDiffReverse(self.val)
-      new.name=None
-      new.val=other**self.val
-      new.children=[[self,other**self.val*np.log(other)]]
-      return new
+        new=AutoDiffReverse(self.val)
+        new.name=None
+        new.val=other**self.val
+        new.children=[[self,other**self.val*np.log(other)]]
+        return new
 
 """
 Below is a set of elementary functions for AutoDiffReverse. The calculation of them are self-evident.
@@ -327,7 +326,7 @@ def expa_rv(a,x):
     """
     Input `a` should be a scaler variable such as a int or float. `a` is an arbitrary base for the calculation.
     """
-  return a**x
+    return a**x
 
 def exp_rv(x):
   return expa_rv(np.exp(1),x)
@@ -363,10 +362,10 @@ def tanh_rv(x):
   return new
 
 def logistic_rv(x):
-   """
+    """
     We define logistic function as 1/(1+exp(-x))
     """
-  return 1/(1+exp_rv(-x))
+    return 1/(1+exp_rv(-x))
 
 def sqrt_rv(x):
   return x**0.5
