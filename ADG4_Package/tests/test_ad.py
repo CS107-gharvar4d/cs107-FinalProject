@@ -32,7 +32,16 @@ def test_basic():
     f = alpha/x
     assert f.val==alpha/a and f.der==-alpha/a**2
  
-
+def test_not_ind_variable():
+    a = 2.0
+    x = ad.AutoDiffVector(a)
+    alpha = 2.0
+    beta = 3.0
+    f = alpha * x + beta
+    m = f * x
+    with pytest.raises(Exception):
+        m.partial(f)
+        
 ###Boer Nov17, test for elementary functions
 def test_trig():
     a = random.random()
