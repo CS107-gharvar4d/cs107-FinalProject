@@ -7,7 +7,7 @@ from collections import defaultdict
 class AutoDiffReverse():
     ## A reverse autodifferentiation class
     def __init__(self,a, name=None):
-        self.val=a
+        self.val= copy.deepcopy(a) # needed for np array reference management
         self.children = []
         self.acc = 1
         self.has_backpropped = False
@@ -167,13 +167,13 @@ def exp_rv(x):
   return expa_rv(np.exp(1),x)
 
 def loga_rv(a,x):
-  new=AutoDiffReverse(np.log(x)/np.log(a))
+  new=AutoDiffReverse(np.log(x.val)/np.log(a))
   new.name=None
   new.children=[[x,1 / (x.val * np.log(a)) ]]
   return new
 
 def log_rv(x):
-  return loga_rv(exp(1),x)
+  return loga_rv(np.exp(1),x)
 
 def sinh_rv(x):
   new=AutoDiffReverse(np.sinh(x.val))
@@ -182,16 +182,19 @@ def sinh_rv(x):
   return new
 
 def cosh_rv(x):
-  new=AutoDiffReverse(np.sinh(x.val))
+  new=AutoDiffReverse(np.cosh(x.val))
   new.name=None
-  new.children=[[x,np.cosh(x.val)]]
+  new.children=[[x,np.sinh(x.val)]]
   return new
 
 def tanh_rv(x):
-  return sinh_rv(x)/cosh_rv(x)
+  new=AutoDiffReverse(np.tanh(x.val))
+  new.name=None
+  new.children=[[x,(np.cosh(x.val) ** 2 - np.sinh(x.val) ** 2) / (np.cosh(x.val) ** 2)]]
+  return new
 
 def logistic_rv(x):
   return 1/(1+exp_rv(-x))
 
-def sqrt_ad(x):
+def sqrt_rv(x):
   return x**0.5
