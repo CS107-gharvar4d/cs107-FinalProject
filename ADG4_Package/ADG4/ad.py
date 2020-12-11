@@ -1,5 +1,6 @@
 """
-ad.py: Automatic Differentiation for Python with forward mode
+ad.py: Automatic Differentiation for Python with forward mode.
+Reverse module can be found in the module reverse.py
 
 
 See the examples below for some simple and advanced uses.
