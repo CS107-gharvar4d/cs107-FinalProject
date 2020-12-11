@@ -462,7 +462,7 @@ Basically we have all the same functions to forward mode, with slight differents
 Similar to the forward mode, we have AutoDiffReverse as our variable and have a set of elementary functions.
 #### AutoDiffReverse
 Below are the core structure of the core variable, AutoDiffReverse. When moving forward with the equation, the variables and partial derivatives with respected to them are stored as two-element lists in the list `self.children`, which is a list of two-element list. After storing the whole graph, the derivatives with respect to a variable `vv` (which is a AutodiffReverse instance) can be calculated using `partial(self,vv)` function. `partial(self,vv)` function calls the `backprop` functions, which propogates the derivatives following the chain rule reversely, and store the derivatives with respect to different AutodiffReverse variables along the way. We have a `self.has_backpropped` variable to guarantee the back propotation is only called once for each function.
-`
+```
 class AutoDiffReverse():
     ## A reverse autodifferentiation class
     def __init__(self,a, name=None):
@@ -503,12 +503,12 @@ class AutoDiffReverse():
             raise KeyError('Function not dependent on input')
     
     ...Other calculation related functions  
-`
+```
 
 #### Element Functions
 The basic idea of the element functions is to return a new AutoDiffReverse instance, with the variables and prtial derivatives stored in its `.children` field. Here the functions are considered as a class but we do not really bind them together, which is similar to the forward mode. Below are a few examples showing how we do it.
 Add and mutiplication function:
-`
+```
 #Inside the defination of the class AutoDiffReverse
   def __add__(self,other):
         new=AutoDiffReverse(self.val)
@@ -531,10 +531,10 @@ Add and mutiplication function:
             new.val*=other
             new.children=[[self,other]]
         return new
-`
+```
 Trig functions:
 
-`
+```
 def sin_rv(x):
   new=AutoDiffReverse(np.sin(x.val))
   new.name=None
@@ -549,7 +549,7 @@ def cos_rv(x):
 
 def tan_rv(x):
   return sin_rv(x)/cos_rv(x)
-`
+```
 
 #### Scalers and Vectors
 Our reverse mode naturally supports vector inputs. The AutoDiffReverse is also readily vectorized, so vector output is also supported.
