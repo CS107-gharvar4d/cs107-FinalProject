@@ -102,8 +102,8 @@ conda activate adg4_env
 ### Some Demos
 
 - Some simple examples of the user interface for how to use the package is below. Running our packages involves:
-- Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
-- Jacobian of partial derivatives: Lastly, the function returns to the Jacobian matrix, or partial derivatives.
+- Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a `val` input for scaler inputs, with optional seeding for the derivative `der`. For vector inputs, `gen_vars` function should be used. If the output is a vector, then `AutoDiffVector.vconvert` should be used to vectorize the output.
+- Jacobian of partial derivatives: Lastly, the function returns to the Jacobian matrix, or partial derivatives. 
 
 Example of Creating an AutoDiffVector:
 ```
@@ -211,36 +211,31 @@ What will the directory structure look like?
 * In order to ensure that our module can be pip installable, our directory follows a structure like this (not explicitly included in this list are our configuration files, e.g. .coverage, .gitignore: 
 
 ```
-code/
+ADG4_package/
 	ADG4/
+		ad.py
+		reverse.py
 	tests/
+		test_ad.py
+		test_reverse.py
 	setup.py
-ad_extension/ # name TBD
 docs/
+	milestone1.ipynb
+	milestone2.md
+	milestone2_progress.md
+	documentation.md
+	documentation-es.md
+setup.py
+README.md
+README-es.md
 .travis.yml
 README.md
 requirements.txt
 ```
 
-* We will have a unittest test file per implementation file. At this point, our module is contained within the `ad.py` file.
-
-```
-ADG4/
-	ad.py
-ad_extension/
-	extension.py
-tests/
-	test_ad.py
-docs/
-	milestone1.ipynb
-	milestone2.md
-setup.py
-README.md
-```
-
-What modules do you plan on including? What is their basic functionality?
-* For now, we plan of having two modules: `ADG4` for implementing our core AD functionality and `ad_extension` which will use our core library for an end-user program.
-* Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices. It has built in support for matrix/vector math which will be useful for our final implementation. We have include these libraries in `requirements.txt` so users can install them easily with `pip install -r requirements.txt` on their machine orvirtual environment.
+Modules:
+* We havie two modules: `ad` for implementing our forward AD functionality and `reverse` which will implement a reverse mode.
+* Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`,`random`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices.  We have include these libraries in `requirements.txt` so users can install them easily with `pip install -r requirements.txt` on their machine orvirtual environment.
 
 Test Suite:
 * We are using both TravisCI and CodeCov as part of our test suite.
@@ -248,7 +243,7 @@ Test Suite:
 * The project repo has a badge reporting on the coverage of our code from Codecov, so we can easily tell how many tests are passing.
 
 Package Distribution:
-* Our package is pip installable using the editable option pointing to a local file system.
+* Our package is pip installable using the editable option pointing to a local file system. It will be pip installable when it is finally published.
 * Specific step by step instructions for how to download and install our package are provided above in the How to Use section.
 * As a brief summary, `ADG4` can be downloaded and installed by creating and activating a virtual environment, downloading our repository (`git clone git@github.com:CS107-gharvar4d/cs107-FinalProject.git`), and navigating into the repo folder with `cd cs107-FinalProject`. 
 * Then, install the requirements with `pip install -r requirements.txt`, and install the `ADG4` package with `pip install --editable ./code` (code is the name of the directory where it lives).
@@ -258,7 +253,7 @@ Sofware Packaging:
 * We use SetupTools (setup.py) to package our software. That way it can handle downloading dependencies and setup processes.
 
 Other Considerations:
-* As noted in the project instructions we will also include a broader impact statement for our library. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population.
+* As noted in the project instructions we will also include a broader impact statement for our library in README.md. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population. We also include a prototype of the documentation in Spanish to help the package to gain further inclusivity. The credit goes to Rodrigo Vargas in our group.
 
 <a name="implementation"/>
 
@@ -274,22 +269,22 @@ Eg the partial derivatives with respect to each input variable.
 ```
 AutoDiffVector
   fields:
-    - val: the currently computed value
-    - der: the jacobian with respect to all the input (aka. independent) variables.
+    - val: the currently computed value, it is either a scaler or a vector.
+    - der: the jacobian with respect to all the input (aka. independent) variables. It is either a scaler, vector, or a matrix.
   methods:
     - partial(vari)
     - __mul__, __add__, .. call the associated ADFunctions to return new AutoDiffVector
 ```
 
 ### Managing derivatives
-At any point, the method `partial(vari=v)` can be called on an AutoDiffVector get the derivative with respont to any input variables.
+At any point, the method `partial(vari=v)` can be called on an AutoDiffVector get the derivative with respect to any input variables.
 
 
 ## ADFunctions
-ADFunctions accept one or more AutoDiffVectors and output a new AutoDiffVector with an updated `val` and `der`.
+ADFunctions accept one AutoDiffVector and output a new AutoDiffVector with an updated `val` and `der`.
 ```
 ADFunction
-  input: One or more AutoDiffVectors
+  input: One AutoDiffVectors
   output: A new AutoDiffVector with appropriate val, der
 ```
 
@@ -300,26 +295,30 @@ and maintains logic depending on whether the input is a vector, matrix etc. For 
 which have implicit functionality in Python, we will overwrite the underlying dunder method so that when called upon an `AutoDiffVector`,
 these functions will evaluate and update the derivatives as described above.
 
-No external dependencies are required at this time.
+No external dependencies are required at this time, except `numpy` package.
+
+Although ADFunctions are considered as a class, when implementing it, we choose not to bind these functions together as a class. We just define them separately to guarantee easy access to them.
 
 
 ### Scalar and Vector
-A Vector is a `list(AutoDiffVectors)` 
-If each `ADFunction` handles the three input types:
-- Scalar
-- AutoDiffVector
-- Vector
+The `AutoDiffVector` is resemble to a single output function with multiple inputs. The multiple inputs should be defined together as shown in the example below.
+`ADFunction`s handles `AutoDiffVector`s of any type. Namely, multiple inputs is supported. Considering that different elements of vector outputs is naturally different, we did not spent much effort on making `ADFunction`s support multiple outputs. 
 
-We anticipate that our program will be able to support these instances. 
+The output can be vectorized using the class method vconvert after calculating each line of output separately, as shown in the example below.
+
 
 ####  Scalars, Vectors example:
 
 ```
-v = AutoDiffVector(range(1)) # a vector of length 4
+v = AutoDiffVector(1) # a scalar input with scaler output
 z = ad.sin_ad(v)
 
-v = AutoDiffVector(range(4)) # a vector of length 4
-z = ad.sin_ad(v)
+##multiple variables: using gen_vars method to define multiple variables together
+[x,y,z,t]=ad.gen_vars([3.,np.pi,5.,3.4])
+
+##multiple outputs: using AutoDiffVector.vconvert method to vectorize outputs
+f  = ad.AutoDiffVector.vconvert([(x + y**z)/t, ad.sin_ad(x+ad.cos_ad(100*y**3)-z**t)])
+
 ```
 
 ### Example Code Structure
