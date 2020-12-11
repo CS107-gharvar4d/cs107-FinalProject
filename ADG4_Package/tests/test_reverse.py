@@ -84,6 +84,15 @@ def basic_sub():
     assert m.val == -10
     #assert  m.partial(y)
 
+def test_fails_without_info():
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    z = rev.AutoDiffReverse(-9, name='z')
+    m = x - y
+    n = x - y - z
+    with pytest.raises(Exception):
+        n.partial(m)
+
 def test_inv():
     """
     Test inverse of a value i.e. 1/val and checks assertion
