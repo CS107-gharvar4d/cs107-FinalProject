@@ -584,10 +584,16 @@ Finally, we are aware of [the gender gap in open source contributions](https://m
 
 While our primary add-on feature is reverse mode, there is also strong interest in the group to continue working on additional extensions for this project. Broadly speaking, these ideas apply autodifferentiation to real world problems that can be done more efficiently. Since these ideas are not fully crystallized, more work will likely need to be done to hone the implementation. A couple of example include:
 
-1. Pricing Exotic Derivatives
 
-There have been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specifically applied to calculating Greeks in Option contracts or evaluating Interest Rate Swaps where the interest rate yield curve can be complex. In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical examples. 
+1. A performance test for the reverse mode and forward mode
 
-2. Parameter Fitting on a Time-Dependent System
+Although we have implemented both forward and reverse mode, their performance has not been throughly tested. We should implement a performant test to give the users an instruction when forward and backward propatation should be used. 
 
-Another potential future extension involves fitting an algorithm for a time dependent system. Given a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. This type of algorithm can be applicable in the real world for use cases such as complex regressions, imaging and revolve spectral mixtures.  
+2. Pricing Exotic Derivatives
+
+There have been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specifically applied to calculating Greeks in Option contracts or evaluating Interest Rate Swaps where the interest rate yield curve can be complex. In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical examples. Mathematically, we are going to use the package as a partial derivative calculator.
+
+3. Parameter Fitting on a Time-Dependent System
+
+Another potential future extension involves fitting an algorithm for a time dependent system. Given a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. This type of algorithm can be applicable in the real world for use cases such as complex regressions, imaging and revolve spectral mixtures. It is mathematically a nonlinear fitting problem, where we need the Jacobian in the equation in the algorithm.
+
