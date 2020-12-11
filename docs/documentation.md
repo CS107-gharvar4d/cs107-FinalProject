@@ -302,7 +302,7 @@ Although ADFunctions are considered as a class, when implementing it, we choose 
 
 ### Scalar and Vector
 The `AutoDiffVector` is resemble to a single output function with multiple inputs. The multiple inputs should be defined together as shown in the example below.
-`ADFunction`s handles `AutoDiffVector`s of any type. Namely, multiple inputs is supported. Considering that different elements of vector outputs is naturally different, we did not spent much effort on making `ADFunction`s support multiple outputs. 
+`ADFunction`s handles `AutoDiffVector`s of any type. Namely, multiple inputs is supported. Considering that different elements of vector outputs is naturally different, we did not make throughly test `ADFunction`s to guarantee them support multiple outputs, although multiple output functions should be supported based on our implementation.
 
 The output can be vectorized using the class method vconvert after calculating each line of output separately, as shown in the example below.
 
@@ -318,6 +318,10 @@ z = ad.sin_ad(v)
 
 ##multiple outputs: using AutoDiffVector.vconvert method to vectorize outputs
 f  = ad.AutoDiffVector.vconvert([(x + y**z)/t, ad.sin_ad(x+ad.cos_ad(100*y**3)-z**t)])
+
+##multiple output functions f is still a AutoDiffVector, so we can still apply ADFunctions to it
+print(ad.sin_ad(f))
+print(f+f)
 
 ```
 
