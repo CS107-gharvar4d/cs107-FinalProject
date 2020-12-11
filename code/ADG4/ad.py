@@ -50,7 +50,9 @@ class AutoDiffVector():
 
     @classmethod
     def vconvert(cls, v):
-        return AutoDiffVector(np.array([ii.val for ii in v]), np.array([ii.der for ii in v]))
+        vvector=np.array([ii.val for ii in v])
+        vvector=vvector.reshape(len(vvector),1)
+        return AutoDiffVector(vvector, np.array([ii.der for ii in v]))
 
     def __add__(self, other):
         new = copy.deepcopy(self)

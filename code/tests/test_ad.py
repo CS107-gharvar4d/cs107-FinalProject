@@ -106,7 +106,7 @@ def test_vector():
     
     [x1,y1,z1,t1]=ad.gen_vars([3.,np.pi,5.,3.4])
     f2  = ad.AutoDiffVector.vconvert([(x1 + y1**z1)/t1, ad.sin_ad(x1+ad.cos_ad(100*y1**3)-z1**t1)])
-    
+    print(ad.sin_ad(f2)) 
     assert f==f2
     
     assert f!=x
