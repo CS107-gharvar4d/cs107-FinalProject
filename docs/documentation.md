@@ -204,12 +204,11 @@ Logistic: logistic_ad(x)
 
 # Software Organization
 
-This section addresses how we plan to organize our software package.
+This section addresses how we organize our software package.
 
 What will the directory structure look like?
-* The directory will be structured based on functionality. Modules will be deployed according to program features such as mathematic calculations, user interface, computational graph and test suite.
-* In order to ensure that our module can be pip installable, our directory follows a structure like this (not explicitly included in this list are our configuration files, e.g. .coverage, .gitignore: 
 
+* our directory follows a structure like this (not explicitly included in this list are our configuration files, e.g. .coverage, .gitignore: 
 ```
 ADG4_package/
 	ADG4/
@@ -232,6 +231,9 @@ README-es.md
 README.md
 requirements.txt
 ```
+* The directory is structured based on functionality. We have the main codes in `ADG4` with forward module `ad.py` which is the main body of our work, and an add-on package `reverse.py`. We also have a separate `\test` directory. Besides the main backage codes `ADG4_package/`, we also have `docs/` directory and some supporting files in the top directory.
+ 
+
 
 Modules:
 * We havie two modules: `ad` for implementing our forward AD functionality and `reverse` which will implement a reverse mode.
@@ -381,27 +383,81 @@ AutoDiffVector will track their trace within the `der` variable, just like it di
 
 ## Reverse Mode Differentiation. 
 
-We've been focusing in forward mode, where we carry derivatives along and traverse the graph at each node. But there is another method in which we build a graph and store a partial derivative at each node and contrary to forward mode, we do not calculate the full derivative nor use the Chain Rule. The same graph can be used in both methods, it is just the direction of the derivative information that changes. In the case of reverse mode, we leverage a backpropagation technique to make this happen, where we generate the forward trace and then calculate the partial derivative on each node with respect to its children.  
+### A brief background introduction to reverse mode
+We've been focusing in forward mode, where we carry derivatives along and traverse the graph at each node. But there is another method in which we build a graph and store a partial derivative at each node and contrary to forward mode, we leverage a backpropagation technique. We generate the forward trace with the input of the equations, however the derivative is not accumulated at this point, we just calculate the partial derivative and store them. After we completed the full eqaution, namely we have stored the whole graph of the trace of the calculation with the partial derivatives along the way, the derivatives with respect to the original variables can be calculated backforward along the graph, and the final result will be retrieved when we comes to the origin of the equation (the independent variables).
 
-Reverse mode utilizes similar element formulas to the ones implemented in forward mode.
+Reverse mode utilizes similar element formulas to the ones implemented in forward mode. The chain rule still shows is power in its implementation, but dual number is not used. As an mathematical example, consider
 
-Code directory structure for the add-on component can be separated into a different module and independent test cases. 
+<a href="https://www.codecogs.com/eqnedit.php?latex=f=sin(x_1^2)&plus;x_2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f=sin(x_1^2)&plus;x_2" title="f=sin(x_1^2)+x_2" /></a> 
+
+When moving forward with the equation, at step 1 we calculate and store <a href="https://www.codecogs.com/eqnedit.php?latex=x_1'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_1'" title="x_1'" /></a> and <a href="https://www.codecogs.com/eqnedit.php?latex=x_2'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2'" title="x_2'" /></a>. At step 2, we store <a href="https://www.codecogs.com/eqnedit.php?latex=x_1^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_1^2" title="x_1^2" /></a>, where <a href="https://www.codecogs.com/eqnedit.php?latex=v_1=x_1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1=x_1" title="v_1=x_1" /></a>. At step 3, we store <a href="https://www.codecogs.com/eqnedit.php?latex=sin(v_2)'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?sin(v_2)'" title="sin(v_2)'" /></a>, where <a href="https://www.codecogs.com/eqnedit.php?latex=v_2=v_1^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_2=v_1^2" title="v_2=v_1^2" /></a>. When calculating the partial derivative with respect to <a href="https://www.codecogs.com/eqnedit.php?latex=v_1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1" title="v_1" /></a>, we move backward and multiply together the derivatives and get <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" title="\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" /></a>. For the partial derivative with repect to <a href="https://www.codecogs.com/eqnedit.php?latex=x_2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2" title="x_2" /></a>, we directly trace back to <a href="https://www.codecogs.com/eqnedit.php?latex=x_2'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2'" title="x_2'" /></a> and get the derivative as 1.
+
+
+### Software organization for add-on feature
+As has been shown in the `Software Organization` section, we have a module `reverse.py` separately for the reverse mode, and a test file `test_reverse.py` for it separately from the forward mode.
+
+### How to use reverse mode
+It is quite similar to the feature of forward mode and self-evident.
+Example of Creating an AutoDiffVector:
+```
+##import the reverse mode module
+import ADG4.reverse as rev
+#Here we give the users a choice to explicity give a name to the independent variables considering the implementation do not give an explicit order to the variables.
+#Our implementation naturally support vector inputs
+x = rev.AutoDiffReverse(3, name='x')
+y = rev.AutoDiffReverse(4, name='y')
+z = rev.AutoDiffReverse(9, name='z')
 
 ```
-ADG4/
-	ad.py
-	reverse.py
-tests/
-	test_ad.py
-	test_reverse.py
-docs/
-	milestone1.ipynb
-	milestone2.md
-	documentation.md
-setup.py
-README.md
-README-es.md
+
+Simple Operation Example: Creating Functions from AD Variables
 ```
+m = x + y
+n = m * z + x
+p = x * x * x
+
+assert n.partial(x) == 10
+assert n.partial(y) == 1 * z.val
+assert n.partial(z) == m.val #.val is the value of the function, which is the same to the forward mode
+assert m.partial(x) == 1
+assert m.partial(y) == 1
+assert p.partial(x) == 3 * 3 * 3
+
+
+```
+Some elementary functions:
+
+Power:
+
+```
+f=x**x #calculate pow
+print(f.val,f.partial(x)) 
+```
+Trig Function Examples:
+```
+##sin function
+f = rev.sin_rv(x)
+print(f.val, f.partial(x))
+##print value and jacobian
+##cos function
+f = rev.cos_rv(x)
+##print value and jacobian
+print(f.val, f.partial(x))
+##tan function
+f = rev.tan_rv(x)
+##print value and jacobian
+print(f.val, f.partial(x))
+```
+Exponential Function Example:
+```
+f = rv.exp_rv(x)
+##print value and jacobian
+print(f.val, f.partial(x))
+```
+
+Basically we have all the same functions to forward mode, with slight differents in implementation. For reverse mode, we do not have compare functions considering the equation is path dependent. But users can still use the default compare functions of python, which compare the reference of two instances.
+
+### Implementation Details
 
 <a name="impact"/>
 
