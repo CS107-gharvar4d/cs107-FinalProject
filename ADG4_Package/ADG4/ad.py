@@ -8,9 +8,9 @@ See the examples below for some simple and advanced uses.
 NOTES:
 
     #Examples for Simple Operations and printing value and derivative:
-    f=alpha*x+beta
+    f=2*x+3
     print(f.val,f.der)
-    f=alpha/x-beta
+    f=2/x-3
     print(f.val,f.der)
     f=x**x #calculate pow
     print(f.val,f.der)
