@@ -184,6 +184,8 @@ Negative: AutoDiffVector.__neg__(self,other)
 
 Partial derivative with respect to a variable `vari`: AutoDiffVector.partial(self, vari)
 
+Compare: AutoDiffVector.__eq__(self,other), AutoDiffVector.__ne__(self,other)
+
 Trig functions: sin_ad(x), cos_ad(x), tan_ad(x)
 
 Inverse trag functions: arcsin_ad(x), arccos_ad(x), arctan_ad(x)
