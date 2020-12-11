@@ -1,3 +1,11 @@
+import numpy as np
+import copy
+import sys
+
+sys.setrecursionlimit(10 ** 6)
+
+
+
 """
 ad.py: Automatic Differentiation for Python with forward mode.
 Reverse module can be found in the module reverse.py
@@ -28,13 +36,6 @@ NOTES:
     print(f.val, f.der)
 
 """
-
-import numpy as np
-import copy
-import sys
-
-sys.setrecursionlimit(10 ** 6)
-
 
 class AutoDiffVector():
     """

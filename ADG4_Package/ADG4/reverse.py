@@ -1,3 +1,7 @@
+import numpy as np
+import copy
+from collections import defaultdict
+
 """
 reverse.py: Automatic Differentiation for Python with reverse mode.
 
@@ -16,13 +20,13 @@ NOTES:
 
         
         Power function:
-        ```
+        
         f=x**x #calculate pow
         print(f.val,f.partial(x)) 
-        ```
+        
         
         Trig Function Examples:
-        ```
+        
         ##sin function
         f = rev.sin_rv(x)
         print(f.val, f.partial(x))
@@ -35,23 +39,16 @@ NOTES:
         f = rev.tan_rv(x)
         ##print value and jacobian
         print(f.val, f.partial(x))
-        ```
+        
         
         Exponential Function Example:
-        ```
+        
         f = rv.exp_rv(x)
         ##print value and jacobian
         print(f.val, f.partial(x))
-        ```
+        
 
 """
-
-
-import numpy as np
-import copy
-from collections import defaultdict
-
-
 
 class AutoDiffReverse():
     """
@@ -323,25 +320,23 @@ def arctan_rv(x):
   return new
 
 def expa_rv(a,x):
-    """
-    Input `a` should be a scaler variable such as a int or float. `a` is an arbitrary base for the calculation.
-    """
+    
     return a**x
 
 def exp_rv(x):
-  return expa_rv(np.exp(1),x)
+    return expa_rv(np.exp(1),x)
 
 def loga_rv(a,x):
-   """
+    """
     Input `a` should be a scaler variable such as a int or float. `a` is an arbitrary base for the calculation.
-   """
+    """
   new=AutoDiffReverse(np.log(x.val)/np.log(a))
   new.name=None
   new.children=[[x,1 / (x.val * np.log(a)) ]]
   return new
 
 def log_rv(x):
-  return loga_rv(np.exp(1),x)
+      return loga_rv(np.exp(1),x)
 
 def sinh_rv(x):
   new=AutoDiffReverse(np.sinh(x.val))
@@ -368,4 +363,4 @@ def logistic_rv(x):
     return 1/(1+exp_rv(-x))
 
 def sqrt_rv(x):
-  return x**0.5
+      return x**0.5
