@@ -236,3 +236,14 @@ def test_compare():
     print(f4.val, f4.partial(x))
     print(f3.val, f3.partial(x))
     assert np.isclose(f4.val, f3.val)
+
+def test_jacobian():
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    z = rev.AutoDiffReverse(-9, name='z')
+    m = x + y
+    n = m * z + x
+    q = -n
+    q.backprop()
+    print(q.jacobian())
+    assert q.jacobian() == {'Variables':[x,z,y],'Jacobian':[8,-7,9]}

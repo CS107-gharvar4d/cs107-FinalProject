@@ -81,6 +81,14 @@ class AutoDiffReverse():
         else:
             raise KeyError('Function not dependent on input')
 
+    def jacobian(self):
+        keys=[]
+        for kk in self._partial.keys():
+            if not kk.name == None:
+               keys.append(kk)
+        return {'Variables':keys, 'Jacobian':[self._partial[kk] for kk in keys]}
+        
+
     def __neg__(self):
       new=AutoDiffReverse(-self.val)
       new.name=None
