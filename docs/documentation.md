@@ -170,7 +170,7 @@ print(f.partial(x))
 ```
 ### A list of supported calculations for forward module `ad.py`
 
-Add: AutoDiffVector.__add__(self,other), AutoDiffVector.__radd__(self,other)
+Add: AutoDiffVector.\__add__(self,other), AutoDiffVector.\__radd__(self,other)
 
 Subtraction: AutoDiffVector.\__sub__(self,other), AutoDiffVector. \__rsub__(self,other)
 
