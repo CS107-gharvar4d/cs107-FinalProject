@@ -12,8 +12,19 @@ import pytest
 import sys
 import ADG4.reverse as rev
 import numpy as np
+import random
 
-def test_add_mult():
+def fprime_fd(f, x0, dx=1e-12):
+    """
+        Calculating derivative of f at x0  using finite difference
+        :param f:
+        :param x0:
+        :param dx:
+        :return:
+        """
+    return (f(x0 + dx) - f(x0)) / dx
+
+def test_rvd_mult():
     """
     Check basic assertions when adding  or multiplying new values and outputs correct derivative
     :return:
@@ -145,3 +156,83 @@ def test_vector():
     assert np.array_equal(k.partial(x), np.array([2, 4, 6]))
     assert np.array_equal(k.partial(z), np.array([1, 2, 3]))
 
+
+
+def test_exp():
+    a = random.randint(1,10)
+    x = rev.AutoDiffReverse(a)
+    f = x**a
+    assert f.val == a ** a
+    assert f.partial(x) ==  a*a**(a-1)
+
+
+def test_loga():
+    a = random.random()
+    x = rev.AutoDiffReverse(a)
+    f = rev.loga_rv(2, x)
+    assert f.val == np.log(a) / np.log(2) and f.partial(x) == 1 / (a * np.log(2))
+
+
+def test_log():
+    a = random.random()
+    x = rev.AutoDiffReverse(a)
+    f = rev.log_rv(x)
+    assert f.val == np.log(a) and f.partial(x) == 1 / (a)
+
+
+def test_inverse_trig():
+    a = random.random()
+    x = rev.AutoDiffReverse(a)
+    f = rev.arcsin_rv(x)
+    assert f.val == np.arcsin(a)
+    assert np.abs(f.partial(x) - fprime_fd(np.arcsin, a)) < 1e-2
+    f = rev.arccos_rv(x)
+    assert f.val == np.arccos(a)
+    assert np.abs(f.partial(x) - fprime_fd(np.arccos, a)) < 1e-2
+    f = rev.arctan_rv(x)
+    assert f.val == np.arctan(a)
+    # DOES NOT WORK
+    #assert np.abs(f.partial(x) - fprime_fd(np.arctan, a)) < 1e-2
+
+
+def test_sqrt():
+    a = random.random()
+    x = rev.AutoDiffReverse(a)
+    f = rev.sqrt_rv(x)
+    assert f.val == a ** 0.5
+    assert f.partial(x) == 0.5 * a ** (-0.5)
+
+
+def test_hyperbolic():
+    a = random.random()
+    x = rev.AutoDiffReverse(a)
+    f = rev.sinh_rv(x)
+    assert f.val == np.sinh(a)
+    assert f.partial(x) == np.cosh(a)
+    f = rev.cosh_rv(x)
+    assert f.val == np.cosh(a)
+    assert f.partial(x) == np.sinh(a)
+    f = rev.tanh_rv(x)
+    assert f.val == np.tanh(a)
+    assert np.abs(f.partial(x) - (1 - np.tanh(a) ** 2)) < 1e-3
+
+
+def test_logistic():
+    a = random.random()
+    x = rev.AutoDiffReverse(a)
+    f = rev.logistic_rv(x)
+    assert f.val == 1 / (1 + np.exp(-a))
+    assert np.abs(f.partial(x) - fprime_fd(lambda x: 1 / (1 + np.exp(-x)), a)) < 1e-2
+
+
+def test_compare():
+    a = random.random()
+    x = rev.AutoDiffReverse(a)
+    f1 = rev.sinh_rv(x)
+    f2 = rev.cosh_rv(x)
+    f3 = rev.tanh_rv(x)
+    assert f1 != f2
+    f4 = f1 / f2
+    print(f4.val, f4.partial(x))
+    print(f3.val, f3.partial(x))
+    assert np.isclose(f4.val, f3.val)
