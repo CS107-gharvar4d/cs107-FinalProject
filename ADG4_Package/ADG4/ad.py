@@ -37,10 +37,12 @@ sys.setrecursionlimit(10 ** 6)
 
 
 class AutoDiffVector():
-
+    """
+    A class for forward mode automatic differentiation variable.
+    """
     def __init__(self, a, der=1):
         """
-        AD class constructor. A single nominal value is supported as val.
+        AutoDiffVector class constructor. A single nominal value is supported as val.
         If no value given for "der", then the default
         is "1"
         :param a:
