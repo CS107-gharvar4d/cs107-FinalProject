@@ -232,9 +232,9 @@ class AutoDiffReverse():
         output: A new AutoDiffReverse instance
         """
         try:
-        return self*other.__inv__()
+            return self*other.__inv__()
         except AttributeError:
-        return self*(1/other)
+            return self*(1/other)
 
     def __rtruediv__(self,other):
         """
