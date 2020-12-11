@@ -245,3 +245,7 @@ def test_compare():
     print(f4.val, f4.partial(x))
     print(f3.val, f3.partial(x))
     assert np.isclose(f4.val, f3.val)
+    
+def test_repr():
+    x = rev.AutoDiffReverse(3, name='x')
+    assert x.__repr__() == f'AutoDiffReverse({x.val}, name="{x.name}")'
