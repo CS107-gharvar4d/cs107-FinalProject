@@ -330,10 +330,10 @@ def loga_rv(a,x):
     """
     Input `a` should be a scaler variable such as a int or float. `a` is an arbitrary base for the calculation.
     """
-  new=AutoDiffReverse(np.log(x.val)/np.log(a))
-  new.name=None
-  new.children=[[x,1 / (x.val * np.log(a)) ]]
-  return new
+    new=AutoDiffReverse(np.log(x.val)/np.log(a))
+    new.name=None
+    new.children=[[x,1 / (x.val * np.log(a)) ]]
+    return new
 
 def log_rv(x):
       return loga_rv(np.exp(1),x)
