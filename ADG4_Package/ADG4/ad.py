@@ -63,13 +63,13 @@ class AutoDiffVector():
         return AutoDiffVector(vvector, np.array([ii.der for ii in v]))
 
     def __add__(self, other):
-         """
-         add function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffVector instance
-          """
+        """
+        add function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffVector instance
+        """
          
         new = copy.deepcopy(self)
         try:
@@ -83,13 +83,13 @@ class AutoDiffVector():
         return self.__add__(other)
 
     def __mul__(self, other):
-          """
-         mutiplication function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffVector instance
-          """
+        """
+        mutiplication function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffVector instance
+        """
         new = copy.deepcopy(self)
         try:
             new.val *= other.val
@@ -103,13 +103,13 @@ class AutoDiffVector():
         return self.__mul__(other)
 
     def __truediv__(self, other):
-          """
-         divide function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffVector instance
-          """
+        """
+        divide function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffVector instance
+        """
         new = copy.deepcopy(self)
         try:
             new.val = self.val / other.val
@@ -120,13 +120,13 @@ class AutoDiffVector():
         return new
 
     def __rtruediv__(self, other):
-         """
-         reverse divide function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffVector instance
-          """
+        """
+        reverse divide function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffVector instance
+        """
         new = copy.deepcopy(self)
         try:
             new.val = other.val / self.val
@@ -137,13 +137,13 @@ class AutoDiffVector():
         return new
 
     def __neg__(self):
-          """
-         unary negative function
-         ------------
-         No input
-         ------------
-         output: A new AutoDiffVector instance
-          """
+        """
+        unary negative function
+        ------------
+        No input
+        ------------
+        output: A new AutoDiffVector instance
+        """
         new = copy.deepcopy(self)
         new.val = -new.val
         new.der = -new.der
@@ -151,12 +151,12 @@ class AutoDiffVector():
 
     def __sub__(self, other):
         """
-         subtraction function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffVector instance
-          """
+        subtraction function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffVector instance
+        """
         new = copy.deepcopy(self)
         try:
             new.val -= other.val
@@ -167,21 +167,21 @@ class AutoDiffVector():
 
     def __rsub__(self, other):
         """
-         reverse subtraction function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffVector instance
-          """
+        reverse subtraction function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffVector instance
+        """
         return -self.__sub__(other)
 
     def __pow__(self, other):
         """
-         power function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffVector instance
+        power function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffVector instance
         """
         new = copy.deepcopy(self)
         try:
@@ -194,11 +194,11 @@ class AutoDiffVector():
 
     def __rpow__(self, other):
         """
-         reverse power function
-         ------------
-         other: either a int/float, or a AutoDiffVector instance
-         ------------
-         output: A new AutoDiffVector instance
+        reverse power function
+        ------------
+        other: either a int/float, or a AutoDiffVector instance
+        ------------
+        output: A new AutoDiffVector instance
         """
         new = copy.deepcopy(self)
         try:
@@ -233,11 +233,11 @@ class AutoDiffVector():
     
     def __eq__(self, other):
         """
-         compare two AutoDiffVectors
-         ------------
-         other: a AutoDiffVector instance
-         ------------
-         output: return a boolean variable, true if two instances are equal
+        compare two AutoDiffVectors
+        ------------
+        other: a AutoDiffVector instance
+        ------------
+        output: return a boolean variable, true if two instances are equal
         """
         try:
             return np.abs(self.val - other.val) < 1e-6 and np.abs(self.der - other.der) < 1e-6
@@ -245,11 +245,11 @@ class AutoDiffVector():
             return (np.abs(self.val - other.val)).all() < 1e-6 and (np.abs(self.der - other.der)).all() < 1e-6
     def __ne__(self, other):
         """
-         compare two AutoDiffVectors
-         ------------
-         other: a AutoDiffVector instance
-         ------------
-         output: return a boolean variable, true if two instances are NOT equal
+        compare two AutoDiffVectors
+        ------------
+        other: a AutoDiffVector instance
+        ------------
+        output: return a boolean variable, true if two instances are NOT equal
         """
         return ~self.__eq__(other)
 
