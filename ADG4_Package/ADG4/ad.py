@@ -1,9 +1,9 @@
 """
-ADG4: Automatic Differentiation for Python
+ad.py: Automatic Differentiation for Python with forward mode
 
-A simple tool for handling automatic differentiation (AD) in Python using
-elementary functions, as well as, trigonometry
-See the examples at the bottom for some simple and advanced uses.
+
+See the examples below for some simple and advanced uses.
+
 NOTES:
 
     #Examples for Simple Operations and printing value and derivative:
@@ -50,11 +50,24 @@ class AutoDiffVector():
 
     @classmethod
     def vconvert(cls, v):
+        """
+        vectorize the output of the function from Rm to Rn
+        ---------------
+        v: a list of AutoDiffVector instances
+        """
         vvector=np.array([ii.val for ii in v])
         vvector=vvector.reshape(len(vvector),1)
         return AutoDiffVector(vvector, np.array([ii.der for ii in v]))
 
     def __add__(self, other):
+         """
+         add function
+         ------------
+         other: either a int/float, or a AutoDiffVector instance
+         ------------
+         output: A new AutoDiffVector instance
+          """
+         
         new = copy.deepcopy(self)
         try:
             new.val += other.val
@@ -67,6 +80,13 @@ class AutoDiffVector():
         return self.__add__(other)
 
     def __mul__(self, other):
+          """
+         mutiplication function
+         ------------
+         other: either a int/float, or a AutoDiffVector instance
+         ------------
+         output: A new AutoDiffVector instance
+          """
         new = copy.deepcopy(self)
         try:
             new.val *= other.val
@@ -80,6 +100,13 @@ class AutoDiffVector():
         return self.__mul__(other)
 
     def __truediv__(self, other):
+          """
+         divide function
+         ------------
+         other: either a int/float, or a AutoDiffVector instance
+         ------------
+         output: A new AutoDiffVector instance
+          """
         new = copy.deepcopy(self)
         try:
             new.val = self.val / other.val
@@ -90,6 +117,13 @@ class AutoDiffVector():
         return new
 
     def __rtruediv__(self, other):
+         """
+         reverse divide function
+         ------------
+         other: either a int/float, or a AutoDiffVector instance
+         ------------
+         output: A new AutoDiffVector instance
+          """
         new = copy.deepcopy(self)
         try:
             new.val = other.val / self.val
@@ -100,12 +134,26 @@ class AutoDiffVector():
         return new
 
     def __neg__(self):
+          """
+         unary negative function
+         ------------
+         No input
+         ------------
+         output: A new AutoDiffVector instance
+          """
         new = copy.deepcopy(self)
         new.val = -new.val
         new.der = -new.der
         return new
 
     def __sub__(self, other):
+        """
+         subtraction function
+         ------------
+         other: either a int/float, or a AutoDiffVector instance
+         ------------
+         output: A new AutoDiffVector instance
+          """
         new = copy.deepcopy(self)
         try:
             new.val -= other.val
@@ -115,9 +163,23 @@ class AutoDiffVector():
         return new
 
     def __rsub__(self, other):
+        """
+         reverse subtraction function
+         ------------
+         other: either a int/float, or a AutoDiffVector instance
+         ------------
+         output: A new AutoDiffVector instance
+          """
         return -self.__sub__(other)
 
     def __pow__(self, other):
+        """
+         power function
+         ------------
+         other: either a int/float, or a AutoDiffVector instance
+         ------------
+         output: A new AutoDiffVector instance
+        """
         new = copy.deepcopy(self)
         try:
             new.val = np.power(self.val, other.val)
@@ -128,6 +190,13 @@ class AutoDiffVector():
         return new
 
     def __rpow__(self, other):
+        """
+         reverse power function
+         ------------
+         other: either a int/float, or a AutoDiffVector instance
+         ------------
+         output: A new AutoDiffVector instance
+        """
         new = copy.deepcopy(self)
         try:
             new.val = np.power(other.val, self.val)
@@ -139,9 +208,11 @@ class AutoDiffVector():
 
     def partial(self, vari):
         """
-        Returns partial derivative given variable
-        :param vari:
-        :return:
+        Returns partial derivative given variab
+        -----------
+        :param vari: a AutoDiffVector istance, the partial derivative will be calcuated with respect to vari
+        -----------
+        :return: return the partial derivative
         """
         try:
             idx = np.nonzero(vari.der)[0]
@@ -156,14 +227,38 @@ class AutoDiffVector():
             raise TypeError
 
     # Boer Dec 5
+    
     def __eq__(self, other):
+        """
+         compare two AutoDiffVectors
+         ------------
+         other: a AutoDiffVector instance
+         ------------
+         output: return a boolean variable, true if two instances are equal
+        """
         try:
             return np.abs(self.val - other.val) < 1e-6 and np.abs(self.der - other.der) < 1e-6
         except ValueError:
             return (np.abs(self.val - other.val)).all() < 1e-6 and (np.abs(self.der - other.der)).all() < 1e-6
     def __ne__(self, other):
+        """
+         compare two AutoDiffVectors
+         ------------
+         other: a AutoDiffVector instance
+         ------------
+         output: return a boolean variable, true if two instances are NOT equal
+        """
         return ~self.__eq__(other)
 
+
+"""
+Below is a set of elementary functions for AutoDiffVectors. The calculation of them are self-evident.
+-----------
+Input: If not particularly specified, should be a AutoDiffVector instance
+-----------
+Return: return a new AutoDiffVector instance after the calculation
+
+"""
 
 def sin_ad(x):
     y = copy.deepcopy(x)
@@ -209,6 +304,10 @@ def arctan_ad(x):
 
 
 def expa_ad(a, x):
+    """
+    Input `a` should be a scaler variable such as a int or float. `a` is an arbitrary base for the calculation.
+
+    """
     y = copy.deepcopy(x)
     y.val = a ** x.val
     y.der = a ** x.val * np.log(a) * x.der
@@ -216,6 +315,10 @@ def expa_ad(a, x):
 
 
 def loga_ad(a, x):
+    """
+    Input `a` should be a scaler variable such as a int or float. `a` is an arbitrary base for the calculation.
+
+    """
     y = copy.deepcopy(x)
     y.val = np.log(x.val) / np.log(a)
     y.der = 1 / (x.val * np.log(a)) * x.der
@@ -251,6 +354,10 @@ def tanh_ad(x):
 
 
 def logistic_ad(x):
+    """
+    We choose logistic function as 1/(1+exp(-x))
+
+    """
     y = copy.deepcopy(x)
     y.val = 1 / (1 + np.exp(-x.val))
     y.der = np.exp(x.val) / (1 + np.exp(x.val)) ** 2 * x.der
@@ -261,6 +368,15 @@ def sqrt_ad(x):
     return x ** 0.5
 
 
+"""
+Above is a set of elementary functions for AutoDiffVectors. The calculation of them are self-evident.
+-----------
+Input: If not particularly specified, should be a AutoDiffVector instance
+-----------
+Return: return a new AutoDiffVector instance after the calculation
+
+"""
+
 # Boer Dec 5
 def exp_ad(x):
     y = copy.deepcopy(x)
@@ -269,11 +385,31 @@ def exp_ad(x):
     return y
 
 
+
 def mul_ad(x):
+    """
+    A function to mupltiply multiple AutoDiffVector variables. This is to make calculation like f=x1x2x3...x100 more convenient.
+    ---------------
+    vx: AutoDiffVector variables
+    ---------------
+    return: The result of Mutiplication
+    ---------------
+    """
     return x[0] * mul_ad(x[1:]) if len(x) > 1 else x[0]
 
 
+
 def gen_vars(vvars):
+    """
+    vectorize the inputs of the function from Rm to Rn
+    ---------------
+    vvars: a list of initial values of different variables
+    ---------------
+    return: a list of AutoDiffVectors, which are different variables. The variables for a same function should be defined together using gen_vars.
+    ---------------
+    Example:
+    [x,y,z,t]=ad.gen_vars([3.,np.pi,5.,3.4])
+    """
     vars = []
     nvars = len(vvars)
     for ii in range(len(vvars)):
