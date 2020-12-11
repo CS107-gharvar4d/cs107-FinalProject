@@ -4,7 +4,7 @@ ADG4: Automatic Differentiation for Python
 A simple tool for handling automatic differentiation (AD) in Python using
 elementary functions, as well as, trigonometry
 
-Tests module that using AutoDiffReverse and test using backpropagation algo.
+Tests module reverse.py that using AutoDiffReverse and test using backpropagation algo.
 
 """
 
@@ -13,6 +13,7 @@ import sys
 import ADG4.reverse as rev
 import numpy as np
 import random
+import pandas as pd
 
 def fprime_fd(f, x0, dx=1e-12):
     """
@@ -83,6 +84,15 @@ def basic_sub():
     m = z - 1
     assert m.val == -10
     #assert  m.partial(y)
+
+def test_fails_without_info():
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    z = rev.AutoDiffReverse(-9, name='z')
+    m = x - y
+    n = x - y - z
+    with pytest.raises(Exception):
+        n.partial(m)
 
 def test_inv():
     """
@@ -237,7 +247,7 @@ def test_compare():
     print(f3.val, f3.partial(x))
     assert np.isclose(f4.val, f3.val)
 
-def test_jacobian():
+def test_der():
     x = rev.AutoDiffReverse(3, name='x')
     y = rev.AutoDiffReverse(4, name='y')
     z = rev.AutoDiffReverse(-9, name='z')
@@ -245,5 +255,9 @@ def test_jacobian():
     n = m * z + x
     q = -n
     q.backprop()
-    print(q.jacobian())
-    assert q.jacobian() == {'Variables':[x,z,y],'Jacobian':[8,-7,9]}
+    result=pd.DataFrame([[8,-7,9]],index=[0],columns=['x','z','y'])
+    assert q.der.equals(result)
+    
+def test_repr():
+    x = rev.AutoDiffReverse(3, name='x')
+    assert x.__repr__() == f'AutoDiffReverse({x.val}, name="{x.name}")'
