@@ -275,14 +275,14 @@ AutoDiffVector
     - der: the jacobian with respect to all the input (aka. independent) variables. It is either a scaler, vector, or a matrix.
   methods:
     - partial(vari)
-    - __mul__, __add__, .. call the associated ADFunctions to return new AutoDiffVector
+    - __mul__, __add__, .. call the associated functions to return new AutoDiffVector
 ```
 
-### Managing derivatives
+#### Managing derivatives
 At any point, the method `partial(vari=v)` can be called on an AutoDiffVector get the derivative with respect to any input variables.
 
 
-## ADFunctions
+### ADFunctions
 ADFunctions accept one AutoDiffVector and output a new AutoDiffVector with an updated `val` and `der`.
 ```
 ADFunction
@@ -290,7 +290,7 @@ ADFunction
   output: A new AutoDiffVector with appropriate val, der
 ```
 
-### ADFunction Implementations
+#### ADFunction Implementations
 Since ADFunctions do not contain internal state, and cannot be loaded as dunder methods (e.g., sin, cos), for now it seems to make the most sense to have them as direct functions.
 Elementary functions like sin, cos, etc will each have a corresponding `ADFunction` implementation that stores gradients
 and maintains logic depending on whether the input is a vector, matrix etc. For functions such as multiplication and addition,
@@ -302,14 +302,14 @@ No external dependencies are required at this time, except `numpy` package.
 Although ADFunctions are considered as a class, when implementing it, we choose not to bind these functions together as a class. We just define them separately to guarantee easy access to them.
 
 
-### Scalar and Vector
+## Scalar and Vector
 The `AutoDiffVector` is resemble to a single output function with multiple inputs. The multiple inputs should be defined together as shown in the example below.
 `ADFunction`s handles `AutoDiffVector`s of any type. Namely, multiple inputs is supported. Considering that different elements of vector outputs is naturally different, we did not make throughly test `ADFunction`s to guarantee them support multiple outputs, although multiple output functions should be supported based on our implementation.
 
 The output can be vectorized using the class method vconvert after calculating each line of output separately, as shown in the example below.
 
 
-####  Scalars, Vectors example:
+###  Scalars, Vectors example:
 
 ```
 v = AutoDiffVector(1) # a scalar input with scaler output
@@ -327,7 +327,7 @@ print(f+f)
 
 ```
 
-### Example Code Structure
+## Example Code Structure
 All functions will return a new AutoDiffVector with an updated value and an array of derivatives with respect to variables.
 
 For example, below is an example of how we might implement a function for addition, which would perform the elementary operation of adding two AutoDiffVectors and calculating the updated derivatives.
@@ -390,7 +390,7 @@ Reverse mode utilizes similar element formulas to the ones implemented in forwar
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=f=sin(x_1^2)&plus;x_2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f=sin(x_1^2)&plus;x_2" title="f=sin(x_1^2)+x_2" /></a> 
 
-When moving forward with the equation, at step 1 we calculate and store <a href="https://www.codecogs.com/eqnedit.php?latex=x_1'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_1'" title="x_1'" /></a> and <a href="https://www.codecogs.com/eqnedit.php?latex=x_2'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2'" title="x_2'" /></a>. At step 2, we store <a href="https://www.codecogs.com/eqnedit.php?latex=v_1'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1'" title="v_1'" /></a>, where <a href="https://www.codecogs.com/eqnedit.php?latex=v_1=x_1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1=x_1" title="v_1=x_1" /></a>. At step 3, we store <a href="https://www.codecogs.com/eqnedit.php?latex=sin(v_2)'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?sin(v_2)'" title="sin(v_2)'" /></a>, where <a href="https://www.codecogs.com/eqnedit.php?latex=v_1'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1'" title="v_1'" /></a>. When calculating the partial derivative with respect to <a href="https://www.codecogs.com/eqnedit.php?latex=v_1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1" title="v_1" /></a>, we move backward and multiply together the derivatives and get <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" title="\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" /></a>. For the partial derivative with repect to <a href="https://www.codecogs.com/eqnedit.php?latex=x_2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2" title="x_2" /></a>, we directly trace back to <a href="https://www.codecogs.com/eqnedit.php?latex=x_2'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2'" title="x_2'" /></a> and get the derivative as 1.
+When moving forward with the equation, at step 1 we calculate and store <a href="https://www.codecogs.com/eqnedit.php?latex=x_1'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_1'" title="x_1'" /></a> and <a href="https://www.codecogs.com/eqnedit.php?latex=x_2'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2'" title="x_2'" /></a>. At step 2, we store <a href="https://www.codecogs.com/eqnedit.php?latex=(v_1^2)'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(v_1^2)'" title="(v_1^2)'" /></a>, where <a href="https://www.codecogs.com/eqnedit.php?latex=v_1=x_1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1=x_1" title="v_1=x_1" /></a>. At step 3, we store <a href="https://www.codecogs.com/eqnedit.php?latex=sin(v_2)'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?sin(v_2)'" title="sin(v_2)'" /></a>, where <a href="https://www.codecogs.com/eqnedit.php?latex=v_2=v_1^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_2=v_1^2" title="v_2=v_1^2" /></a>. When calculating the partial derivative with respect to <a href="https://www.codecogs.com/eqnedit.php?latex=v_1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1" title="v_1" /></a>, we move backward and multiply together the derivatives and get <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" title="\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" /></a>. For the partial derivative with repect to <a href="https://www.codecogs.com/eqnedit.php?latex=x_2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2" title="x_2" /></a>, we directly trace back to <a href="https://www.codecogs.com/eqnedit.php?latex=x_2'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2'" title="x_2'" /></a> and get the derivative as 1.
 
 
 ### Software organization for add-on feature
@@ -458,8 +458,104 @@ print(f.val, f.partial(x))
 Basically we have all the same functions to forward mode, with slight differents in implementation. For reverse mode, we do not have compare functions considering the equation is path dependent. But users can still use the default compare functions of python, which compare the reference of two instances.
 
 ### Implementation Details
+#### core class
+Similar to the forward mode, we have AutoDiffReverse as our variable and have a set of elementary functions.
+#### AutoDiffReverse
+Below are the core structure of the core variable, AutoDiffReverse. When moving forward with the equation, the variables and partial derivatives with respected to them are stored as two-element lists in the list `self.children`, which is a list of two-element list. After storing the whole graph, the derivatives with respect to a variable `vv` (which is a AutodiffReverse instance) can be calculated using `partial(self,vv)` function. `partial(self,vv)` function calls the `backprop` functions, which propogates the derivatives following the chain rule reversely, and store the derivatives with respect to different AutodiffReverse variables along the way. We have a `self.has_backpropped` variable to guarantee the back propotation is only called once for each function.
+`
+class AutoDiffReverse():
+    ## A reverse autodifferentiation class
+    def __init__(self,a, name=None):
+        self.val= copy.deepcopy(a) # needed for np array reference management
+        self.children = []
+        self.has_backpropped = False
+        self.name = name
+        self._partial = {}
+    def backprop(self):
+        # A back prop implementation that keeps all derivative accumulations
+        # within this root node that calls .backprop()
+        partial = defaultdict(int)
+        
+        stack = [ (child_node, edge_value) for (child_node, edge_value) in self.children]
+        while stack:
+            # edge value is the derivative between the root node
+            # and this current node
+            node, edge_value = stack.pop()
+            # Update the partial derivative to add this current derivative value
+            partial[node] += edge_value
+            # Add each child to our stack
+            for child_node, child_edge_value in node.children:
+                # For each child, its derivative with respect to the root is
+                # (derivative root -> node) * (derivative node -> child_node)
+                stack.append((child_node, edge_value * child_edge_value))
+                
+     def partial(self,vv):
+        if not self.has_backpropped:
+            self.backprop()
+            self.has_backpropped = True
+        
+        if vv in self._partial.keys():
+            return self._partial[vv]
+        ##Deal with the case when
+        elif self is vv:
+            return 1
+        else:
+            raise KeyError('Function not dependent on input')
+    
+    ...Other calculation related functions  
+`
+
+#### Element Functions
+The basic idea of the element functions is to return a new AutoDiffReverse instance, with the variables and prtial derivatives stored in its `.children` field. Here the functions are considered as a class but we do not really bind them together, which is similar to the forward mode. Below are a few examples showing how we do it.
+Add and mutiplication function:
+`
+#Inside the defination of the class AutoDiffReverse
+  def __add__(self,other):
+        new=AutoDiffReverse(self.val)
+        
+        try:
+            new.val+=other.val
+            new.children=[[self,1],[other,1]]
+        except AttributeError:
+            new.val+=other
+            new.children=[[self,1]]
+        return new
+	
+  def __mul__(self,other):
+        new=AutoDiffReverse(self.val)
+        
+        try:
+            new.val*=other.val
+            new.children=[[self,other.val],[other,self.val]]
+        except AttributeError:
+            new.val*=other
+            new.children=[[self,other]]
+        return new
+`
+Trig functions:
+
+`
+def sin_rv(x):
+  new=AutoDiffReverse(np.sin(x.val))
+  new.name=None
+  new.children=[[x,np.cos(x.val)]]
+  return new
+
+def cos_rv(x):
+  new=AutoDiffReverse(np.cos(x.val))
+  new.name=None
+  new.children=[[x,-np.sin(x.val)]]
+  return new
+
+def tan_rv(x):
+  return sin_rv(x)/cos_rv(x)
+`
+
+#### Scalers and Vectors
+Our reverse mode naturally supports vector inputs. The AutoDiffReverse is also readily vectorized, so vector output is also supported.
 
 <a name="impact"/>
+
 
 # ADG4 Impact and Inclusivity. 
 
