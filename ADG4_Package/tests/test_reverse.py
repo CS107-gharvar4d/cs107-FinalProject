@@ -4,7 +4,7 @@ ADG4: Automatic Differentiation for Python
 A simple tool for handling automatic differentiation (AD) in Python using
 elementary functions, as well as, trigonometry
 
-Tests module that using AutoDiffReverse and test using backpropagation algo.
+Tests module reverse.py that using AutoDiffReverse and test using backpropagation algo.
 
 """
 
