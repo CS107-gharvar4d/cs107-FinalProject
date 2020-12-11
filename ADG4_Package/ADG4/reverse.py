@@ -258,11 +258,11 @@ class AutoDiffReverse():
         new=AutoDiffReverse(self.val)
         new.name=None
         try:
-        new.val**=other.val
-        new.children=[[self,other.val*self.val**(other.val-1)],[other,self.val**other.val*np.log(self.val)]]
+            new.val**=other.val
+            new.children=[[self,other.val*self.val**(other.val-1)],[other,self.val**other.val*np.log(self.val)]]
         except:
-        new.val**=other
-        new.children=[[self,other*self.val**(other-1)]]
+            new.val**=other
+            new.children=[[self,other*self.val**(other-1)]]
         return new
 
     def __rpow__(self,other):
