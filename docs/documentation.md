@@ -99,49 +99,92 @@ conda activate adg4_env
 
 <a name="demo"/>
 
-### A Demo
+### Some Demos
 
-- A simple example of the user interface for how to use the package is below. Running our packages involves:
+- Some simple examples of the user interface for how to use the package is below. Running our packages involves:
 - Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
-- Jacobian: Lastly, the function returns to the Jacobian matrix. 
+- Jacobian of partial derivatives: Lastly, the function returns to the Jacobian matrix, or partial derivatives.
 
 Example of Creating an AutoDiffVector:
 ```
+##import the forward mode module
 import ADG4.ad as ad
 
 a = 2.0 # Value to evaluate at
-x = ad.AutoDiffVector(a) #create a AutoDiff variable with value 2
-alpha=2.0
-beta=3.0
+x = ad.AutoDiffVector(a) #create a AutoDiff variable with value of a
+
 ```
 
 Simple Operation Example: Creating Functions from AD Variables
 ```
+alpha=2.0
+beta=3.0
 f=alpha*x+beta # behind the scenes this calls the __add__ function and the __mul__ function respectively
 
-# Now you can access the values and derivatives from the AD objects
+# Now you can access the values and derivatives(jacobian) from the AD objects
 print(f.val,f.der)
 
 f=alpha/x-beta # behind the scenes this calls the __truediv__ function and the __sub__ function respectively
-print(f.val,f.der) # print the value and derivative
+print(f.val,f.der) # print the value and derivative(jacobian)
 
+```
+Some elementary functions:
+
+```
 f=x**x #calculate pow
+##print value and jacobian
 print(f.val,f.der) 
 ```
 Trig Function Examples:
 ```
+##sin function
 f = ad.sin_ad(x)
 print(f.val, f.der)
+##print value and jacobian
+##cos function
 f = ad.cos_ad(x)
+##print value and jacobian
 print(f.val, f.der)
+##tan function
 f = ad.tan_ad(x)
+##print value and jacobian
 print(f.val, f.der)
 ```
 Exponential Function Example:
 ```
 f = ad.exp_ad(x)
+##print value and jacobian
 print(f.val, f.der)
 ```
+
+Vector implementation:
+```
+##multiple variables: using gen_vars method to define multiple variables together
+[x,y,z,t]=ad.gen_vars([3.,np.pi,5.,3.4])
+##multiple outputs: using AutoDiffVector.vconvert method to vectorize outputs
+f  = ad.AutoDiffVector.vconvert([(x + y**z)/t, ad.sin_ad(x+ad.cos_ad(100*y**3)-z**t)])
+##print value and jacobian
+print(f.val,f.der)
+##print partial derivative with respect to x
+print(f.partial(x))
+```
+### A list of supported calculations for forward module `ad.py`
+
+Add: AutoDiffVector.__add__(self,other), AutoDiffVector.__radd__(self,other)
+Subtraction: AutoDiffVector.__sub__(self,other), AutoDiffVector.__rsub__(self,other)
+Mupltiplication: AutoDiffVector.__mul__(self,other), AutoDiffVector.__rmul__(self,other)
+Divide: AutoDiffVector.__rturediv__(self,other), AutoDiffVector.__rtruediv__(self,other)
+Power: AutoDiffVector.__pow__(self,other), AutoDiffVector.__pow__(self,other)
+Negative: AutoDiffVector.__neg__(self,other)
+Partial derivative with respect to a variable `vari`: AutoDiffVector.partial(self, vari)
+Trig functions: sin_ad(x), cos_ad(x), tan_ad(x)
+Inverse trag functions: arcsin_ad(x), arccos_ad(x), arctan_ad(x)
+Exponential: expa_ad(a,x), exp_ad(x)
+logrithmic: loga_ad(a,x), log_ad(x)
+Hyperbolic: sinh_ad(x), cosh_ad(x), tanh_ad(x)
+Logistic: logistic_ad(x)
+
+
 
 <a name="org"/>
 
