@@ -268,10 +268,9 @@ def test_vconvert():
     vec=rev.AutoDiffReverse.vconvert([m,n,q])
     print(vec.val)
     print(vec.der)
-    result=type('obj',(object,),{'val':[m.val,n.val,q.val],'der':pd.DataFrame([[-8,-9,7],[8,9,-7],[1,1,0]],index=[0,0,0],columns=['y','z','x'])})
+    result=type('obj',(object,),{'val':[m.val,n.val,q.val],'der':pd.DataFrame([[1,1,0],[-8,-9,7],[8,9,-7]],index=[0,0,0],columns=['x','y','z'])})
     print(result.der)
     assert vec.der.equals(result.der)
-    #assert vec.der['x']=result.der['r']
     
 def test_repr():
     x = rev.AutoDiffReverse(3, name='x')
