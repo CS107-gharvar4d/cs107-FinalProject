@@ -183,13 +183,12 @@ class AutoDiffReverse():
         if not self.has_backpropped:
             self.backprop()
             self.has_backpropped = True
-
-        keys=[]
-        for kk in self._partial.keys():
-            if not kk.name == None:
-               keys.append(kk)
-        der=pd.DataFrame([[self._partial[kk] for kk in keys]],index=[0],columns=[k.name for k in keys])
-        return der
+            keys=[]
+            for kk in self._partial.keys():
+                if not kk.name == None:
+                   keys.append(kk)
+            self._der=pd.DataFrame([[self._partial[kk] for kk in keys]],index=[0],columns=[k.name for k in keys])
+        return self._der
         
     @classmethod
     def vconvert(cls, v):
