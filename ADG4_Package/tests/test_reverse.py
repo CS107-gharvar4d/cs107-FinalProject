@@ -270,6 +270,7 @@ def test_vconvert():
     print(vec.der)
     result=type('obj',(object,),{'val':[m.val,n.val,q.val],'der':pd.DataFrame([[1,1,0],[-8,-9,7],[8,9,-7]],index=[0,0,0],columns=['x','y','z'])})
     print(result.der)
+    vec.der=vec.der[['x','y','z']]
     assert vec.der.equals(result.der)
     
 def test_repr():
