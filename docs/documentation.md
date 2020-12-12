@@ -84,6 +84,17 @@ Dual numbers: a two dimentional space where an outer product is defined between 
 # How to use
 
 Here are the steps to use our package. First, below are the steps to download and install `ADG4`:
+
+### User Installation
+Our `ADG4` is available on [PyPi](https://pypi.org/project/ADG4/) and is pip installable. We also designed our `setup.py` file so that dependencies such as `numpy` will automatically be installed. All you need to do is run the following command and you are ready to use `ADG4`:
+
+```
+pip install ADG4
+```
+
+### Development Installation
+Alternatively, our package is also available for development installation, through which you can access and edit the code. To do so, follow the steps below: 
+
 1. Create and activate a virtual environment, either with conda 
 ```
 conda create -n adg4_env python=3.8
@@ -233,11 +244,9 @@ requirements.txt
 ```
 * The directory is structured based on functionality. We have the main codes in `ADG4` with forward module `ad.py` which is the main body of our work, and an add-on package `reverse.py`. We also have a separate `\test` directory. Besides the main backage codes `ADG4_package/`, we also have `docs/` directory and some supporting files in the top directory.
  
-
-
 Modules:
-* We havie two modules: `ad` for implementing our forward AD functionality and `reverse` which will implement a reverse mode.
-* Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`,`random`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices.  We have include these libraries in `requirements.txt` so users can install them easily with `pip install -r requirements.txt` on their machine orvirtual environment.
+* We have two modules: `ad` for implementing our forward AD functionality and `reverse` which will implement a reverse mode.
+* Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices. It has built in support for matrix/vector math which will be useful for our final implementation. We have designed our `setup.py` file so that these dependencies will be automatically installed when a user runs `pip install ADG4`. We also include these libraries in `requirements.txt` so developer users can install them easily with `pip install -r requirements.txt` on their machine or virtual environment.
 
 Test Suite:
 * We are using both TravisCI and CodeCov as part of our test suite.
@@ -245,17 +254,16 @@ Test Suite:
 * The project repo has a badge reporting on the coverage of our code from Codecov, so we can easily tell how many tests are passing.
 
 Package Distribution:
-* Our package is pip installable using the editable option pointing to a local file system. It will be pip installable when it is finally published.
-* Specific step by step instructions for how to download and install our package are provided above in the How to Use section.
-* As a brief summary, `ADG4` can be downloaded and installed by creating and activating a virtual environment, downloading our repository (`git clone git@github.com:CS107-gharvar4d/cs107-FinalProject.git`), and navigating into the repo folder with `cd cs107-FinalProject`. 
-* Then, install the requirements with `pip install -r requirements.txt`, and install the `ADG4` package with `pip install --editable ./code` (code is the name of the directory where it lives).
+* Our package is pip installable through [PiPy](https://pypi.org/project/ADG4/).
+* Users can simply run the command `pip install ADG4` to download and install our package.
 * Now you can use the command `import ADG4.ad as ad` and you are ready to use our package!
+* Specific step by step instructions for how developers can download and install our package to view and edit the code are provided above in the How to Use section.
 
 Sofware Packaging:
 * We use SetupTools (setup.py) to package our software. That way it can handle downloading dependencies and setup processes.
 
 Other Considerations:
-* As noted in the project instructions we will also include a broader impact statement for our library in README.md. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population. We also include a prototype of the documentation in Spanish to help the package to gain further inclusivity. The credit goes to Rodrigo Vargas in our group.
+* As noted in the project instructions we also include a broader impact statement for our library in README.md. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population. We also include a prototype of the documentation in Spanish to help the package to gain further inclusivity. The credit goes to Rodrigo Vargas in our group.
 
 <a name="implementation"/>
 
