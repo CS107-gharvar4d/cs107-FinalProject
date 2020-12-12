@@ -560,7 +560,30 @@ def tan_rv(x):
 ```
 
 #### Scalers and Vectors
-Our reverse mode naturally supports vector inputs. The AutoDiffReverse is also readily vectorized, so vector output is also supported.
+The AutoDiffReverse class supports vector inputs simply by storing different variables and the derivatives as a dictionary. To support vectorized output, we devised a class function AutoDiffReverse.vvector, as the following,
+```
+@classmethod
+def vconvert(cls, v):
+    """
+    vectorize the output of the function from Rm to Rn
+    ---------------
+    v: a list of AutoDiffVector instances
+    """
+    vvector=np.array([ii.val for ii in v])
+    cols=[]
+    for ii in v:
+        cols=cols+list(ii.der.columns)
+    cols=set(cols)
+    jacobian=pd.DataFrame(columns=cols)
+    for nn,ii in enumerate(v):
+        jacobian=jacobian.append(ii.der)
+    jacobian=jacobian.fillna(0)
+    obj = type('obj', (object,), {'val' : vvector, 'der':jacobian})
+    return obj
+```
+which essentially serves as a wrapper that loops over each entry of the vectorized output.
+
+
 
 <a name="impact"/>
 
