@@ -32,7 +32,12 @@ functions allows agents to maximize their expected outcomes. These are only a fe
 differentiating complex functions is useful and necessary.
 
 Given the broad set of applications across domains, we hope ADG4 can be a useful tool
-that can facilitate quick and easy numerical evaluation of derivatives through computing.
+that can facilitate quick and easy numerical evaluation of derivatives through computing. In our toolbox, vector
+calculation is supported. The tool box is capable of returning the Jacobian of a function with arbitrary dimension,
+and is also capable of returning the partial derivative for certain variables. We integrate both forward mode and reverse mode, 
+and the users are welcomed to choose the mode best suited to their scientific problem. Generally speaking,
+we expect that forward mode is more suitable with lower dimensional input with higher dimensional output, and
+the contrary is true for reverse mode. 
 
 
 # Background
@@ -62,9 +67,17 @@ independent variables, where the seeding variables would be put in.
 
 Here are a few important concepts pertaining AD which are mentioned above:
 
-The Chain Rule: the derivative of a convoluted function is the product of each simple function evaluated at the value of its child function.
-Jacobian: the gradient of each element of a function's output with respect to each and every input. In other words, it's the gradient of the function at the space spanned by the inputs.
-Dual numbers: a two dimentional space where a outer product is defined between any vectors x = (a, b) and y = (c, d) as x×y = (a⋅c, a⋅d + c⋅b). Dual number is useful when we want to include a second-order calculation, i.e., not only calculate the value of a function, but also its changes with regard to small changes from the inputs.
+The Chain Rule: the derivative of a convoluted function is the product of each simple function evaluated at the value of its child function. Namely, it can be expressed in terms of the following equation. 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" title="\frac{du}{dx}=\frac{du}{dv}\frac{dv}{dx}" /></a>
+	
+The basic idea of forward mode relys on the chain rule. The final derivative can be calculated by using chain rule recursively.
+
+Jacobian: the gradient of each element of a function's output with respect to each and every input. In other words, it's the gradient of the function at the space spanned by the inputs. The Jacobian for a function <a href="https://www.codecogs.com/eqnedit.php?latex=f:\mathbb{R}^m\to\mathbb{R}^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f:\mathbb{R}^m\to\mathbb{R}^n" title="f:\mathbb{R}^m\to\mathbb{R}^n" /></a> is
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=J=\begin{bmatrix}&space;\frac{\partial{f_1}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_1}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_1}}{\partial&space;x_m}\\&space;\frac{\partial{f_2}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_2}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_2}}{\partial&space;x_m}\\&space;...&...&...&...\\&space;\frac{\partial{f_n}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_n}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_n}}{\partial&space;x_m}&space;\end{bmatrix}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?J=\begin{bmatrix}&space;\frac{\partial{f_1}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_1}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_1}}{\partial&space;x_m}\\&space;\frac{\partial{f_2}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_2}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_2}}{\partial&space;x_m}\\&space;...&...&...&...\\&space;\frac{\partial{f_n}}{\partial&space;x_1}&space;&&space;\frac{\partial{f_n}}{\partial&space;x_2}&space;&&space;...&\frac{\partial{f_n}}{\partial&space;x_m}&space;\end{bmatrix}" title="J=\begin{bmatrix} \frac{\partial{f_1}}{\partial x_1} & \frac{\partial{f_1}}{\partial x_2} & ...&\frac{\partial{f_1}}{\partial x_m}\\ \frac{\partial{f_2}}{\partial x_1} & \frac{\partial{f_2}}{\partial x_2} & ...&\frac{\partial{f_2}}{\partial x_m}\\ ...&...&...&...\\ \frac{\partial{f_n}}{\partial x_1} & \frac{\partial{f_n}}{\partial x_2} & ...&\frac{\partial{f_n}}{\partial x_m} \end{bmatrix}" /></a>
+
+Dual numbers: a two dimentional space where an outer product is defined between any vectors <a href="https://www.codecogs.com/eqnedit.php?latex=x=(a,b)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x=(a,b)" title="x=(a,b)" /></a> and <a href="https://www.codecogs.com/eqnedit.php?latex=y=(c,d)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?y=(c,d)" title="y=(c,d)" /></a> as <a href="https://www.codecogs.com/eqnedit.php?latex=x&space;\cdot&space;y=(a&space;\cdot&space;c,a&space;\cdot&space;d&plus;c&space;\cdot&space;b)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x&space;\cdot&space;y=(a&space;\cdot&space;c,a&space;\cdot&space;d&plus;c&space;\cdot&space;b)" title="x \cdot y=(a \cdot c,a \cdot d+c \cdot b)" /></a>. Dual number is useful when we want to include a derivative calculation, i.e. if we put the first item of a dual number as a value of a funtion, and the second item of a dual number as the derivative of a function, then the calculations  of two dual numbers <a href="https://www.codecogs.com/eqnedit.php?latex=p=(x_1,\dot{x_1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p=(x_1,\dot{x_1})" title="p=(x_1,\dot{x_1})" /></a>, and <a href="https://www.codecogs.com/eqnedit.php?latex=q=(x_2,\dot{x_2})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?q=(x_2,\dot{x_2})" title="q=(x_2,\dot{x_2})" /></a> would give us the value of the calculation between the values at the first item, and the derivative of the calculation at the second item, because it turns out the calculation of the second item follows the chain rule. For example <a href="https://www.codecogs.com/eqnedit.php?latex=p&plus;q&space;=(x_1&plus;x_2,\dot{x_1}&plus;\dot{x_2})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p&plus;q&space;=(x_1&plus;x_2,x_1'&plus;x_2')" title="p+q =(x_1+x_2,x_1'+x_2')" /></a>, <a href="https://www.codecogs.com/eqnedit.php?latex=pq&space;=(x_1x_2,(x_1x_2)')" target="_blank"><img src="https://latex.codecogs.com/gif.latex?pq&space;=(x_1x_2,(x_1x_2)')" title="pq =(x_1x_2,(x_1x_2)')" /></a>. When implementing forward mode, we are actually defining a basic variable as a dual number. More details can be found in the `Implementation Details` section, where our `var` is the first item and `der` is the second item of the dual number.
 
 <a name="how_to_use"/>
 
@@ -97,90 +110,142 @@ conda activate adg4_env
 
 <a name="demo"/>
 
-### A Demo
+### Some Demos
 
-- A simple example of the user interface for how to use the package is below. Running our packages involves:
-- Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a list of function inputs as declaration, a list of input values, a function form (methods for repetition and recursion should be provided in preparation of cases like f = x1 x2 ... x100000)
-- Jacobian: Lastly, the function returns to the Jacobian matrix. 
+- Some simple examples of the user interface for how to use the package is below. Running our packages involves:
+- Functional inputs: A class should be called to instantiate the object. The constructor requires the following inputs: a `val` input for scaler inputs, with optional seeding for the derivative `der`. For vector inputs, `gen_vars` function should be used. If the output is a vector, then `AutoDiffVector.vconvert` should be used to vectorize the output.
+- Jacobian of partial derivatives: Lastly, the function returns to the Jacobian matrix, or partial derivatives. 
 
 Example of Creating an AutoDiffVector:
 ```
+##import the forward mode module
 import ADG4.ad as ad
 
 a = 2.0 # Value to evaluate at
-x = ad.AutoDiffVector(a) #create a AutoDiff variable with value 2
-alpha=2.0
-beta=3.0
+x = ad.AutoDiffVector(a) #create a AutoDiff variable with value of a
+
 ```
 
 Simple Operation Example: Creating Functions from AD Variables
 ```
+alpha=2.0
+beta=3.0
 f=alpha*x+beta # behind the scenes this calls the __add__ function and the __mul__ function respectively
 
-# Now you can access the values and derivatives from the AD objects
+# Now you can access the values and derivatives(jacobian) from the AD objects
 print(f.val,f.der)
 
 f=alpha/x-beta # behind the scenes this calls the __truediv__ function and the __sub__ function respectively
-print(f.val,f.der) # print the value and derivative
+print(f.val,f.der) # print the value and derivative(jacobian)
 
+```
+Some elementary functions:
+
+```
 f=x**x #calculate pow
+##print value and jacobian
 print(f.val,f.der) 
 ```
 Trig Function Examples:
 ```
+##sin function
 f = ad.sin_ad(x)
 print(f.val, f.der)
+##print value and jacobian
+##cos function
 f = ad.cos_ad(x)
+##print value and jacobian
 print(f.val, f.der)
+##tan function
 f = ad.tan_ad(x)
+##print value and jacobian
 print(f.val, f.der)
 ```
 Exponential Function Example:
 ```
 f = ad.exp_ad(x)
+##print value and jacobian
 print(f.val, f.der)
 ```
+
+Vector implementation:
+```
+##multiple variables: using gen_vars method to define multiple variables together
+[x,y,z,t]=ad.gen_vars([3.,np.pi,5.,3.4])
+##multiple outputs: using AutoDiffVector.vconvert method to vectorize outputs
+f  = ad.AutoDiffVector.vconvert([(x + y**z)/t, ad.sin_ad(x+ad.cos_ad(100*y**3)-z**t)])
+##print value and jacobian
+print(f.val,f.der)
+##print partial derivative with respect to x
+print(f.partial(x))
+```
+### A list of supported calculations for forward module `ad.py`
+
+Add: AutoDiffVector.\__add__(self,other), AutoDiffVector.\__radd__(self,other)
+
+Subtraction: AutoDiffVector.\__sub__(self,other), AutoDiffVector. \__rsub__(self,other)
+
+Mupltiplication: AutoDiffVector.\__mul__(self,other), AutoDiffVector.\__rmul__(self,other)
+
+Divide: AutoDiffVector.\__rturediv__(self,other), AutoDiffVector.\__rtruediv__(self,other)
+
+Power: AutoDiffVector.\__pow__(self,other), AutoDiffVector.\__pow__(self,other)
+
+Negative: AutoDiffVector.\__neg__(self,other)
+
+Partial derivative with respect to a variable `vari`: AutoDiffVector.partial(self, vari)
+
+Compare: AutoDiffVector. \__eq__(self,other), AutoDiffVector. \__ne__(self,other)
+
+Trig functions: sin_ad(x), cos_ad(x), tan_ad(x)
+
+Inverse trag functions: arcsin_ad(x), arccos_ad(x), arctan_ad(x)
+
+Exponential: expa_ad(a,x), exp_ad(x)
+
+logrithmic: loga_ad(a,x), log_ad(x)
+
+Hyperbolic: sinh_ad(x), cosh_ad(x), tanh_ad(x)
+
+Logistic: logistic_ad(x)
+
+
 
 <a name="org"/>
 
 # Software Organization
 
-This section addresses how we plan to organize our software package.
+This section addresses how we organize our software package.
 
 What will the directory structure look like?
-* The directory will be structured based on functionality. Modules will be deployed according to program features such as mathematic calculations, user interface, computational graph and test suite.
-* In order to ensure that our module can be pip installable, our directory follows a structure like this (not explicitly included in this list are our configuration files, e.g. .coverage, .gitignore: 
 
+* our directory follows a structure like this (not explicitly included in this list are our configuration files, e.g. .coverage, .gitignore: 
 ```
-code/
+ADG4_package/
 	ADG4/
+		ad.py
+		reverse.py
 	tests/
+		test_ad.py
+		test_reverse.py
 	setup.py
-ad_extension/ # name TBD
 docs/
+	milestone1.ipynb
+	milestone2.md
+	milestone2_progress.md
+	documentation.md
+	documentation-es.md
+setup.py
+README.md
+README-es.md
 .travis.yml
 README.md
 requirements.txt
 ```
-
-* We will have a unittest test file per implementation file. At this point, our module is contained within the `ad.py` file.
-
-```
-ADG4/
-	ad.py
-ad_extension/
-	extension.py
-tests/
-	test_ad.py
-docs/
-	milestone1.ipynb
-	milestone2.md
-setup.py
-README.md
-```
-
-What modules do you plan on including? What is their basic functionality?
-* For now, we plan of having two modules: `ADG4` for implementing our core AD functionality and `ad_extension` which will use our core library for an end-user program.
+* The directory is structured based on functionality. We have the main codes in `ADG4` with forward module `ad.py` which is the main body of our work, and an add-on package `reverse.py`. We also have a separate `\test` directory. Besides the main backage codes `ADG4_package/`, we also have `docs/` directory and some supporting files in the top directory.
+ 
+Modules:
+* We have two modules: `ad` for implementing our forward AD functionality and `reverse` which will implement a reverse mode.
 * Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices. It has built in support for matrix/vector math which will be useful for our final implementation. We have designed our `setup.py` file so that these dependencies will be automatically installed when a user runs `pip install ADG4`. We also include these libraries in `requirements.txt` so developer users can install them easily with `pip install -r requirements.txt` on their machine or virtual environment.
 
 Test Suite:
@@ -198,7 +263,7 @@ Sofware Packaging:
 * We use SetupTools (setup.py) to package our software. That way it can handle downloading dependencies and setup processes.
 
 Other Considerations:
-* As noted more thoroughly in our broader impact statement below, we want to be considerate of diverse groups. As such, we include documentation in both English and Spanish to make our software accessible to a wide breadth of developers.
+* As noted in the project instructions we also include a broader impact statement for our library in README.md. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population. We also include a prototype of the documentation in Spanish to help the package to gain further inclusivity. The credit goes to Rodrigo Vargas in our group.
 
 <a name="implementation"/>
 
@@ -214,55 +279,63 @@ Eg the partial derivatives with respect to each input variable.
 ```
 AutoDiffVector
   fields:
-    - val: the currently computed value
-    - der: the jacobian with respect to all the input (aka. independent) variables.
+    - val: the currently computed value, it is either a scaler or a vector.
+    - der: the jacobian with respect to all the input (aka. independent) variables. It is either a scaler, vector, or a matrix.
   methods:
     - partial(vari)
-    - __mul__, __add__, .. call the associated ADFunctions to return new AutoDiffVector
+    - __mul__, __add__, .. call the associated functions to return new AutoDiffVector
 ```
 
-### Managing derivatives
-At any point, the method `partial(vari=v)` can be called on an AutoDiffVector get the derivative with respont to any input variables.
+#### Managing derivatives
+At any point, the method `partial(vari=v)` can be called on an AutoDiffVector get the derivative with respect to any input variables.
 
 
-## ADFunctions
-ADFunctions accept one or more AutoDiffVectors and output a new AutoDiffVector with an updated `val` and `der`.
+### ADFunctions
+ADFunctions accept one AutoDiffVector and output a new AutoDiffVector with an updated `val` and `der`.
 ```
 ADFunction
-  input: One or more AutoDiffVectors
+  input: One AutoDiffVectors
   output: A new AutoDiffVector with appropriate val, der
 ```
 
-### ADFunction Implementations
+#### ADFunction Implementations
 Since ADFunctions do not contain internal state, and cannot be loaded as dunder methods (e.g., sin, cos), for now it seems to make the most sense to have them as direct functions.
 Elementary functions like sin, cos, etc will each have a corresponding `ADFunction` implementation that stores gradients
 and maintains logic depending on whether the input is a vector, matrix etc. For functions such as multiplication and addition,
 which have implicit functionality in Python, we will overwrite the underlying dunder method so that when called upon an `AutoDiffVector`,
 these functions will evaluate and update the derivatives as described above.
 
-No external dependencies are required at this time.
+No external dependencies are required at this time, except `numpy` package.
+
+Although ADFunctions are considered as a class, when implementing it, we choose not to bind these functions together as a class. We just define them separately to guarantee easy access to them.
 
 
-### Scalar and Vector
-A Vector is a `list(AutoDiffVectors)` 
-If each `ADFunction` handles the three input types:
-- Scalar
-- AutoDiffVector
-- Vector
+## Scalar and Vector
+The `AutoDiffVector` is resemble to a single output function with multiple inputs. The multiple inputs should be defined together as shown in the example below.
+`ADFunction`s handles `AutoDiffVector`s of any type. Namely, multiple inputs is supported. Considering that different elements of vector outputs is naturally different, we did not make throughly test `ADFunction`s to guarantee them support multiple outputs, although multiple output functions should be supported based on our implementation.
 
-We anticipate that our program will be able to support these instances. 
+The output can be vectorized using the class method vconvert after calculating each line of output separately, as shown in the example below.
 
-####  Scalars, Vectors example:
+
+###  Scalars, Vectors example:
 
 ```
-v = AutoDiffVector(range(1)) # a vector of length 4
+v = AutoDiffVector(1) # a scalar input with scaler output
 z = ad.sin_ad(v)
 
-v = AutoDiffVector(range(4)) # a vector of length 4
-z = ad.sin_ad(v)
+##multiple variables: using gen_vars method to define multiple variables together
+[x,y,z,t]=ad.gen_vars([3.,np.pi,5.,3.4])
+
+##multiple outputs: using AutoDiffVector.vconvert method to vectorize outputs
+f  = ad.AutoDiffVector.vconvert([(x + y**z)/t, ad.sin_ad(x+ad.cos_ad(100*y**3)-z**t)])
+
+##multiple output functions f is still a AutoDiffVector, so we can still apply ADFunctions to it
+print(ad.sin_ad(f))
+print(f+f)
+
 ```
 
-### Example Code Structure
+## Example Code Structure
 All functions will return a new AutoDiffVector with an updated value and an array of derivatives with respect to variables.
 
 For example, below is an example of how we might implement a function for addition, which would perform the elementary operation of adding two AutoDiffVectors and calculating the updated derivatives.
@@ -318,29 +391,179 @@ AutoDiffVector will track their trace within the `der` variable, just like it di
 
 ## Reverse Mode Differentiation. 
 
-We've been focusing in forward mode, where we carry derivatives along and traverse the graph at each node. But there is another method in which we build a graph and store a partial derivative at each node and contrary to forward mode, we do not calculate the full derivative nor use the Chain Rule. The same graph can be used in both methods, it is just the direction of the derivative information that changes. In the case of reverse mode, we leverage a backpropagation technique to make this happen, where we generate the forward trace and then calculate the partial derivative on each node with respect to its children.  
+### A brief background introduction to reverse mode
+We've been focusing in forward mode, where we carry derivatives along and traverse the graph at each node. But there is another method in which we build a graph and store a partial derivative at each node and contrary to forward mode, we leverage a backpropagation technique. We generate the forward trace with the input of the equations, however the derivative is not accumulated at this point, we just calculate the partial derivative and store them. After we completed the full eqaution, namely we have stored the whole graph of the trace of the calculation with the partial derivatives along the way, the derivatives with respect to the original variables can be calculated backforward along the graph, and the final result will be retrieved when we comes to the origin of the equation (the independent variables).
 
-Reverse mode utilizes similar element formulas to the ones implemented in forward mode.
+Reverse mode utilizes similar element formulas to the ones implemented in forward mode. The chain rule still shows is power in its implementation, but dual number is not used. As an mathematical example, consider
 
-Code directory structure for the add-on component can be separated into a different module and independent test cases. 
+<a href="https://www.codecogs.com/eqnedit.php?latex=f=sin(x_1^2)&plus;x_2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f=sin(x_1^2)&plus;x_2" title="f=sin(x_1^2)+x_2" /></a> 
+
+When moving forward with the equation, at step 1 we calculate and store <a href="https://www.codecogs.com/eqnedit.php?latex=x_1'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_1'" title="x_1'" /></a> and <a href="https://www.codecogs.com/eqnedit.php?latex=x_2'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2'" title="x_2'" /></a>. At step 2, we store <a href="https://www.codecogs.com/eqnedit.php?latex=(v_1^2)'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(v_1^2)'" title="(v_1^2)'" /></a>, where <a href="https://www.codecogs.com/eqnedit.php?latex=v_1=x_1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1=x_1" title="v_1=x_1" /></a>. At step 3, we store <a href="https://www.codecogs.com/eqnedit.php?latex=sin(v_2)'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?sin(v_2)'" title="sin(v_2)'" /></a>, where <a href="https://www.codecogs.com/eqnedit.php?latex=v_2=v_1^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_2=v_1^2" title="v_2=v_1^2" /></a>. When calculating the partial derivative with respect to <a href="https://www.codecogs.com/eqnedit.php?latex=v_1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_1" title="v_1" /></a>, we move backward and multiply together the derivatives and get <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" title="\frac{d(sin(v_2))}{dv_2}\frac{dv_1^2}{dv_1}\frac{dx^2}{dx}" /></a>. For the partial derivative with repect to <a href="https://www.codecogs.com/eqnedit.php?latex=x_2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2" title="x_2" /></a>, we directly trace back to <a href="https://www.codecogs.com/eqnedit.php?latex=x_2'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_2'" title="x_2'" /></a> and get the derivative as 1.
+
+
+### Software organization for add-on feature
+As has been shown in the `Software Organization` section, we have a module `reverse.py` separately for the reverse mode, and a test file `test_reverse.py` for it separately from the forward mode.
+
+### How to use reverse mode
+It is quite similar to the feature of forward mode and self-evident.
+Example of Creating an AutoDiffVector:
+```
+##import the reverse mode module
+import ADG4.reverse as rev
+#Here we give the users a choice to explicity give a name to the independent variables considering the implementation do not give an explicit order to the variables.
+#Our implementation naturally support vector inputs
+x = rev.AutoDiffReverse(3, name='x')
+y = rev.AutoDiffReverse(4, name='y')
+z = rev.AutoDiffReverse(9, name='z')
 
 ```
-ADG4/
-	ad.py
-	reverse.py
-tests/
-	test_ad.py
-	test_reverse.py
-docs/
-	milestone1.ipynb
-	milestone2.md
-	documentation.md
-setup.py
-README.md
-README-es.md
+
+Simple Operation Example: Creating Functions from AD Variables
 ```
+m = x + y
+n = m * z + x
+p = x * x * x
+
+assert n.partial(x) == 10
+assert n.partial(y) == 1 * z.val
+assert n.partial(z) == m.val #.val is the value of the function, which is the same to the forward mode
+assert m.partial(x) == 1
+assert m.partial(y) == 1
+assert p.partial(x) == 3 * 3 * 3
+
+
+```
+Some elementary functions:
+
+Power:
+
+```
+f=x**x #calculate pow
+print(f.val,f.partial(x)) 
+```
+Trig Function Examples:
+```
+##sin function
+f = rev.sin_rv(x)
+print(f.val, f.partial(x))
+##print value and jacobian
+##cos function
+f = rev.cos_rv(x)
+##print value and jacobian
+print(f.val, f.partial(x))
+##tan function
+f = rev.tan_rv(x)
+##print value and jacobian
+print(f.val, f.partial(x))
+```
+Exponential Function Example:
+```
+f = rv.exp_rv(x)
+##print value and jacobian
+print(f.val, f.partial(x))
+```
+
+Basically we have all the same functions to forward mode, with slight differents in implementation. For reverse mode, we do not have compare functions considering the equation is path dependent. But users can still use the default compare functions of python, which compare the reference of two instances.
+
+### Implementation Details
+#### core class
+Similar to the forward mode, we have AutoDiffReverse as our variable and have a set of elementary functions.
+#### AutoDiffReverse
+Below are the core structure of the core variable, AutoDiffReverse. When moving forward with the equation, the variables and partial derivatives with respected to them are stored as two-element lists in the list `self.children`, which is a list of two-element list. After storing the whole graph, the derivatives with respect to a variable `vv` (which is a AutodiffReverse instance) can be calculated using `partial(self,vv)` function. `partial(self,vv)` function calls the `backprop` functions, which propogates the derivatives following the chain rule reversely, and store the derivatives with respect to different AutodiffReverse variables along the way. We have a `self.has_backpropped` variable to guarantee the back propotation is only called once for each function.
+```
+class AutoDiffReverse():
+    ## A reverse autodifferentiation class
+    def __init__(self,a, name=None):
+        self.val= copy.deepcopy(a) # needed for np array reference management
+        self.children = []
+        self.has_backpropped = False
+        self.name = name
+        self._partial = {}
+    def backprop(self):
+        # A back prop implementation that keeps all derivative accumulations
+        # within this root node that calls .backprop()
+        partial = defaultdict(int)
+        
+        stack = [ (child_node, edge_value) for (child_node, edge_value) in self.children]
+        while stack:
+            # edge value is the derivative between the root node
+            # and this current node
+            node, edge_value = stack.pop()
+            # Update the partial derivative to add this current derivative value
+            partial[node] += edge_value
+            # Add each child to our stack
+            for child_node, child_edge_value in node.children:
+                # For each child, its derivative with respect to the root is
+                # (derivative root -> node) * (derivative node -> child_node)
+                stack.append((child_node, edge_value * child_edge_value))
+                
+     def partial(self,vv):
+        if not self.has_backpropped:
+            self.backprop()
+            self.has_backpropped = True
+        
+        if vv in self._partial.keys():
+            return self._partial[vv]
+        ##Deal with the case when
+        elif self is vv:
+            return 1
+        else:
+            raise KeyError('Function not dependent on input')
+    
+    ...Other calculation related functions  
+```
+
+#### Element Functions
+The basic idea of the element functions is to return a new AutoDiffReverse instance, with the variables and prtial derivatives stored in its `.children` field. Here the functions are considered as a class but we do not really bind them together, which is similar to the forward mode. Below are a few examples showing how we do it.
+Add and mutiplication function:
+```
+#Inside the defination of the class AutoDiffReverse
+  def __add__(self,other):
+        new=AutoDiffReverse(self.val)
+        
+        try:
+            new.val+=other.val
+            new.children=[[self,1],[other,1]]
+        except AttributeError:
+            new.val+=other
+            new.children=[[self,1]]
+        return new
+	
+  def __mul__(self,other):
+        new=AutoDiffReverse(self.val)
+        
+        try:
+            new.val*=other.val
+            new.children=[[self,other.val],[other,self.val]]
+        except AttributeError:
+            new.val*=other
+            new.children=[[self,other]]
+        return new
+```
+Trig functions:
+
+```
+def sin_rv(x):
+  new=AutoDiffReverse(np.sin(x.val))
+  new.name=None
+  new.children=[[x,np.cos(x.val)]]
+  return new
+
+def cos_rv(x):
+  new=AutoDiffReverse(np.cos(x.val))
+  new.name=None
+  new.children=[[x,-np.sin(x.val)]]
+  return new
+
+def tan_rv(x):
+  return sin_rv(x)/cos_rv(x)
+```
+
+#### Scalers and Vectors
+Our reverse mode naturally supports vector inputs. The AutoDiffReverse is also readily vectorized, so vector output is also supported.
 
 <a name="impact"/>
+
 
 # ADG4 Impact and Inclusivity. 
 
@@ -369,10 +592,16 @@ Finally, we are aware of [the gender gap in open source contributions](https://m
 
 While our primary add-on feature is reverse mode, there is also strong interest in the group to continue working on additional extensions for this project. Broadly speaking, these ideas apply autodifferentiation to real world problems that can be done more efficiently. Since these ideas are not fully crystallized, more work will likely need to be done to hone the implementation. A couple of example include:
 
-1. Pricing Exotic Derivatives
 
-There have been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specifically applied to calculating Greeks in Option contracts or evaluating Interest Rate Swaps where the interest rate yield curve can be complex. In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical examples. 
+1. A performance test for the reverse mode and forward mode
 
-2. Parameter Fitting on a Time-Dependent System
+Although we have implemented both forward and reverse mode, their performance has not been throughly tested. We should implement a performant test to give the users an instruction when forward and backward propatation should be used. 
 
-Another potential future extension involves fitting an algorithm for a time dependent system. Given a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. This type of algorithm can be applicable in the real world for use cases such as complex regressions, imaging and revolve spectral mixtures.  
+2. Pricing Exotic Derivatives
+
+There have been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specifically applied to calculating Greeks in Option contracts or evaluating Interest Rate Swaps where the interest rate yield curve can be complex. In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical examples. Mathematically, we are going to use the package as a partial derivative calculator.
+
+3. Parameter Fitting on a Time-Dependent System
+
+Another potential future extension involves fitting an algorithm for a time dependent system. Given a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. This type of algorithm can be applicable in the real world for use cases such as complex regressions, imaging and revolve spectral mixtures. It is mathematically a nonlinear fitting problem, where we need the Jacobian in the equation in the algorithm.
+
