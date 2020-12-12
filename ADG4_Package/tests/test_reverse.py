@@ -13,6 +13,7 @@ import sys
 import ADG4.reverse as rev
 import numpy as np
 import random
+import pandas as pd
 
 def fprime_fd(f, x0, dx=1e-12):
     """
@@ -245,6 +246,31 @@ def test_compare():
     print(f4.val, f4.partial(x))
     print(f3.val, f3.partial(x))
     assert np.isclose(f4.val, f3.val)
+
+def test_der():
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    z = rev.AutoDiffReverse(-9, name='z')
+    m = x + y
+    n = m * z + x
+    q = -n
+    q.backprop()
+    result=pd.DataFrame([[8,-7,9]],index=[0],columns=['x','z','y'])
+    assert q.der.equals(result)
+
+def test_vconvert():
+    x = rev.AutoDiffReverse(3, name='x')
+    y = rev.AutoDiffReverse(4, name='y')
+    z = rev.AutoDiffReverse(-9, name='z')
+    m = x + y
+    n = m * z + x
+    q = -n
+    vec=rev.AutoDiffReverse.vconvert([m,n,q])
+    print(vec.val)
+    print(vec.der)
+    result=type('obj',(object,),{'val':[m.val,n.val,q.val],'der':pd.DataFrame([[1,1,0],[-8,-9,7],[8,9,-7]],index=[0,0,0],columns=['x','y','z'])})
+    print(result.der)
+    assert vec.der.equals(result.der)
     
 def test_repr():
     x = rev.AutoDiffReverse(3, name='x')

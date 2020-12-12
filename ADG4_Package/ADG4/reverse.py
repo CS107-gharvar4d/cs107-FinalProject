@@ -1,6 +1,7 @@
 import numpy as np
 import copy
 from collections import defaultdict
+import pandas as pd
 
 """
 reverse.py: Automatic Differentiation for Python with reverse mode.
@@ -176,6 +177,39 @@ class AutoDiffReverse():
             return 1
         else:
             raise KeyError('Function not dependent on input')
+
+    @property
+    def der(self):
+        if not self.has_backpropped:
+            self.backprop()
+            self.has_backpropped = True
+
+        keys=[]
+        for kk in self._partial.keys():
+            if not kk.name == None:
+               keys.append(kk)
+        der=pd.DataFrame([[self._partial[kk] for kk in keys]],index=[0],columns=[k.name for k in keys])
+        return der
+        
+    @classmethod
+    def vconvert(cls, v):
+        """
+        vectorize the output of the function from Rm to Rn
+        ---------------
+        v: a list of AutoDiffVector instances
+        """
+        vvector=np.array([ii.val for ii in v])
+#        vvector=vvector.reshape(len(vvector),1)
+        cols=[]
+        for ii in v:
+            cols=cols+list(ii.der.columns)
+        cols=set(cols)
+        jacobian=pd.DataFrame(columns=cols)
+        for nn,ii in enumerate(v):
+            jacobian=jacobian.append(ii.der)
+        jacobian=jacobian.fillna(0)
+        obj = type('obj', (object,), {'val' : vvector, 'der':jacobian})
+        return obj
 
     def __neg__(self):
         """

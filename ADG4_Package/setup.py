@@ -11,4 +11,5 @@ setup(
 	long_description_content_type='text/markdown',
 	url="https://github.com/CS107-gharvar4d/cs107-FinalProject",
 	python_requires=">=3.6"
+	install_requires=["numpy","pandas"]
 )

@@ -6,6 +6,7 @@ import sys
 import ADG4.ad as ad 
 import numpy as np
 import random as random
+import pandas as pandas
 
 ##Boer Dec5, calculating derivative of f at x0  using finite difference
 def fprime_fd(f,x0,dx=1e-12):
