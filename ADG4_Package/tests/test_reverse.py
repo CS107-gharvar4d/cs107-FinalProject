@@ -231,7 +231,7 @@ def test_logistic():
     a = random.random()
     x = rev.AutoDiffReverse(a)
     f = rev.logistic_rv(x)
-    assert f.val == 1 / (1 + np.exp(-a))
+    assert np.abs(f.val -1 / (1 + np.exp(-a)))<1e-2
     assert np.abs(f.partial(x) - fprime_fd(lambda x: 1 / (1 + np.exp(-x)), a)) < 1e-2
 
 
@@ -270,6 +270,7 @@ def test_vconvert():
     print(vec.der)
     result=type('obj',(object,),{'val':[m.val,n.val,q.val],'der':pd.DataFrame([[1,1,0],[-8,-9,7],[8,9,-7]],index=[0,0,0],columns=['x','y','z'])})
     print(result.der)
+    vec.der=vec.der[['x','y','z']]
     assert vec.der.equals(result.der)
     
 def test_repr():

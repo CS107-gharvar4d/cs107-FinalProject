@@ -84,6 +84,17 @@ Dual numbers: a two dimentional space where an outer product is defined between 
 # How to use
 
 Here are the steps to use our package. First, below are the steps to download and install `ADG4`:
+
+### User Installation
+Our `ADG4` is available on [PyPi](https://pypi.org/project/ADG4/) and is pip installable. We also designed our `setup.py` file so that dependencies such as `numpy` will automatically be installed. All you need to do is run the following command and you are ready to use `ADG4`:
+
+```
+pip install ADG4
+```
+
+### Development Installation
+Alternatively, our package is also available for development installation, through which you can access and edit the code. To do so, follow the steps below: 
+
 1. Create and activate a virtual environment, either with conda 
 ```
 conda create -n adg4_env python=3.8
@@ -233,11 +244,9 @@ requirements.txt
 ```
 * The directory is structured based on functionality. We have the main codes in `ADG4` with forward module `ad.py` which is the main body of our work, and an add-on package `reverse.py`. We also have a separate `\test` directory. Besides the main backage codes `ADG4_package/`, we also have `docs/` directory and some supporting files in the top directory.
  
-
-
 Modules:
-* We havie two modules: `ad` for implementing our forward AD functionality and `reverse` which will implement a reverse mode.
-* Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`,`random`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices.  We have include these libraries in `requirements.txt` so users can install them easily with `pip install -r requirements.txt` on their machine orvirtual environment.
+* We have two modules: `ad` for implementing our forward AD functionality and `reverse` which will implement a reverse mode.
+* Our current version also relies on a couple of third-party libraries to help us support specific features of the project, such as `numpy`, `copy`, and `sys`. For example, we use numpy because it is a mathematical computation library that makes it easy to build interactions between scalars, vectors, and matrices. It has built in support for matrix/vector math which will be useful for our final implementation. We have designed our `setup.py` file so that these dependencies will be automatically installed when a user runs `pip install ADG4`. We also include these libraries in `requirements.txt` so developer users can install them easily with `pip install -r requirements.txt` on their machine or virtual environment.
 
 Test Suite:
 * We are using both TravisCI and CodeCov as part of our test suite.
@@ -245,17 +254,16 @@ Test Suite:
 * The project repo has a badge reporting on the coverage of our code from Codecov, so we can easily tell how many tests are passing.
 
 Package Distribution:
-* Our package is pip installable using the editable option pointing to a local file system. It will be pip installable when it is finally published.
-* Specific step by step instructions for how to download and install our package are provided above in the How to Use section.
-* As a brief summary, `ADG4` can be downloaded and installed by creating and activating a virtual environment, downloading our repository (`git clone git@github.com:CS107-gharvar4d/cs107-FinalProject.git`), and navigating into the repo folder with `cd cs107-FinalProject`. 
-* Then, install the requirements with `pip install -r requirements.txt`, and install the `ADG4` package with `pip install --editable ./code` (code is the name of the directory where it lives).
+* Our package is pip installable through [PiPy](https://pypi.org/project/ADG4/).
+* Users can simply run the command `pip install ADG4` to download and install our package.
 * Now you can use the command `import ADG4.ad as ad` and you are ready to use our package!
+* Specific step by step instructions for how developers can download and install our package to view and edit the code are provided above in the How to Use section.
 
 Sofware Packaging:
 * We use SetupTools (setup.py) to package our software. That way it can handle downloading dependencies and setup processes.
 
 Other Considerations:
-* As noted in the project instructions we will also include a broader impact statement for our library in README.md. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population. We also include a prototype of the documentation in Spanish to help the package to gain further inclusivity. The credit goes to Rodrigo Vargas in our group.
+* As noted in the project instructions we also include a broader impact statement for our library in README.md. This will consider the accessibility of our software library to different groups of people and ensure that it is accessible and usable to a wide and representative population. We also include a prototype of the documentation in Spanish to help the package to gain further inclusivity. The credit goes to Rodrigo Vargas in our group.
 
 <a name="implementation"/>
 
@@ -462,7 +470,7 @@ Basically we have all the same functions to forward mode, with slight differents
 Similar to the forward mode, we have AutoDiffReverse as our variable and have a set of elementary functions.
 #### AutoDiffReverse
 Below are the core structure of the core variable, AutoDiffReverse. When moving forward with the equation, the variables and partial derivatives with respected to them are stored as two-element lists in the list `self.children`, which is a list of two-element list. After storing the whole graph, the derivatives with respect to a variable `vv` (which is a AutodiffReverse instance) can be calculated using `partial(self,vv)` function. `partial(self,vv)` function calls the `backprop` functions, which propogates the derivatives following the chain rule reversely, and store the derivatives with respect to different AutodiffReverse variables along the way. We have a `self.has_backpropped` variable to guarantee the back propotation is only called once for each function.
-`
+```
 class AutoDiffReverse():
     ## A reverse autodifferentiation class
     def __init__(self,a, name=None):
@@ -503,12 +511,12 @@ class AutoDiffReverse():
             raise KeyError('Function not dependent on input')
     
     ...Other calculation related functions  
-`
+```
 
 #### Element Functions
 The basic idea of the element functions is to return a new AutoDiffReverse instance, with the variables and prtial derivatives stored in its `.children` field. Here the functions are considered as a class but we do not really bind them together, which is similar to the forward mode. Below are a few examples showing how we do it.
 Add and mutiplication function:
-`
+```
 #Inside the defination of the class AutoDiffReverse
   def __add__(self,other):
         new=AutoDiffReverse(self.val)
@@ -531,10 +539,10 @@ Add and mutiplication function:
             new.val*=other
             new.children=[[self,other]]
         return new
-`
+```
 Trig functions:
 
-`
+```
 def sin_rv(x):
   new=AutoDiffReverse(np.sin(x.val))
   new.name=None
@@ -549,7 +557,7 @@ def cos_rv(x):
 
 def tan_rv(x):
   return sin_rv(x)/cos_rv(x)
-`
+```
 
 #### Scalers and Vectors
 Our reverse mode naturally supports vector inputs. The AutoDiffReverse is also readily vectorized, so vector output is also supported.
@@ -584,10 +592,16 @@ Finally, we are aware of [the gender gap in open source contributions](https://m
 
 While our primary add-on feature is reverse mode, there is also strong interest in the group to continue working on additional extensions for this project. Broadly speaking, these ideas apply autodifferentiation to real world problems that can be done more efficiently. Since these ideas are not fully crystallized, more work will likely need to be done to hone the implementation. A couple of example include:
 
-1. Pricing Exotic Derivatives
 
-There have been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specifically applied to calculating Greeks in Option contracts or evaluating Interest Rate Swaps where the interest rate yield curve can be complex. In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical examples. 
+1. A performance test for the reverse mode and forward mode
 
-2. Parameter Fitting on a Time-Dependent System
+Although we have implemented both forward and reverse mode, their performance has not been throughly tested. We should implement a performant test to give the users an instruction when forward and backward propatation should be used. 
 
-Another potential future extension involves fitting an algorithm for a time dependent system. Given a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. This type of algorithm can be applicable in the real world for use cases such as complex regressions, imaging and revolve spectral mixtures.  
+2. Pricing Exotic Derivatives
+
+There have been emerging conversations between Academia and the Quantitative Finance Industry of using this type of techniques for valuating derivatives. A derivative is a financial security with a value that is reliant upon or derived from, an underlying asset or group of assets. The use case for AD will be specifically applied to calculating Greeks in Option contracts or evaluating Interest Rate Swaps where the interest rate yield curve can be complex. In the computation of derivatives, two aspects have to be taken into account; precision and speed. AD is an answer to both concerns. The goal of this feature would not prove accuracy of theoretical results, but will show efficiency through practical examples. Mathematically, we are going to use the package as a partial derivative calculator.
+
+3. Parameter Fitting on a Time-Dependent System
+
+Another potential future extension involves fitting an algorithm for a time dependent system. Given a governing equation with a few undecided parameters and a set of observational data, the AD integrates the equation over time and compares the result against the observations. This type of algorithm can be applicable in the real world for use cases such as complex regressions, imaging and revolve spectral mixtures. It is mathematically a nonlinear fitting problem, where we need the Jacobian in the equation in the algorithm.
+
