@@ -5,5 +5,5 @@ setup(
 	version = "0.1.0",
 	author="Group 28",
 	packages=find_packages(),
-	install_requires=["numpy"]
+	install_requires=["numpy","pandas]
 )
