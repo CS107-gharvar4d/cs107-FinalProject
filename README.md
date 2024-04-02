@@ -16,7 +16,7 @@ Given the broad set of applications across domains, we hope ADG4 can be a useful
 **[English](docs/documentation.md)** | [Español](docs/documentation-es.md) <!-- l10n:select -->
 
 
-Group number: 28
+<!-- Group number: 28 -->
 
 Group mumbers:  
 
