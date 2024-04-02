@@ -1,6 +1,6 @@
 # cs107-FinalProject
 
-[![Build Status](https://travis-ci.com/CS107-gharvar4d/cs107-FinalProject.svg?token=Yaj31swkEpNhrSRpktqZ&branch=master)](https://travis-ci.com/CS107-gharvar4d/cs107-FinalProject)
+<!--[![Build Status](https://travis-ci.com/CS107-gharvar4d/cs107-FinalProject.svg?token=Yaj31swkEpNhrSRpktqZ&branch=master)](https://travis-ci.com/CS107-gharvar4d/cs107-FinalProject) -->
 
 [![codecov](https://codecov.io/gh/CS107-gharvar4d/cs107-FinalProject/branch/master/graph/badge.svg?token=8GK9WUDOZP)](undefined)
 
