@@ -18,7 +18,7 @@ Given the broad set of applications across domains, we hope ADG4 can be a useful
 
 <!-- Group number: 28 -->
 
-Group mumbers:  
+Group members:  
 
 Rodrigo	Vargas	rov406@g.harvard.edu
 
@@ -26,7 +26,7 @@ Xin	Wei	davidwei@g.harvard.edu
 
 Kristen	Grabarz	kgrabarz@g.harvard.edu
 
-Boer	Zhang	boerzhang@g.harvard.edu
+Boer Zhang	boerzhang@g.harvard.edu
 
 # ADG4 Impact and Inclusivity. 
 
