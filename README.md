@@ -4,6 +4,13 @@
 
 [![codecov](https://codecov.io/gh/CS107-gharvar4d/cs107-FinalProject/branch/master/graph/badge.svg?token=8GK9WUDOZP)](undefined)
 
+### Introduction
+ADG4 is a package which computes a value while using automatic differentiation to compute derivatives of that value. It integrates a set of techniques to evaluate the derivative of various mathematical expressions.
+
+Being able to take derivatives has many important practical applications across a variety of domains. In physics, the first order derivative tells us the rate of change, while further orders can tell us more pieces of information like acceleration and actergy. In statistics, applications include Bayesian inference and the training of neural networks. In economics, taking the derivative of profit and utility functions allows agents to maximize their expected outcomes. These are only a few instances wherein differentiating complex functions is useful and necessary.
+
+Given the broad set of applications across domains, we hope ADG4 can be a useful tool that can facilitate quick and easy numerical evaluation of derivatives through computing. In our toolbox, vector calculation is supported. The tool box is capable of returning the Jacobian of a function with arbitrary dimension, and is also capable of returning the partial derivative for certain variables. We integrate both forward mode and reverse mode, and the users are welcomed to choose the mode best suited to their scientific problem. Generally speaking, we expect that forward mode is more suitable with lower dimensional input with higher dimensional output, and the contrary is true for reverse mode.
+
 ### Documentation
 
 **[English](docs/documentation.md)** | [Español](docs/documentation-es.md) <!-- l10n:select -->
